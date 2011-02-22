@@ -1,0 +1,4 @@
+INFO main org.rosuda.util.r.WindowsRStarter - current R version R-2.12.1
+INFO main org.rosuda.util.r.WindowsRStarter - starting R process for 'C:\Program Files\R\R-2.12.1\bin\x64\R.exe'
+INFO main org.rosuda.util.r.WindowsRStarter - > C:\Program Files\R\R-2.12.1\bin\x64\R.exe CMD Rserve_x64 --no-save --slave 
+INFO main org.rosuda.util.r.RunningInstance - reusing running rconnection.

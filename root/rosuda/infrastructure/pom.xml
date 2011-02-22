@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+        <parent>
+       	        <groupId>org.rosuda</groupId>
+               	<artifactId>root</artifactId>
+	        <version>1.0.0-SNAPSHOT</version>
+        </parent>
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.rosuda</groupId>
+	<artifactId>infrastructure</artifactId>
+	<version>1.0.2-SNAPSHOT</version>
+
+	<name>MORET</name>
+	<description>Model Repository - redesign</description>
+	<inceptionYear>2010</inceptionYear>
+
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>process</module>
+		<module>db</module>
+		<module>jr-connect</module>
+		<module>jr-connect-rengine-impl</module>
+		<module>r-service</module>
+		<module>jr-connect-rengine-impl-test</module>
+	</modules>
+
+</project>
