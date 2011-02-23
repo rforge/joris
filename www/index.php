@@ -33,13 +33,25 @@ echo '<?xml version="1.0" encoding="UTF-8"?>';
 <!-- get project title  -->
 <!-- own website starts here, the following may be changed as you like -->
 
-<?php if ($handle=fopen('http://'.$domain.'/export/projtitl.php?group_name='.$group_name,'r')){
-$contents = '';
-while (!feof($handle)) {
-	$contents .= fread($handle, 8192);
-}
-fclose($handle);
-echo $contents; } ?>
+<h1>Welcome to JORIS</h1>
+<h3>The Java ordinary R infrastructure support project</h3>
+<p>
+The goal for this project is to supply a set of useful java code that facilitates using R in combination with java.
+jr-connect is one maven module to connect to R either via JRI or Rserve.
+some tools from the project MORET are migrated bit by bit to provide services for multi model management.
+There is lots of code for mapping objects from an arbitraty type into a storable and searchable tree (graph) structure.
+the last step will be to create ui widgets for desktop applications as a reference how to use this packages.
+</p>
+<p>
+About the project structure. The project build system is maven (2 or newer). In this early stage the full build process might hang up on some machines
+like a windows machine blocking in a non forking process. If the build seems to stop break and retry.</br>
+<h6>folders</h6>
+<ul>
+    <li>root ... contains the maven and java sources</li>
+    <li>maven-artifacts ... contains some jar files that were not found on public repositories yet. Please install manually using mvn install:install-file
+    refer to the manual if necessary <a href="http://maven.apache.org/plugins/maven-install-plugin/usage.html">http://maven.apache.org/plugins/maven-install-plugin/usage.html</a> or drop me a few lines</li>
+</ul>
+</p>
 
 <!-- end of project description -->
 
