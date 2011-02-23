@@ -22,7 +22,7 @@
 		<module>generic-type-restructure</module>
 		<module>generic-mapper-filter</module>
 		<module>irexp-mapper</module>
-		<module>util</module>
 		<module>test-data</module>
+		<module>util</module>
 	</modules>
 </project>

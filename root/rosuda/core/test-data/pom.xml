@@ -11,7 +11,7 @@
 	<artifactId>test-data</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0.2-SNAPSHOT</version>
-	<name>rosuda-irexp-mapper</name>
+	<name>rosuda-test-data</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
