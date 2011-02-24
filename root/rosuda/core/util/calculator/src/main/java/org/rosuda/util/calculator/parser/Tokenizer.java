@@ -27,7 +27,7 @@ public class Tokenizer {
 	
 	private List<Token> tokens = new ArrayList<Token>();
 	
-	public Tokenizer(final String source) {
+	public Tokenizer(final String source)  throws TokenizerException {
 		final String cleanSource = escape(source);
 		final List<PreToken> preTokens = split(cleanSource);
 		compile(preTokens);
@@ -46,7 +46,7 @@ public class Tokenizer {
 	}
 
 	// filter out numbers
-	private List<PreToken> split(final String source) {
+	private List<PreToken> split(final String source) throws TokenizerException{
 		final List<PreToken> preTokens= new ArrayList<PreToken>();
 		
 		for (int i = 0; i < source.length(); i++) {
@@ -72,7 +72,7 @@ public class Tokenizer {
 				preTokens.add(new PreToken(Type.Separator, null, ",", i, i+1));
 			} 
 			else {
-				throw new IllegalArgumentException("string \""+source+"\" contains unrecognized character '"+c+"'");
+				throw new TokenizerException("string \""+source+"\" contains unrecognized character '"+c+"'");
 			}
 		}
 		return preTokens;
