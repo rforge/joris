@@ -10,8 +10,6 @@
 		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
 
-	<context:annotation-config />
-	<context:component-scan base-package="org.rosuda.graph.dao" />
 
 	<context:property-placeholder location="classpath:/spring/jdbc.properties" />
 
@@ -24,34 +22,6 @@
 		<property name="password" value="${jdbc.pass}" />
 	</bean>
 
-	<!-- hibernate stuff -->
-	<bean id="hibernateSessionFactory"
-		class="org.springframework.orm.hibernate3.annotation.AnnotationSessionFactoryBean">
-		<property name="dataSource" ref="dataSource" />
-		<property name="packagesToScan" value="org.rosuda.graph.domain" />
-		<property name="hibernateProperties">
-			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.DerbyDialect</prop>
-				<prop key="hibernate.show_sql">true</prop>
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
-			</props>
-		</property>
-	</bean>
 
-
-	<tx:annotation-driven transaction-manager="txManager"/>
 	
-	<bean id="txManager"
-		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
-		<property name="sessionFactory">
-			<ref local="hibernateSessionFactory" />
-		</property>
-	</bean>
-	
-	<!-- dao is requred for the service -->
-	<bean id="graphDao" class="org.rosuda.graph.dao.HibernateGraphDaoImpl">
-	</bean>
-	
-	<bean id="graphService" class="org.rosuda.graph.service.HibernateGraphServiceImpl">
-	</bean>
 </beans>

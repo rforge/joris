@@ -2,20 +2,11 @@ package org.rosuda.irconnect;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.Properties;
-import junit.framework.TestCase;
-import org.rosuda.irconnect.IRBool;
-import org.rosuda.irconnect.IRConnection;
-import org.rosuda.irconnect.IREXP;
-import org.rosuda.irconnect.IRFactor;
-import org.rosuda.irconnect.IRMap;
-import org.rosuda.irconnect.IRMatrix;
-import org.rosuda.irconnect.IRVector;
-import org.rosuda.irconnect.RServerException;
+
 import org.rosuda.rengine.REngineConnectionFactory;
 
-public class TestWrappedEngine extends TestCase {
+public class TestWrappedEngine extends AbstractRTestCase {
 
 	public static final double EPS = 0.000001;
 	IRConnection connection;

@@ -16,11 +16,10 @@ class WindowsRStarter extends AbstractRStarter {
 	
 	public static final String rserve = "Rserve";
 	public static final String rserveX64 = "Rserve_x64";
-	
 	private String usedRserveExecutable;
 	
-	WindowsRStarter(RunStateHolder<IRConnection> runStateHolder) {
-		super(runStateHolder);
+	WindowsRStarter(final RunStateHolder<IRConnection> runStateHolder, final RStartContext setup) {
+		super(runStateHolder, setup);
 	}
 
 	@Override

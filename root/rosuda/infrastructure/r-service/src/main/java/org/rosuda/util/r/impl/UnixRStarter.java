@@ -17,8 +17,8 @@ class UnixRStarter extends AbstractRStarter {
 		"/Library/Frameworks/R.Framework/Resources/bin/R",
 	};
 	
-	UnixRStarter(RunStateHolder<IRConnection> runStateHolder) {
-		super(runStateHolder);
+	UnixRStarter(RunStateHolder<IRConnection> runStateHolder, final RStartContext setup) {
+		super(runStateHolder, setup);
 	}
 
 	@Override

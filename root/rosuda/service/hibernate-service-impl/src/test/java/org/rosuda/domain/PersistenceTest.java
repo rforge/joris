@@ -33,7 +33,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:spring-hibernate-service-test.xml")
+@ContextConfiguration(locations = { "classpath:/spring/hibernate-service-impl.spring.xml","classpath:spring-hibernate-service-test.xml"})
 @TransactionConfiguration(transactionManager = "txManager", defaultRollback = true)
 @Transactional
 public class PersistenceTest {

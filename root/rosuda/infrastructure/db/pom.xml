@@ -19,7 +19,6 @@
 		<dependency>
 			<groupId>org.jasypt</groupId>
 			<artifactId>jasypt</artifactId>
-			<version>1.7</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
@@ -54,6 +53,15 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -65,46 +73,18 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
-			<!--<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.2</version>
-				<executions>
-					<execution>
-						<id>start derby network server</id>
-						<phase>generate-sources</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<configuration>
-							<executable>java</executable>
-							<arguments>
-								<argument>-classpath</argument>
-								<classpath />
-								<argument>org.apache.derby.drda.NetworkServerControl</argument>
-								<argument>start</argument>
-								<argument>-noSecurityManager</argument>
-							</arguments>
-						</configuration>
-					</execution>
-					<execution>
-						<id>shutdown derby network server</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<configuration>
-							<executable>java</executable>
-							<arguments>
-								<argument>-classpath</argument>
-								<classpath />
-								<argument> org.apache.derby.drda.NetworkServerControl </argument>
-								<argument>shutdown</argument>
-							</arguments>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>-->
+			<!--<plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>exec-maven-plugin</artifactId> 
+				<version>1.2</version> <executions> <execution> <id>start derby network server</id> 
+				<phase>generate-sources</phase> <goals> <goal>exec</goal> </goals> <configuration> 
+				<executable>java</executable> <arguments> <argument>-classpath</argument> 
+				<classpath /> <argument>org.apache.derby.drda.NetworkServerControl</argument> 
+				<argument>start</argument> <argument>-noSecurityManager</argument> </arguments> 
+				</configuration> </execution> <execution> <id>shutdown derby network server</id> 
+				<phase>post-integration-test</phase> <goals> <goal>exec</goal> </goals> <configuration> 
+				<executable>java</executable> <arguments> <argument>-classpath</argument> 
+				<classpath /> <argument> org.apache.derby.drda.NetworkServerControl </argument> 
+				<argument>shutdown</argument> </arguments> </configuration> </execution> 
+				</executions> </plugin> -->
 		</plugins>
 	</build>
 </project>

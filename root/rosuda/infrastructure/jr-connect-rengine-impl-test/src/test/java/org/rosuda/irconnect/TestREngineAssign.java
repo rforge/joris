@@ -9,23 +9,14 @@ import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import junit.framework.TestCase;
-import org.rosuda.irconnect.IRBool;
-import org.rosuda.irconnect.IREXP;
-import org.rosuda.irconnect.IREXPConstants;
-import org.rosuda.irconnect.IRFactor;
-import org.rosuda.irconnect.IRMap;
-import org.rosuda.irconnect.IRMatrix;
-import org.rosuda.irconnect.IRVector;
-import org.rosuda.irconnect.ITwoWayConnection;
-import org.rosuda.irconnect.RServerException;
+
 import org.rosuda.rengine.REngineConnectionFactory;
 
 /**
  *
  * @author Ralf
  */
-public class TestREngineAssign extends TestCase {
+public class TestREngineAssign extends AbstractRTestCase {
 
     public static final double EPS = 0.000001;
 	ITwoWayConnection connection;

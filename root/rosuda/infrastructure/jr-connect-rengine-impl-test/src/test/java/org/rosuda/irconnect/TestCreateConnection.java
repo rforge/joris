@@ -1,7 +1,5 @@
 package org.rosuda.irconnect;
 
-import junit.framework.TestCase;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rosuda.rengine.REngineConnectionFactory;
@@ -10,10 +8,10 @@ import org.rosuda.rengine.REngineConnectionFactory;
  *
  * @author Ralf
  */
-public class TestCreateConnection extends TestCase{
+public class TestCreateConnection extends AbstractRTestCase{
 
 	private Log log = LogFactory.getLog(TestCreateConnection.class);
-	
+		
     public void testCreateREngineConnection() {
     	try {
     		final IRConnection irConnection = new REngineConnectionFactory().createRConnection(null);

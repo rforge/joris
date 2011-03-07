@@ -12,6 +12,7 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rosuda.irconnect.IRConnection;
+import org.rosuda.rengine.REngineConnectionFactory;
 import org.rosuda.util.process.ProcessStarter;
 import org.rosuda.util.process.RUNSTATE;
 import org.rosuda.util.process.RunStateHolder;
@@ -19,15 +20,18 @@ import org.rosuda.util.process.RunstateAware;
 
 abstract class AbstractRStarter extends RunstateAware<IRConnection> implements ProcessStarter<IRConnection> {
 
-	public static long MAX_TIMEOUT = 1000;
+	private long MAX_TIMEOUT = 1000;
+	private long POLL_TIME = 100;
 	protected final Log log = LogFactory.getLog(getClass());
 	protected final String R_ARGS = "--vanilla --slave";
 	protected final String R_SERVE_ARGS = "--no-save --slave";
 	protected final List<File> fileLocations = Collections.unmodifiableList(getRFileLocations());
+	final RStartContext setup;
 	private Process process;
 	
-	public AbstractRStarter(final RunStateHolder<IRConnection> runStateHolder) {
+	public AbstractRStarter(final RunStateHolder<IRConnection> runStateHolder, final RStartContext setup) {
 		super(runStateHolder);
+		this.setup = setup;
 		runStateHolder.setRunState(RUNSTATE.STARTING);
 	}
 	
@@ -56,7 +60,7 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
 				}
 				log.info(sb.toString());
 				
-				process = Runtime.getRuntime().exec(runtimeArgs);
+				process = setup.createProcessForArgs(runtimeArgs);
 				//append loggers
 				final StreamLogger infoStream = new StreamLogger("RServe>", Mode.INFO, process.getInputStream());
 				new Thread(new StreamLogger("RServe>", Mode.ERROR, process.getErrorStream())).start();
@@ -64,19 +68,25 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
 				new Thread(new ProcessMonitor()).start();
 				//TODO: wait until started ...
 				long totalTimeOut = 0;
-				while (totalTimeOut < MAX_TIMEOUT && infoStream.length < 20) {
+				IRConnection rcon = null;
+				while (rcon == null && totalTimeOut < MAX_TIMEOUT) {
 					synchronized (this) {
 						try {
-							this.wait(50);
-							totalTimeOut += 50;
+							this.wait(POLL_TIME);
+							try {
+								rcon = REngineConnectionFactory.getInstance().createRConnection(null);
+							} catch (final Exception x) {}
+							totalTimeOut += POLL_TIME;
 						} catch (InterruptedException e) {
 							log.debug("woke up");
 						}
 					}
 				}
-				if (totalTimeOut < MAX_TIMEOUT)
+				if (rcon != null) {
+					rcon.close();
 					runStateHolder.setRunState(RUNSTATE.RUNNING);
-				else 
+					//TODO kill process for maven ?
+				} else 
 					log.warn("no answer from R - please make sure R is installed an Rserve running.");
 			}catch (final IOException x) {
 				log.fatal(x);
