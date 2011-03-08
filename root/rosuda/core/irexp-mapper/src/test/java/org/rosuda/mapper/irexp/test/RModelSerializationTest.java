@@ -12,8 +12,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
 import junit.framework.Assert;
-import junit.framework.TestCase;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 import org.rosuda.irconnect.IREXP;
 import org.rosuda.irconnect.ITwoWayConnection;
 import org.rosuda.mapper.ObjectTransformationHandler;
@@ -22,14 +24,14 @@ import org.rosuda.rengine.REngineConnectionFactory;
 import org.rosuda.type.Node;
 import org.rosuda.type.impl.NodeBuilderFactory;
 
-public class RModelSerializationTest extends TestCase {
+public class RModelSerializationTest extends AbstractRTestCase {
 
 	private static final Logger logger = Logger.getLogger(RTypeConversionTest.class.getCanonicalName());
 	private ITwoWayConnection connection;
 	private ObjectTransformationHandler<Object> handler;
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
+	
+	@Before
+	public void setUp() throws Exception {
 		if (connection != null)
 			return; //reuse old con
 		this.handler = new IREXPMapper<Object>().createInstance();
@@ -42,22 +44,22 @@ public class RModelSerializationTest extends TestCase {
 		}
 	}
 	
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
+	@After
+	public void tearDown() throws Exception {
 		connection.close();
 	}
 	
+	@Test
 	public void testWriteLMSummary() throws ParserConfigurationException, TransformerException, IOException {
 		if (connection == null) {
 			logger.severe("Rserve is not running, test cannot work.");
 			return;
 		}
 		final IREXP lmREXP = connection.eval("c(summary(lm(speed~dist,data=cars),AIC=AIC(lm(speed~dist,data=cars))))");
-		assertEquals(IREXP.XT_MAP, lmREXP.getType());
+		Assert.assertEquals(IREXP.XT_MAP, lmREXP.getType());
 		final Node.Builder<Object> lmNode = new NodeBuilderFactory<Object>().createRoot();
 		handler.transform(lmREXP, lmNode);
-		assertNotNull(lmNode);
+		Assert.assertNotNull(lmNode);
 		final File file = File.createTempFile("lmsummary", "rObj");
 		final ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
 		oos.writeObject(lmNode.build());
@@ -67,6 +69,7 @@ public class RModelSerializationTest extends TestCase {
 		//file.deleteOnExit();
 	}
 	
+	@Test
 	public void testReadLMSummary() throws ParserConfigurationException, TransformerException, IOException, ClassNotFoundException {
 		final ObjectInputStream ois = new ObjectInputStream(RModelSerializationTest.class.getResourceAsStream("/extendedLmSummary.rObj"));
 		final Object rootNode = ois.readObject();

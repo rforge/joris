@@ -1,8 +1,9 @@
-package org.rosuda.irconnect;
+package org.rosuda.mapper.irexp.test;
 
 import org.junit.After;
 import org.junit.Before;
 import org.junit.runner.RunWith;
+import org.rosuda.irconnect.IRConnection;
 import org.rosuda.util.process.ProcessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;

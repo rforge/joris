@@ -10,6 +10,10 @@ package org.rosuda.irconnect;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.rosuda.REngine.REXP;
 import org.rosuda.REngine.REXPMismatchException;
 import org.rosuda.REngine.RList;
@@ -20,26 +24,22 @@ public class TestEngine extends AbstractRTestCase{
 
 	RConnection connection;
 
-    @Override
-	protected void setUp() throws Exception {		
-		super.setUp();
+    @Before
+	public void setUp() throws Exception {		
 		connection = new RConnection();				
 	}
 
-    @Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
+    @After
+    public void tearDown() throws Exception {
 		connection.close();
-//		try {
-//			connection.shutdown();
-//		} catch (final RserveException rse) {			
-//		}
 	}
 
+    @Test
 	public void testConnection() {
-		assertNotNull("not connected", connection);
+		Assert.assertNotNull("not connected", connection);
 	}
 	
+    @Test
 	public void testLibraries() throws RserveException, REXPMismatchException{
 		final REXP libraryREXP =				
 			connection.eval(
@@ -52,27 +52,27 @@ public class TestEngine extends AbstractRTestCase{
 		
 		final RList namedRList = libraryREXP.asList();
 		final String[] keys = namedRList.keys();
-		assertEquals("header", keys[0]);
-		assertEquals("results", keys[1]);
-		assertEquals("footer", keys[2]);
+		Assert.assertEquals("header", keys[0]);
+		Assert.assertEquals("results", keys[1]);
+		Assert.assertEquals("footer", keys[2]);
 		final REXP header = namedRList.at("header");
-		assertTrue(header.isNull());
+		Assert.assertTrue(header.isNull());
 		final REXP footer = namedRList.at("footer");
-		assertTrue(footer.isNull());		
+		Assert.assertTrue(footer.isNull());		
 		final REXP results = namedRList.at("results");
-		assertNotNull(results.dim());
-		assertEquals(3,results.dim()[1]);		
-		assertTrue(results.isString());
-		assertTrue(results.length()>1);
+		Assert.assertNotNull(results.dim());
+		Assert.assertEquals(3,results.dim()[1]);		
+		Assert.assertTrue(results.isString());
+		Assert.assertTrue(results.length()>1);
 		final String[] strings = results.asStrings();
-		assertTrue(results.hasAttribute("dim"));
+		Assert.assertTrue(results.hasAttribute("dim"));
 		final REXP dim = results.getAttribute("dim");
-		assertTrue(dim.isInteger());
-		assertTrue(dim.length()==2);
+		Assert.assertTrue(dim.isInteger());
+		Assert.assertTrue(dim.length()==2);
 		final int[] dimensions = dim.asIntegers();
-		assertEquals(3,dimensions[1]);
+		Assert.assertEquals(3,dimensions[1]);
 		final int rows = dimensions[0];
-		assertEquals(rows*3, results.length());
+		Assert.assertEquals(rows*3, results.length());
 		
 		final int length = dimensions[0];
 		final List<TestWrappedEngine.Library> libs = new ArrayList<TestWrappedEngine.Library>();

@@ -14,7 +14,7 @@
 	<artifactId>root</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 
-	<name>MORET</name>
+	<name>org.rosuda.root</name>
 	<description>Model Repository - redesign</description>
 	<inceptionYear>2010</inceptionYear>
 

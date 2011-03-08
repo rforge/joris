@@ -5,6 +5,7 @@ import java.util.Properties;
 import org.rosuda.irconnect.IConnectionFactory;
 import org.rosuda.irconnect.IRConnection;
 import org.rosuda.util.process.ProcessContext;
+import org.springframework.beans.factory.annotation.Required;
 
 public class RStartContext extends ProcessContext{
 
@@ -12,7 +13,7 @@ public class RStartContext extends ProcessContext{
 	
 	IConnectionFactory connectionFactory;
 	
-
+	@Required
 	public void setConnectionFactory(final IConnectionFactory connectionFactory) {
 		this.connectionFactory = connectionFactory;
 	}

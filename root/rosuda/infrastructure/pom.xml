@@ -14,7 +14,7 @@
 	<artifactId>infrastructure</artifactId>
 	<version>1.0.2-SNAPSHOT</version>
 
-	<name>MORET</name>
+	<name>org.rosuda.infrastucture</name>
 	<description>Model Repository - redesign</description>
 	<inceptionYear>2010</inceptionYear>
 

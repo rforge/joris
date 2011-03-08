@@ -3,8 +3,10 @@ package org.rosuda.mapper.irexp.test;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-import junit.framework.TestCase;
-
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.rosuda.irconnect.IREXP;
 import org.rosuda.irconnect.ITwoWayConnection;
 import org.rosuda.mapper.filter.NodeFilter;
@@ -17,7 +19,7 @@ import org.rosuda.type.Node;
 import org.rosuda.type.Value;
 import org.rosuda.type.impl.NodeBuilderFactory;
 
-public class RFilterTest extends TestCase {
+public class RFilterTest extends AbstractRTestCase {
 
 	int countAccepted = 0;
 	int countRejected = 0;
@@ -26,9 +28,8 @@ public class RFilterTest extends TestCase {
 	private ITwoWayConnection connection;
 	private ObjectTransformationManager<Object> filterMgr;
 	
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
+	@Before
+	public void setUp() throws Exception {
 		this.filterMgr = new ObjectTransformationManager<Object>(new NodeBuilderFactory<Object>(), 
 				new IREXPMapper<Object>().createInstance());
 		final Properties properties = new Properties();
@@ -39,25 +40,26 @@ public class RFilterTest extends TestCase {
 		}
 	}
 	
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
+	@After
+	public void tearDown() throws Exception {
 		connection.close();
 	}
 	
+	@Test
 	public void testUnfilteredModel() {
 		if (connection == null) {
 			logger.warning("no connection available, test cannot be run");
 			return;
 		}
 		final IREXP lmREXP = connection.eval("lm(speed~dist,data=cars)");
-		assertEquals(IREXP.XT_MAP, lmREXP.getType());
+		Assert.assertEquals(IREXP.XT_MAP, lmREXP.getType());
 		final Node<?> lmNode = filterMgr.transform(lmREXP);
-		assertNotNull(lmNode);
+		Assert.assertNotNull(lmNode);
 		if (debug) System.out.println(lmNode);
-		assertEquals(12, lmNode.getChildCount()); //keyvalues	
+		Assert.assertEquals(12, lmNode.getChildCount()); //keyvalues	
 	}
 	
+	@Test
 	public void testFilteredModel() {
 		if (connection == null) {
 			logger.warning("no connection available, test cannot be run");
@@ -87,15 +89,16 @@ public class RFilterTest extends TestCase {
 		filterResiduals.addListener(listener);
 		filterMgr.addFilter(filterResiduals);
 		final IREXP lmREXP = connection.eval("lm(speed~dist,data=cars)");
-		assertEquals(IREXP.XT_MAP, lmREXP.getType());
+		Assert.assertEquals(IREXP.XT_MAP, lmREXP.getType());
 		final Node<?> lmNode = filterMgr.transform(lmREXP);
 		if (debug) System.out.println(lmNode);
-		assertNotNull(lmNode);
-		assertEquals(11,lmNode.getChildCount());
-		assertEquals(1, countRejected);
-		assertTrue(countAccepted > 11);
+		Assert.assertNotNull(lmNode);
+		Assert.assertEquals(11,lmNode.getChildCount());
+		Assert.assertEquals(1, countRejected);
+		Assert.assertTrue(countAccepted > 11);
 	}
 	
+	@Test
 	public void testFilteredModelMapKeyValues() {
 		if (connection == null) {
 			logger.warning("no connection available, test cannot be run");
@@ -141,18 +144,19 @@ public class RFilterTest extends TestCase {
 		filterResiduals.addListener(listener);
 		filterMgr.addFilter(filterResiduals);
 		final IREXP lmREXP = connection.eval("lm(speed~dist,data=cars)");
-		assertEquals(IREXP.XT_MAP, lmREXP.getType());
+		Assert.assertEquals(IREXP.XT_MAP, lmREXP.getType());
 		final Node<?> lmNode = filterMgr.transform(lmREXP);
 		if (debug) System.out.println(lmNode);
-		assertNotNull(lmNode);
-		assertEquals(11, countRejected);
+		Assert.assertNotNull(lmNode);
+		Assert.assertEquals(11, countRejected);
 		//coefficients + childs:
 		//> length(lm(speed~dist,data=cars)$coefficients)
 		//[1] 2
-		assertEquals(3, countAccepted);
-		assertEquals(1, lmNode.getChildCount()); //rmap
+		Assert.assertEquals(3, countAccepted);
+		Assert.assertEquals(1, lmNode.getChildCount()); //rmap
 	}
 
+	@Test
 	public void testFilteredResiduals() {
 		if (connection == null) {
 			logger.warning("no connection available, test cannot be run");
@@ -202,12 +206,12 @@ public class RFilterTest extends TestCase {
 		
 		filterMgr.addFilter(filterQrIntercepts);
 		final IREXP lmREXP = connection.eval("lm(speed~dist,data=cars)");
-		assertEquals(IREXP.XT_MAP, lmREXP.getType());
+		Assert.assertEquals(IREXP.XT_MAP, lmREXP.getType());
 		final Node<Object> lmNode = filterMgr.transform(lmREXP);
 		if (debug) 
 			System.out.println(lmNode);
-		assertNotNull(lmNode);
-		assertEquals(50, countRejected); // all qr intercept
+		Assert.assertNotNull(lmNode);
+		Assert.assertEquals(50, countRejected); // all qr intercept
 		//check Matrix
 		int distCount = 0;
 		int otherCount = 0;
@@ -235,8 +239,8 @@ public class RFilterTest extends TestCase {
 				
 			}
 		}
-		assertEquals(50, distCount);
-		assertEquals(0, otherCount);
+		Assert.assertEquals(50, distCount);
+		Assert.assertEquals(0, otherCount);
 	}
 	
 	//"structural" tests are only found for
@@ -322,17 +326,16 @@ public class RFilterTest extends TestCase {
 		};
 		filterResiduals.addListener(listener);
 		
-		
 		filterMgr.addFilter(filterResiduals);
 		final IREXP lmREXP = connection.eval("summary(lm(speed~dist,data=cars))");
-		assertEquals(IREXP.XT_MAP, lmREXP.getType());
+		Assert.assertEquals(IREXP.XT_MAP, lmREXP.getType());
 		final Node<Object> lmNode = filterMgr.transform(lmREXP);
 		//if (debug) 
 			System.out.println(lmNode);
-		assertNotNull(lmNode);
-		assertEquals(4, countRejected); // 6 named
-		//assertEquals(1, countAccepted);
-		assertEquals(1, lmNode.getChildCount()); //rmap
+		Assert.assertNotNull(lmNode);
+		Assert.assertEquals(4, countRejected); // 6 named
+		//Assert.assertEquals(1, countAccepted);
+		Assert.assertEquals(1, lmNode.getChildCount()); //rmap
 	}
 
 }

@@ -6,8 +6,10 @@ import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import junit.framework.TestCase;
-
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.rosuda.irconnect.IREXP;
 import org.rosuda.irconnect.ITwoWayConnection;
 import org.rosuda.mapper.ObjectTransformationHandler;
@@ -21,14 +23,14 @@ import org.rosuda.type.impl.NodeBuilderFactory;
  * @author ralfseger
  *
  */
-public class RTypeConversionTest extends TestCase {
+public class RTypeConversionTest extends AbstractRTestCase {
 
 	private static final Logger logger = Logger.getLogger(RTypeConversionTest.class.getCanonicalName());
 	private ITwoWayConnection connection;
 	private ObjectTransformationHandler<Object> handler;
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
+	
+	@Before
+	public void setUp() throws Exception {
 		if (connection != null)
 			return; //reuse old con
 		this.handler = new IREXPMapper<Object>().createInstance();
@@ -41,89 +43,95 @@ public class RTypeConversionTest extends TestCase {
 		}
 	}
 	
-	@Override
-	protected void tearDown() throws Exception {
-		super.tearDown();
+	@After
+	public void tearDown() throws Exception {
 		connection.close();
 	}
 	
+	@Test
 	public void testStringConversion() throws ParserConfigurationException, TransformerException {
 		if (connection == null) {
 			logger.severe("Rserve is not running, test cannot work.");
 			return;
 		}
 		final IREXP stringREXP = connection.eval("\"aString\"");
-		assertEquals(IREXP.XT_STR, stringREXP.getType());
+		Assert.assertEquals(IREXP.XT_STR, stringREXP.getType());
 		final Node.Builder<Object> stringNode = new NodeBuilderFactory<Object>().createRoot();
 		handler.transform(stringREXP, stringNode);
-		assertNotNull(stringNode);
+		Assert.assertNotNull(stringNode);
 		System.out.println(stringNode);
 	}
 	
+	@Test
 	public void testDoubleConversion() throws ParserConfigurationException, TransformerException {
 		if (connection == null) { 			logger.severe("Rserve is not running, test cannot work."); 			return; 		}
 		final IREXP doubleREXP = connection.eval("1/7");
-		assertEquals(IREXP.XT_DOUBLE, doubleREXP.getType());
+		Assert.assertEquals(IREXP.XT_DOUBLE, doubleREXP.getType());
 		final Node.Builder<Object> doubleNode = new NodeBuilderFactory<Object>().createRoot();
 		handler.transform(doubleREXP, doubleNode);
-		assertNotNull(doubleNode);
+		Assert.assertNotNull(doubleNode);
 		System.out.println(doubleNode);
 	}
 	
+	@Test
 	public void testIntegerConversion() throws ParserConfigurationException, TransformerException {
 		if (connection == null) { 			logger.severe("Rserve is not running, test cannot work."); 			return; 		}
 		final IREXP intREXP = connection.eval("as.integer(1+7)");
-		assertEquals(IREXP.XT_INT, intREXP.getType());
+		Assert.assertEquals(IREXP.XT_INT, intREXP.getType());
 		final Node.Builder<Object> intNode = new NodeBuilderFactory<Object>().createRoot();
 		handler.transform(intREXP, intNode);
-		assertNotNull(intNode);
+		Assert.assertNotNull(intNode);
 		System.out.println(intNode);
 	}
 	
+	@Test
 	public void testBooleanConversion() throws ParserConfigurationException, TransformerException {
 		if (connection == null) { 			logger.severe("Rserve is not running, test cannot work."); 			return; 		}
 		final IREXP boolREXP = connection.eval("1 == 1");
-		assertEquals(IREXP.XT_BOOL, boolREXP.getType());
+		Assert.assertEquals(IREXP.XT_BOOL, boolREXP.getType());
 		final Node.Builder<Object> boolNode = new NodeBuilderFactory<Object>().createRoot();
 		handler.transform(boolREXP, boolNode);
-		assertNotNull(boolNode);
+		Assert.assertNotNull(boolNode);
 		System.out.println(boolNode);
 	}
 	
+	@Test
 	public void testFactorConversion() throws ParserConfigurationException, TransformerException {
 		if (connection == null) { 			logger.severe("Rserve is not running, test cannot work."); 			return; 		}
 		final IREXP factorREXP = connection.eval("as.factor(x=c(\"a\",\"b\"))");
-		assertEquals(IREXP.XT_FACTOR, factorREXP.getType());
+		Assert.assertEquals(IREXP.XT_FACTOR, factorREXP.getType());
 		final Node.Builder<Object> factorNode = new NodeBuilderFactory<Object>().createRoot();
 		handler.transform(factorREXP, factorNode);
-		assertNotNull(factorNode);
+		Assert.assertNotNull(factorNode);
 		System.out.println(factorNode);
 	}
 	
+	@Test
 	public void testLM() throws ParserConfigurationException, TransformerException {
 		if (connection == null) { 			logger.severe("Rserve is not running, test cannot work."); 			return; 		}
 		final IREXP lmREXP = connection.eval("lm(speed~dist,data=cars)");
-		assertEquals(IREXP.XT_MAP, lmREXP.getType());
+		Assert.assertEquals(IREXP.XT_MAP, lmREXP.getType());
 		final long tick = System.currentTimeMillis();
 		final Node.Builder<Object> lmNode = new NodeBuilderFactory<Object>().createRoot();
 		handler.transform(lmREXP, lmNode);
 		System.out.println("performance="+(System.currentTimeMillis()-tick)+" ms.");
-		assertNotNull(lmNode);
+		Assert.assertNotNull(lmNode);
 		System.out.println(lmNode);	
 	}
 	
+	@Test
 	public void testLMSummary() throws ParserConfigurationException, TransformerException {
 		if (connection == null) {
 			logger.severe("Rserve is not running, test cannot work.");
 			return;
 		}
 		final IREXP lmREXP = connection.eval("summary(lm(speed~dist,data=cars))");
-		assertEquals(IREXP.XT_MAP, lmREXP.getType());
+		Assert.assertEquals(IREXP.XT_MAP, lmREXP.getType());
 		final long tick = System.currentTimeMillis();
 		final Node.Builder<Object> lmNode = new NodeBuilderFactory<Object>().createRoot();
 		handler.transform(lmREXP, lmNode);
 		System.out.println("performance="+(System.currentTimeMillis()-tick)+" ms.");
-		assertNotNull(lmNode);
+		Assert.assertNotNull(lmNode);
 		System.out.println(lmNode);	
 	}
 	
