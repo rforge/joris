@@ -55,8 +55,11 @@ like a windows machine blocking in a non forking process. If the build seems to 
 
 <!-- end of project description -->
 
-<p> No content added. </p>
-
+<p>
+	<h3>Getting started.</h3> 
+	You need to install R and a connection to R first in order to utilize
+	<a href="docu/irconnection.php">IRConnection</a>.
+</p>
 <p> The <strong>project summary page</strong> you can find <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
 
 </body>
