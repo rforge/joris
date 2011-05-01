@@ -26,6 +26,7 @@
 		<module>jr-connect</module>
 		<module>jr-connect-rengine-impl</module>
 		<module>r-service</module>
+		<module>jr-connection-mgr</module>
 		<module>jr-connect-rengine-impl-test</module>
 	</modules>
 
