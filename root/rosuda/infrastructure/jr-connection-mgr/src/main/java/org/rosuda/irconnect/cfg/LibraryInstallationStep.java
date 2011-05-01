@@ -5,7 +5,6 @@ import org.apache.commons.logging.LogFactory;
 import org.rosuda.irconnect.IRConnection;
 import org.rosuda.irconnect.IREXP;
 import org.rosuda.irconnect.RServerException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Required;
 
 public class LibraryInstallationStep implements IRConnectionConfigStep{

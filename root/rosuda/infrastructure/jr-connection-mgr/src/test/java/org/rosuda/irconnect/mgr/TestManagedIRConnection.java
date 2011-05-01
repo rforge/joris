@@ -28,8 +28,6 @@ public class TestManagedIRConnection {
 	@Test
 	public void testIsTimpConnection() throws IOException {
 		Assert.assertNotNull(managedConnection);
-		//load lib:
-		managedConnection.voidEval("require(\"TIMP\")");
 		final BufferedReader reader = new BufferedReader(new InputStreamReader(TestManagedIRConnection.class.getResourceAsStream("/TIMPExample.R")));
 		String line = null;
 		while ((line = reader.readLine()) != null) {

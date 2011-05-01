@@ -15,6 +15,9 @@
 				<bean class="org.rosuda.irconnect.cfg.LibraryInstallationStep">
 					<property name="library" value="TIMP"/>
 				</bean>
+				<bean class="org.rosuda.irconnect.cfg.LoadLibraryStep">
+					<property name="library" value="TIMP"/>
+				</bean>
 			</list>
 		</property>
 	</bean>
