@@ -18,6 +18,7 @@
 
 	<modules>
  	        <module>commons-messagebus</module>
+ 	        <module>swing-impl</module>
 		<module>generic-type-visualizer</module>
 		<module>mmi-tool</module>
 	</modules>
