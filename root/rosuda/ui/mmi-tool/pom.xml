@@ -11,7 +11,7 @@
 	<artifactId>mmi-tool</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0.2-SNAPSHOT</version>
-	<name>rosuda-generic-type-visualizer</name>
+	<name>mmi-tool</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
@@ -46,10 +46,40 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.rosuda.ui</groupId>
+			<artifactId>swing-impl</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>3.8.1</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>openxls</groupId>
+			<artifactId>openxls</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.swixml</groupId>
+			<artifactId>swixml</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jdom</groupId>
+			<artifactId>jdom</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>3.0.6.RELEASE</version>
+			<type>jar</type>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.rosuda</groupId>
+			<artifactId>jr-connection-mgr</artifactId>
+			<version>1.0.2-SNAPSHOT</version>
+			<type>jar</type>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
 </project>

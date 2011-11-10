@@ -20,6 +20,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreeNode;
 
+import org.rosuda.irconnect.IRConnection;
 import org.rosuda.irconnect.IREXP;
 import org.rosuda.irconnect.ITwoWayConnection;
 import org.rosuda.mapper.filter.ObjectTransformationManager;
@@ -28,6 +29,9 @@ import org.rosuda.rengine.REngineConnectionFactory;
 import org.rosuda.type.Node;
 import org.rosuda.type.impl.NodeBuilderFactory;
 import org.rosuda.ui.core.mvc.MessageBus;
+import org.rosuda.util.process.ProcessStarter;
+import org.rosuda.util.process.ProcessStopper;
+import org.rosuda.util.r.impl.RStarterFactory;
 import org.rosuda.visualizer.NodeTreeModel.NodeToTreeNodeWrapper;
 import org.rosuda.visualizer.NodeTreeModel.ValueToTreeNodeWrapper;
 import org.rosuda.visualizer.step.LabelledMultiSelectionStep;
@@ -182,7 +186,16 @@ public class VisualizerFrame extends JFrame {
 		this.step = view.getStep();
 	}
 	
+	//Demo
 	public static final void main(final String[] args) {
+		//start RConnection (can be performed by a spring context, too)
+		
+		final RStarterFactory factory = new RStarterFactory();
+		// final ProcessFactory<IRConnection> rController = new ProcessF
+		final ProcessStarter<IRConnection> starter = factory.createService();
+		final ProcessStopper<IRConnection> stopper = (ProcessStopper<IRConnection>) starter;
+		starter.start();
+		try {
 		final ObjectTransformationManager<Object> filterMgr
 			= new ObjectTransformationManager<Object>(new NodeBuilderFactory<Object>(), 
 				new IREXPMapper<Object>().createInstance());
@@ -264,6 +277,8 @@ public class VisualizerFrame extends JFrame {
 	    //max 0,333 0,011 
 	    //avg 0,139 0,001 
 
-
+		} finally {
+			// stopper.stop();
+		}
 	}
 }

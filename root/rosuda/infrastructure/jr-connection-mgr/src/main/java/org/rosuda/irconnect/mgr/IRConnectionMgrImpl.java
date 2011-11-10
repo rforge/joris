@@ -2,6 +2,8 @@ package org.rosuda.irconnect.mgr;
 
 import java.util.Properties;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rosuda.irconnect.IConnectionFactory;
 import org.rosuda.irconnect.IRConnection;
 import org.rosuda.irconnect.cfg.IRConnectionConfig;
@@ -20,11 +22,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 //@ContextConfiguration(locations = {"classpath:/spring/r-service.spring.xml"})
 public class IRConnectionMgrImpl implements IRConnectionMgr {
 
-	private ProcessService<IRConnection> service;
+	private static final Log LOG = LogFactory.getLog(IRConnectionMgrImpl.class);
 
 	@Autowired
 	@Qualifier("rStarterProcess")
-	public void setService(ProcessService<IRConnection> service) {
+	private ProcessService<IRConnection> service;
+
+	public void setService(final ProcessService<IRConnection> service) {
 		this.service = service;
 	}
 	
@@ -32,14 +36,25 @@ public class IRConnectionMgrImpl implements IRConnectionMgr {
 	@Qualifier("rConnectionFactory")
 	private IConnectionFactory factory;
 	
+	public void setFactory(final IConnectionFactory factory) {
+		this.factory = factory;
+	}
+	
 	@Autowired
 	@Qualifier("rConnectionConfiguration")
-	private Properties configuration;
+	private Properties configuration = new Properties();
+
+	public void setConfiguration(Properties configuration) {
+		this.configuration = configuration;
+	}
 	
 	protected IRConnection createConnection() {
+		LOG.debug("createConnection()");
 		if (this.service.getRunState()!=RUNSTATE.RUNNING) {
+			LOG.debug("createConnection().service.start()");
 			this.service.start();
 		}
+		LOG.debug("createConnection().createTwoWayConnection("+configuration+")");
 		return factory.createTwoWayConnection(configuration);
 	}
 	
@@ -47,6 +62,7 @@ public class IRConnectionMgrImpl implements IRConnectionMgr {
 	
 	@Override
 	public IRConnection getIRConnection(final IRConnectionConfig config) {
+		LOG.debug("getIRConnection("+config+")");
 		if (managedConnection == null)
 			managedConnection = createConnection();
 		for (final IRConnectionConfigStep step: config.getSteps()) {

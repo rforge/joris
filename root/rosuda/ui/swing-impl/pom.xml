@@ -16,32 +16,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.rosuda</groupId>
-			<artifactId>jr-connect</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-		<!-- reference impl -->
-		<dependency>
-			<groupId>org.rosuda</groupId>
-			<artifactId>jr-connect-rengine-impl</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rosuda</groupId>
-			<artifactId>irexp-mapper</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rosuda</groupId>
-			<artifactId>generic-type-mapper-filter</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rosuda</groupId>
-			<artifactId>generic-type-restructure</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.rosuda</groupId>
 			<artifactId>commons-messagebus</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
@@ -49,18 +23,6 @@
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>openxls</groupId>
-			<artifactId>openxls</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.swixml</groupId>
-			<artifactId>swixml</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.jdom</groupId>
-			<artifactId>jdom</artifactId>
 		</dependency>
 	</dependencies>
 </project>

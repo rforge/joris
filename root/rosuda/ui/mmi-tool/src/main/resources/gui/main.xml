@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<frame size="800,600" defaultCloseOperation="JFrame.EXIT_ON_CLOSE">
+	<menubar>
+		<menu text="R">
+			<menuitem text="Scan Workspace" accelerator="W" id="scanWorkspace"/>
+			<menuitem text="Load Data Set" accelerator="L" id="loadDataSet"/>
+			<separator />
+			<menuitem text="Quit" id="quit" accelerator="shift meta Q"/>
+		</menu>
+		<menu text="Database">
+			<menuitem text="Search" accelerator="meta F" />
+			<menuitem text="Configure" accelerator="meta C" />
+		</menu>
+	</menubar>
+
+	<panel layout="BorderLayout">
+		<splitpane orientation="JSplitPane.VERTICAL_SPLIT"
+			dividerSize="5">
+			<scrollpane height="500" PreferredSize="800,500"
+				HorizontalScrollBarPolicy="JScrollPane.HORIZONTAL_SCROLLBAR_NEVER"
+				VerticalScrollBarPolicy="JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED">
+				<editorpane id="protocol" Editable="false" MinimumSize="320,200" PreferredSize="800,500" ContentType="text/html">
+				</editorpane>
+			</scrollpane>
+			<textarea id="input">
+			</textarea>
+		</splitpane>
+	</panel>
+</frame>

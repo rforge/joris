@@ -21,6 +21,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<spring.version>3.0.5.RELEASE</spring.version>
 		<derby.version>10.7.1.1</derby.version>
+		<rserve.version>0.66</rserve.version>
 	</properties>
 
 	<packaging>pom</packaging>
@@ -289,6 +290,36 @@
 				<artifactId>plexus-utils</artifactId>
 				<version>2.0.1</version>
 			</dependency>
+
+			<dependency>
+				<groupId>openxls</groupId>
+				<artifactId>openxls</artifactId>
+				<version>6.0.6</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.swixml</groupId>
+				<artifactId>swixml</artifactId>
+				<version>2.5-rc1</version>
+				<!-- <version>2.5.20110708</version> -->
+			</dependency>
+			<dependency>
+				<groupId>org.jdom</groupId>
+				<artifactId>jdom</artifactId>
+				<version>1.1</version>
+			</dependency>
+
+			<!-- R -->
+			<dependency>
+				<groupId>org.rosuda</groupId>
+				<artifactId>rengine</artifactId>
+				<version>${rserve.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.rosuda</groupId>
+				<artifactId>rserveengine</artifactId>
+				<version>${rserve.version}</version>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -326,6 +357,21 @@
 			<url>http://download.java.net/maven/2/</url>
 			<layout>default</layout>
 		</repository>
+		<repository>
+			<id>openXLS</id>
+			<name>maven.emeldi.com</name>
+			<url>http://maven.emeldi.com/repo</url>
+			<layout>default</layout>
+		</repository>
+		<repository>
+			<id>swixml2</id>
+			<name>code.google.com</name>
+			<url>http://code.google.com/p/swixml2/source/browse/mavenrepo/</url>
+		</repository>
+		<!--<repository> <id>sonatype-repository</id> <url>https://oss.sonatype.org/content/groups/public</url> 
+			<snapshots> <enabled>false</enabled> </snapshots> </repository> <repository> 
+			<id>sonatype-snapshot-repository</id> <url>https://oss.sonatype.org/content/repositories/snapshots</url> 
+			<releases> <enabled>false</enabled> </releases> </repository> -->
 		<!--<repository> <id>Apache</id> <name>the Apache repo</name> <url>http://ftp.cica.es/mirrors/maven2/</url> 
 			<layout>default</layout> </repository> -->
 	</repositories>

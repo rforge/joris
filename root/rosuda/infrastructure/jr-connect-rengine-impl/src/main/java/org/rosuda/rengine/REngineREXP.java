@@ -155,7 +155,7 @@ public class REngineREXP implements IREXP {
 					return IREXP.XT_VECTOR;
 			}
 		} catch (final REXPMismatchException e) {
-			throw new UnsupportedOperationException();
+			throw new UnsupportedOperationException("Unknown type :"+delegate.toDebugString());
 		}
 		System.out.println("unknown type = " + delegate+ " isVector?"+delegate.isVector()+" isList?"+delegate.isList());
 		try {

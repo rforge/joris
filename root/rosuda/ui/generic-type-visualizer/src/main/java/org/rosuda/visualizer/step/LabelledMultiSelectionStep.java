@@ -1,7 +1,6 @@
 package org.rosuda.visualizer.step;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -15,12 +14,16 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.rosuda.mvc.swing.JButtonHasClickable;
+import org.rosuda.mvc.swing.JLabelHasValue;
+import org.rosuda.mvc.swing.JListHasValue;
+import org.rosuda.mvc.swing.MVPContainerView;
 import org.rosuda.type.TreeUtil;
 import org.rosuda.ui.core.mvc.HasClickable;
 import org.rosuda.ui.core.mvc.HasClickable.ClickEvent;
 import org.rosuda.ui.core.mvc.HasClickable.ClickListener;
 import org.rosuda.ui.core.mvc.HasValue;
-import org.rosuda.ui.core.mvc.MVC;
+import org.rosuda.ui.core.mvc.MVP;
 import org.rosuda.ui.core.mvc.MessageBus;
 import org.rosuda.ui.core.mvc.MessageBus.EventListener;
 import org.rosuda.ui.core.mvc.impl.HasValueImpl;
@@ -28,11 +31,8 @@ import org.rosuda.visualizer.Localized;
 import org.rosuda.visualizer.VisualizerFrame;
 import org.rosuda.visualizer.VisualizerFrame.NodeEvent;
 import org.rosuda.visualizer.VisualizerFrame.Step;
-import org.rosuda.visualizer.mvc.swing.JButtonHasClickable;
-import org.rosuda.visualizer.mvc.swing.JLabelHasValue;
-import org.rosuda.visualizer.mvc.swing.JListHasValue;
 
-public class LabelledMultiSelectionStep implements MVC<LabelledMultiSelectionStep.Model, LabelledMultiSelectionStep.View> {
+public class LabelledMultiSelectionStep implements MVP<LabelledMultiSelectionStep.Model, LabelledMultiSelectionStep.View> {
 	
 
 	public static class JPanelImpl {
@@ -55,7 +55,7 @@ public class LabelledMultiSelectionStep implements MVC<LabelledMultiSelectionSte
 		
 	}
 	
-	public static class Model implements MVC.Model {
+	public static class Model implements MVP.Model {
 		
 		private final Step identifier;
 		
@@ -76,10 +76,8 @@ public class LabelledMultiSelectionStep implements MVC<LabelledMultiSelectionSte
 		
 	}
 	
-	public static class View implements MVC.View<JPanel>, LabelledView {
+	public static class View extends MVPContainerView<JPanel> implements LabelledView {
 
-		private final JPanel panel = new JPanel();
-		
 		private final HasValue<List<String>> labelledField;
 		private final HasValue<String> description;
 		private final HasValue<String> stepDescription;	
@@ -90,6 +88,7 @@ public class LabelledMultiSelectionStep implements MVC<LabelledMultiSelectionSte
 		private final Step step;
 		
 		private View (final Step step) {
+			super(new JPanel());
 			this.step = step;
 			final String prefix = step.toString();
 			final ResourceBundle localization = ResourceBundle.getBundle(org.rosuda.visualizer.step.LabelledSelectionStep.View.class.getName());
@@ -118,9 +117,9 @@ public class LabelledMultiSelectionStep implements MVC<LabelledMultiSelectionSte
 			this.choseButton = new JButtonHasClickable(jchoseButton);
 			this.labelledField = new JListHasValue(nodePathField);
 			
-			panel.add(jlabel, BorderLayout.WEST);
-			panel.add(new JScrollPane(nodePathField, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS), BorderLayout.CENTER);
-			panel.add(jchoseButton, BorderLayout.EAST);
+			getContainer().add(jlabel, BorderLayout.WEST);
+			getContainer().add(new JScrollPane(nodePathField, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS), BorderLayout.CENTER);
+			getContainer().add(jchoseButton, BorderLayout.EAST);
 		}
 		
 		public HasValue<String> getLabel() {
@@ -142,38 +141,12 @@ public class LabelledMultiSelectionStep implements MVC<LabelledMultiSelectionSte
 			return choseButton;
 		}
 		
-		public void disable() {
-			panel.setEnabled(false);
-			for (final Component c: panel.getComponents()) {
-				c.setEnabled(false);
-			}
-		}
-
-		public void enable() {
-			panel.setEnabled(true);
-			for (final Component c: panel.getComponents()) {
-				c.setEnabled(true);
-			}
-		}
-
-		public void show() {
-			panel.setVisible(true);
-		}
-
-		public void hide() {
-			panel.setVisible(false);
-		}
-
-		public JPanel getContainer() {
-			return panel;
-		}
-		
 		public Step getStep() {
 			return step;
 		}
 	}
 	
-	public static class Presenter implements MVC.Presenter<LabelledMultiSelectionStep.Model, LabelledMultiSelectionStep.View> {
+	public static class Presenter implements MVP.Presenter<LabelledMultiSelectionStep.Model, LabelledMultiSelectionStep.View> {
 
 		private final Step identifier;
 		

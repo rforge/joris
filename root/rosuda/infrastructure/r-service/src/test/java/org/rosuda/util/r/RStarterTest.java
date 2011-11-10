@@ -24,14 +24,11 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @Configurable
 public class RStarterTest {
 	
-	private ProcessService<IRConnection> service;
-		
+	
 	@Autowired
 	@Qualifier("rStarterProcess")
-	public void setService(ProcessService<IRConnection> service) {
-		this.service = service;
-	}
-	
+	private ProcessService<IRConnection> service;
+		
 	@Test
 	public void testSpringServiceAvailable() {
 		Assert.assertNotNull(service);

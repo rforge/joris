@@ -1,6 +1,6 @@
 package org.rosuda.ui.core.mvc;
 
-public interface MVC<M extends MVC.Model, V extends MVC.View> {
+public interface MVP<M extends MVP.Model, V extends MVP.View> {
 
 	/**
 	 * the data model
@@ -28,7 +28,7 @@ public interface MVC<M extends MVC.Model, V extends MVC.View> {
 		
 	}
 	
-	interface Presenter<M extends MVC.Model, V extends MVC.View> {
+	interface Presenter<M extends MVP.Model, V extends MVP.View> {
 		/**
 		 * binds model and view
 		 */

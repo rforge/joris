@@ -17,7 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/spring/r-service.spring.xml","classpath:/spring/r-manager.spring.xml"})
+@ContextConfiguration(locations = {"classpath*:spring/r-service.spring.xml", "classpath:/spring/r-manager.spring.xml"})
 @Configurable
 public class TestManagedIRConnection {
 

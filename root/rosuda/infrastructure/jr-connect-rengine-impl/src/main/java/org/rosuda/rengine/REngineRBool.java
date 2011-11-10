@@ -20,15 +20,19 @@ public class REngineRBool implements IRBool {
 
 	}
 	public boolean isFALSE() {
-		return delegate.isFalse()[index];
+		return sanityCheck() && delegate.isFALSE()[index];
 	}
 
 	public boolean isNA() {
-		return delegate.isNA()[index];
+		return sanityCheck() && delegate.isNA()[index];
 	}
 
 	public boolean isTRUE() {
-		return delegate.isTrue()[index];
+		return sanityCheck() && delegate.isTRUE()[index];
 	}
 
+	private boolean sanityCheck() {
+		final int length = delegate.length();
+		return (length > index);
+	}
 }
