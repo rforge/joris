@@ -1,24 +1,19 @@
  package org.rosuda.ui;
 
 import java.awt.Container;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeListener;
+import java.awt.Window;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import javax.swing.Action;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JTextArea;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.rosuda.irconnect.IRConnection;
 import org.rosuda.irconnect.IREXP;
-import org.rosuda.irconnect.mgr.IRConnectionMgrImpl;
+import org.rosuda.ui.context.UIContext;
 import org.rosuda.ui.core.mvc.MessageBus;
 import org.rosuda.ui.core.mvc.MessageBus.EventListener;
 import org.rosuda.ui.main.CRTKeyEvent;
@@ -27,23 +22,24 @@ import org.rosuda.ui.main.MainModel;
 import org.rosuda.ui.main.MainPresenter;
 import org.rosuda.ui.main.MainView;
 import org.rosuda.ui.main.MainViewContainerImpl;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.swixml.SwingEngine;
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame implements UIContext{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -6797582948731429567L;
 
-	private static final Log LOG = LogFactory.getLog(MainFrame.class);
-
+	private final ApplicationContext context;
 	private IRConnection rConnection;
 	private JEditorPane protocol;
 	private JTextArea input;
 
-	private JMenuItem quit;
+	JMenuItem quit;
+	JMenuItem scanWorkspace; 
 	
 	public class JPanelImpl {
 
@@ -60,14 +56,6 @@ public class MainFrame extends JFrame {
 
 	}
 
-	protected void startContext() {
-		final ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext(
-				new String[]{
-					"classpath*:spring/r-service.spring.xml",
-					"classpath:/spring/applicationContext.spring.xml"});
-		rConnection = context.getBean("managedConnection", IRConnection.class);
-	}
-
 	//
 	// actions: load dataset = call R source
 	// * create model = call R source
@@ -75,7 +63,12 @@ public class MainFrame extends JFrame {
 	//
 
 	public MainFrame() throws Exception {
-		startContext();
+		context = new ClassPathXmlApplicationContext(
+				new String[]{
+					"classpath*:spring/r-service.spring.xml",
+					"classpath:/spring/applicationContext.spring.xml"});
+		rConnection = context.getBean("managedConnection", IRConnection.class);
+		
 		//TODO load this file Localized
 		final InputStream rsc = MainFrame.class.getResourceAsStream("/gui/Main.xml");
 		final BufferedReader reader = new BufferedReader(new InputStreamReader(
@@ -107,16 +100,20 @@ public class MainFrame extends JFrame {
 				bus.fireEvent(new IREXPResponseEvent(rexp));				
 			}
 		});
-		quit.addActionListener(new ActionListener() {	
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				frame.setVisible(false);
-				System.exit(0);
-			}
-		});
+		new UIProcessor().bindEvents(bus, this, this);
 	}
-
+	
 	public static void main(String[] args) throws Exception {
 		new MainFrame();
+	}
+
+	@Override
+	public Window getUIFrame() {
+		return this;
+	}
+
+	@Override
+	public ApplicationContext getAppContext() {
+		return context;
 	}
 }

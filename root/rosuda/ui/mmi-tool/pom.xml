@@ -41,6 +41,11 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.rosuda.ui</groupId>
+			<artifactId>generic-type-visualizer</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>commons-messagebus</artifactId>
 			<version>${project.parent.version}</version>
@@ -48,6 +53,11 @@
 		<dependency>
 			<groupId>org.rosuda.ui</groupId>
 			<artifactId>swing-impl</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rosuda</groupId>
+			<artifactId>jr-connection-mgr</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
@@ -68,18 +78,16 @@
 			<artifactId>jdom</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
-			<version>3.0.6.RELEASE</version>
-			<type>jar</type>
-			<scope>compile</scope>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
-			<artifactId>jr-connection-mgr</artifactId>
-			<version>1.0.2-SNAPSHOT</version>
-			<type>jar</type>
-			<scope>compile</scope>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
 		</dependency>
 	</dependencies>
 </project>

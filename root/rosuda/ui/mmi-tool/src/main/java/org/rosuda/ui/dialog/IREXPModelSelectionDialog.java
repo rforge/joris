@@ -1,0 +1,40 @@
+package org.rosuda.ui.dialog;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+
+import javax.swing.JDialog;
+import javax.swing.JPanel;
+
+import org.rosuda.irconnect.IREXP;
+import org.rosuda.type.Node;
+import org.rosuda.ui.MainFrame;
+import org.rosuda.ui.context.UIContext;
+import org.rosuda.visualizer.Visualizer;
+import org.swixml.SwingEngine;
+
+public class IREXPModelSelectionDialog extends JDialog {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7248740770850757226L;
+	private JPanel visualizer;
+	
+	public IREXPModelSelectionDialog(final UIContext context) throws Exception {
+		super(context.getUIFrame());
+		final InputStream rsc = MainFrame.class.getResourceAsStream("/gui/dialog/ModelSelectionDialog.xml");
+		final BufferedReader reader = new BufferedReader(new InputStreamReader(
+				rsc));
+		new SwingEngine<JDialog>(this).render(reader);
+		reader.close();
+	}
+	
+	public IREXPModelSelectionDialog showWithNode(final Node<IREXP> environmentNode) {
+		visualizer.removeAll();
+		visualizer.add(new Visualizer<IREXP>(environmentNode));
+		setVisible(true);
+		return this;
+	}
+}

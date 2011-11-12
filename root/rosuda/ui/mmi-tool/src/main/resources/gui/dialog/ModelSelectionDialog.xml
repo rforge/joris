@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog size="640,480">
+	<menubar>
+		<menu text="DataBase">
+			<menuitem text="Define Filter" accelerator="meta F" id="defineFilter" />
+			<menuitem text="Store Selection" accelerator="meta S" id="storeSelection" />
+			<separator />
+			<menuitem text="Close" accelerator="meta C" id="close"/>
+		</menu>
+	</menubar>
+
+	<panel layout="BorderLayout">
+		<scrollpane height="480" PreferredSize="640,480"
+			HorizontalScrollBarPolicy="JScrollPane.HORIZONTAL_SCROLLBAR_NEVER"
+			VerticalScrollBarPolicy="JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED">
+			<panel id="visualizer"/>
+		</scrollpane>
+	</panel>
+</dialog>
