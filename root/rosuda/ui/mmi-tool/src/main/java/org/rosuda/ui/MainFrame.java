@@ -38,8 +38,8 @@ public class MainFrame extends JFrame implements UIContext{
 	private JEditorPane protocol;
 	private JTextArea input;
 
-	JMenuItem quit;
-	JMenuItem scanWorkspace; 
+	public JMenuItem quit;
+	public JMenuItem scanWorkspace; 
 	
 	public class JPanelImpl {
 
@@ -66,6 +66,8 @@ public class MainFrame extends JFrame implements UIContext{
 		context = new ClassPathXmlApplicationContext(
 				new String[]{
 					"classpath*:spring/r-service.spring.xml",
+					"classpath*:spring/hibernate-service-impl.spring.xml",
+					"classpath:/spring/dbContext.spring.xml",
 					"classpath:/spring/applicationContext.spring.xml"});
 		rConnection = context.getBean("managedConnection", IRConnection.class);
 		
@@ -75,7 +77,7 @@ public class MainFrame extends JFrame implements UIContext{
 				rsc));
 		final JFrame frame = new SwingEngine<JFrame>(this).render(reader);
 		reader.close();
-		final MessageBus bus = MessageBus.INSTANCE;
+		final MessageBus bus = context.getBean(MessageBus.class);
 		// l8n ?
 		// read text
 		final BufferedReader htmlStream = new BufferedReader(

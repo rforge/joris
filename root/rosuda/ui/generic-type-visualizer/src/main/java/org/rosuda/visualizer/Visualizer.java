@@ -1,8 +1,13 @@
 package org.rosuda.visualizer;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+
 import javax.swing.JPanel;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
 
 import org.rosuda.type.Node;
 
@@ -35,6 +40,18 @@ public class Visualizer<T> extends JPanel{
 	
 	public void enableDragMode() {
 		tree.setDragEnabled(true);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<Node<T>> getSelectedNodes() {
+		final Collection<Node<T>> selection = new ArrayList<Node<T>>();
+		final TreePath[] selectedPaths = tree.getSelectionPaths();
+		if (selectedPaths == null)
+			return Collections.unmodifiableCollection(selection);
+		for (TreePath selectedPath : selectedPaths) {
+			selection.add((Node<T>) ((NodeTreeModel.NodeToTreeNodeWrapper<T>)selectedPath.getLastPathComponent()).getNode());
+		}
+		return Collections.unmodifiableCollection(selection);
 	}
 	
 }

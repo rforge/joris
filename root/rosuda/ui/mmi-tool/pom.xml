@@ -10,7 +10,6 @@
 	<groupId>org.rosuda.ui</groupId>
 	<artifactId>mmi-tool</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.2-SNAPSHOT</version>
 	<name>mmi-tool</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
@@ -50,6 +49,21 @@
 			<artifactId>commons-messagebus</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+		<!-- one implementatino of generic-service: -->
+		<dependency>
+			<groupId>org.rosuda</groupId>
+			<artifactId>hibernate-service-impl</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<!-- database libraries -->
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derbyclient</artifactId>
+		</dependency>		
 		<dependency>
 			<groupId>org.rosuda.ui</groupId>
 			<artifactId>swing-impl</artifactId>

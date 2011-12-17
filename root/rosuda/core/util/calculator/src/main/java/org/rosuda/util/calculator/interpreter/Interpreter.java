@@ -139,6 +139,17 @@ public class Interpreter {
 	   			}
 	   			return accumulator;
 	   		}
+	   		case POW: {
+	   			Double accumulator = null;
+	   			for (TreeNode child : node.getChildren()) {
+	   				final Number value = eval(child, resolver);
+	   				if (accumulator == null && value != null)
+	   					accumulator = value.doubleValue();
+	   				else if (value!=null)
+	   					accumulator = Math.pow(accumulator, value.doubleValue());
+	   			}
+	   			return accumulator;
+	   		}
 	   		case FUNCTION: {
 	   			final Function function = functions.get(node.getValue());
 	   			if (function==null)

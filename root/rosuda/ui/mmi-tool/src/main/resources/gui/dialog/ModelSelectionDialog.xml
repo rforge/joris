@@ -13,7 +13,7 @@
 		<scrollpane height="480" PreferredSize="640,480"
 			HorizontalScrollBarPolicy="JScrollPane.HORIZONTAL_SCROLLBAR_NEVER"
 			VerticalScrollBarPolicy="JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED">
-			<panel id="visualizer"/>
+			<panel id="visualizerPanel"/>
 		</scrollpane>
 	</panel>
 </dialog>

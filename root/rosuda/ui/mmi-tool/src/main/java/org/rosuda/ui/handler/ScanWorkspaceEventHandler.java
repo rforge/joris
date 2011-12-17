@@ -6,6 +6,7 @@ import org.rosuda.irconnect.IRConnection;
 import org.rosuda.irconnect.IREXP;
 import org.rosuda.type.Node;
 import org.rosuda.ui.context.UIContext;
+import org.rosuda.ui.context.UIContextAware;
 import org.rosuda.ui.core.mvc.MessageBus;
 import org.rosuda.ui.dialog.IREXPModelSelectionDialog;
 import org.rosuda.ui.event.ScanWorkspaceEvent;
@@ -16,21 +17,20 @@ import com.google.common.base.Function;
 import com.google.common.base.Functions;
 
 public class ScanWorkspaceEventHandler extends
-		MessageBus.EventListener<ScanWorkspaceEvent> {
+		MessageBus.EventListener<ScanWorkspaceEvent> implements UIContextAware{
 
 	private static final Log LOG = LogFactory.getLog(ScanWorkspaceEventHandler.class);
 	
 	private UIContext context;
 
-	public ScanWorkspaceEventHandler(final UIContext eventContext) {
-		this.context = eventContext;
+	public ScanWorkspaceEventHandler() {
 	}
 
 	@Override
 	public void onEvent(final ScanWorkspaceEvent event) {
 		long tick = System.currentTimeMillis();
 		final IRConnection connection = context.getAppContext().getBean("managedConnection", IRConnection.class);
-		final Function<IREXP, Node<IREXP>> filterTransformation = new WrapIREXPAsNode();
+		final Function<IREXP, Node<IREXP>> filterTransformation = context.getAppContext().getBean(WrapIREXPAsNode.class);
 		final Function<IRConnection, Node<IREXP>> transformation = Functions.compose(filterTransformation, ReadAllObjectsFromRConnection.getInstance());
 		final Node<IREXP> environmentNode = transformation.apply(connection);
 		final long mark1 = System.currentTimeMillis() - tick;
@@ -40,14 +40,10 @@ public class ScanWorkspaceEventHandler extends
 		} catch (final Exception e) {
 			throw new RuntimeException(e);
 		}
-//		tick = System.currentTimeMillis();
-//		
-//		final Visualizer<IREXP> visualizer = new Visualizer<IREXP>(environmentNode);
-//		//TODO with ?swixml?
-//		final JDialog selectionDialog = new JDialog(context.getUIFrame());
-//		final JScrollPane innerPanel = new JScrollPane(visualizer);
-//		selectionDialog.getContentPane().add(innerPanel);
-//		selectionDialog.pack();
-//		selectionDialog.setVisible(true);
+	}
+
+	@Override
+	public void setUIContext(final UIContext context) {
+		this.context = context;
 	}
 }

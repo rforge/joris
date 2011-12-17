@@ -2,14 +2,14 @@ package org.rosuda.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
 import javax.swing.AbstractButton;
 
-import org.apache.commons.logging.LogFactory;
 import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rosuda.ui.context.UIContext;
+import org.rosuda.ui.context.UIContextAware;
 import org.rosuda.ui.core.mvc.MessageBus;
 import org.rosuda.ui.core.mvc.MessageBus.Event;
 import org.rosuda.ui.core.mvc.MessageBus.EventListener;
@@ -17,9 +17,9 @@ import org.rosuda.ui.core.mvc.MessageBus.EventListener;
 public class UIProcessor {
 
 	private static final Log LOG = LogFactory.getLog(UIProcessor.class);
-	
+
 	public void bindEvents(final MessageBus messageBus, final Object uiObject, final UIContext context) {
-		for (final Field field: uiObject.getClass().getDeclaredFields()) {
+		for (final Field field: uiObject.getClass().getFields()) {
 			if (AbstractButton.class.isAssignableFrom(field.getType())) {
 				createActionForButton(field, messageBus, uiObject, context);
 			}
@@ -61,10 +61,12 @@ public class UIProcessor {
 				.append(eventName)
 				.append("Handler").toString();
 		try {
-			final Class<?> eventClass = Class.forName(eventClassName);
-			final Constructor<?> eventConstructor = eventClass.getConstructor(UIContext.class);
-			final MessageBus.EventListener<?> handler = (EventListener<?>) eventConstructor.newInstance(context);
+			final Class<?> eventHandlerClassName = Class.forName(eventClassName);
+			final MessageBus.EventListener<?> handler = (EventListener<?>) eventHandlerClassName.newInstance();
 			messageBus.registerListener(handler);
+			if (UIContextAware.class.isAssignableFrom(eventHandlerClassName)) {
+				((UIContextAware)handler).setUIContext(context);
+			}
 		} catch (final Exception e) {
 			LOG.warn("no EventHandler for "+event,e);
 		}

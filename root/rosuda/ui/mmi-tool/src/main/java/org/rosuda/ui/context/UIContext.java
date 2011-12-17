@@ -9,5 +9,5 @@ public interface UIContext {
 	ApplicationContext getAppContext();
 	
 	Window getUIFrame();
-
+	
 }
