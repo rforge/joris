@@ -42,6 +42,7 @@ public class UIProcessor {
 					new Thread(new Runnable() {
 						@Override
 						public void run() {
+							LOG.debug("fireEvent:"+messageBusEvent);
 							messageBus.fireEvent(messageBusEvent);							
 						}
 					}).run();
@@ -62,7 +63,14 @@ public class UIProcessor {
 				.append("Handler").toString();
 		try {
 			final Class<?> eventHandlerClassName = Class.forName(eventClassName);
-			final MessageBus.EventListener<?> handler = (EventListener<?>) eventHandlerClassName.newInstance();
+			final MessageBus.EventListener<?> handler;
+			if (context.getAppContext().getBeanNamesForType(eventHandlerClassName).length == 1) {
+				handler = (EventListener<?>) context.getAppContext().getBean(eventHandlerClassName);
+				LOG.debug("fetch handler "+handler+" from spring context");
+			} else {
+				handler = (EventListener<?>) eventHandlerClassName.newInstance();
+				LOG.debug("created handler "+handler+" by reflection");
+			}
 			messageBus.registerListener(handler);
 			if (UIContextAware.class.isAssignableFrom(eventHandlerClassName)) {
 				((UIContextAware)handler).setUIContext(context);

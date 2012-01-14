@@ -10,7 +10,6 @@
 	<groupId>org.rosuda.util</groupId>
 	<artifactId>combinatorics</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.2-SNAPSHOT</version>
 	<name>util.combinatorics</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>

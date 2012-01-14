@@ -15,4 +15,8 @@ public class NameVertexConstraint extends AbstractVertexConstraint{
 		return name.equals(vertex.getName());
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
 }

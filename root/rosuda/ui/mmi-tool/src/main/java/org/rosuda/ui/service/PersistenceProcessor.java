@@ -5,7 +5,6 @@ import org.rosuda.irconnect.IREXP;
 import org.rosuda.type.Node;
 import org.rosuda.ui.core.mvc.MessageBus;
 import org.rosuda.ui.event.StoreSelectionEvent;
-import org.rosuda.ui.work.WrapIREXPAsNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

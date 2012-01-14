@@ -6,11 +6,13 @@ import java.io.InputStreamReader;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.rosuda.irconnect.IRConnection;
 import org.rosuda.irconnect.IREXP;
+import org.rosuda.util.process.ProcessService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.test.context.ContextConfiguration;
@@ -25,6 +27,17 @@ public class TestManagedIRConnection {
 	
 	@Autowired IRConnection managedConnection;
 	
+	@Autowired ProcessService<IRConnection> rStarterProcess;
+	
+	@After
+	public void onShutDown() {
+		LOG.info("shutting down test context ...");
+		managedConnection.close();
+		LOG.info("connection closed ...");
+		rStarterProcess.stop();
+		LOG.info("stopped rStarterProcess");
+	}
+		
 	@Test
 	public void testIsTimpConnection() throws IOException {
 		Assert.assertNotNull(managedConnection);

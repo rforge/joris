@@ -40,6 +40,8 @@ public class MainFrame extends JFrame implements UIContext{
 
 	public JMenuItem quit;
 	public JMenuItem scanWorkspace; 
+
+	public JMenuItem searchData;
 	
 	public class JPanelImpl {
 

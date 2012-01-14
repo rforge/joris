@@ -91,7 +91,7 @@ public interface Node<N>{
 
 		Value getValue();
 		
-		void add(final Builder<B> child);
+		Builder<B> add(final Builder<B> child);
 		
 		Builder<B> createChild(final String... nodeNames);
 		

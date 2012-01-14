@@ -7,13 +7,16 @@
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.rosuda</groupId>
 	<artifactId>hibernate-service-impl</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.2-SNAPSHOT</version>
 	<name>${project.artifactId}</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
+		<dependency>
+			<groupId>mockit</groupId>
+			<artifactId>jmockit</artifactId>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>generic-type</artifactId>

@@ -29,10 +29,8 @@ public class Graph<T> implements NodeBuilderFactory<T>, Serializable{
 		Value getValue();
 	}
 	
-	protected class NodeValueBuilderImpl implements NodeValue {
-		/**
-		 * 
-		 */
+	protected class NodeValueBuilderImpl implements NodeValue, Serializable {
+
 		private static final long serialVersionUID = 7582259642347834847L;
 		private String name;
 		private Value value;
@@ -61,6 +59,14 @@ public class Graph<T> implements NodeBuilderFactory<T>, Serializable{
 		}
 		public Value getValue() {
 			return value;
+		}
+		@Override
+		public String toString() {
+			return new StringBuilder(
+					this.getClass().getSimpleName())
+						.append("[name=").append(name)
+						.append(", value=").append(value).append("]")
+					.toString();
 		}
 	}
 
@@ -171,7 +177,7 @@ public class Graph<T> implements NodeBuilderFactory<T>, Serializable{
 			return nodes.get(nodeIdx).getValue();
 		}
 
-		public void add(final Builder<T> child) {
+		public Builder<T> add(final Builder<T> child) {
 			if (child instanceof Graph.BuilderFacade) {
 				final BuilderFacade childFacade = (BuilderFacade) child;
 				if (parentRefs.containsKey(childFacade.nodeIdx)) {
@@ -188,7 +194,7 @@ public class Graph<T> implements NodeBuilderFactory<T>, Serializable{
 				}
 				children.add(childFacade.nodeIdx);
 			}
-			 
+			return this;
 		}
 		
 		//experimental

@@ -1,5 +1,7 @@
 package org.rosuda.graph.domain;
 
+import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EnumType;
@@ -13,7 +15,7 @@ public class Value {
 	}
 
 	@Column( name="NUM", scale=10, precision=20)
-	private Number number;
+	private BigDecimal number;
 	@Column( name="STRING" )
 	private String string;
 	@Column( name="REF" )
@@ -24,12 +26,21 @@ public class Value {
 	@Enumerated(EnumType.ORDINAL)
 	private Type type;
 
-	public Number getNumber() {
+	public BigDecimal getNumber() {
 		return number;
 	}
-	public void setNumber(final Number number) {
+	public void setNumber(final BigDecimal number) {
 		this.number = number;
 		this.type = Type.NUMBER;
+	}
+	public void setNumber(final Number number) {
+		if (number != null) {
+			if ((double)number.longValue() == number.doubleValue()) {
+				setNumber(new BigDecimal(number.longValue()));
+			} else {
+				setNumber(new BigDecimal(number.doubleValue()));
+			}
+		}
 	}
 	public String getString() {
 		return string;

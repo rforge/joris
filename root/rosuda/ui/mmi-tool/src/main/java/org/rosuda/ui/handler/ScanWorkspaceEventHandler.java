@@ -12,25 +12,33 @@ import org.rosuda.ui.dialog.IREXPModelSelectionDialog;
 import org.rosuda.ui.event.ScanWorkspaceEvent;
 import org.rosuda.ui.work.ReadAllObjectsFromRConnection;
 import org.rosuda.ui.work.WrapIREXPAsNode;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import com.google.common.base.Function;
 import com.google.common.base.Functions;
 
+@Component
 public class ScanWorkspaceEventHandler extends
 		MessageBus.EventListener<ScanWorkspaceEvent> implements UIContextAware{
 
 	private static final Log LOG = LogFactory.getLog(ScanWorkspaceEventHandler.class);
 	
+	@Autowired 
+	@Qualifier("managedConnection")
+	private IRConnection connection;
+	@Autowired
+	private WrapIREXPAsNode filterTransformation;
+	
 	private UIContext context;
-
+	
 	public ScanWorkspaceEventHandler() {
 	}
 
 	@Override
 	public void onEvent(final ScanWorkspaceEvent event) {
 		long tick = System.currentTimeMillis();
-		final IRConnection connection = context.getAppContext().getBean("managedConnection", IRConnection.class);
-		final Function<IREXP, Node<IREXP>> filterTransformation = context.getAppContext().getBean(WrapIREXPAsNode.class);
 		final Function<IRConnection, Node<IREXP>> transformation = Functions.compose(filterTransformation, ReadAllObjectsFromRConnection.getInstance());
 		final Node<IREXP> environmentNode = transformation.apply(connection);
 		final long mark1 = System.currentTimeMillis() - tick;

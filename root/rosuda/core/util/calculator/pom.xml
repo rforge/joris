@@ -10,7 +10,6 @@
 	<groupId>org.rosuda.util</groupId>
 	<artifactId>calculator</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.2-SNAPSHOT</version>
 	<name>util.calculator</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>

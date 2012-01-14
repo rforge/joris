@@ -26,7 +26,12 @@ public class HibernateGraphServiceImpl<T> implements GraphService<T>{
 	GraphDao graphDao;
 	@Autowired
 	SessionFactory sessionFactory;
-	
+	VertexConstraintToCriteriaTranslator translator;
+
+	public void setVertexConstraintToCriteriaTranslator(final VertexConstraintToCriteriaTranslator translator) {
+		this.translator = translator;
+	}
+
 	@Override
 	//@Transactional(propagation=Propagation.REQUIRED)
 	public Long store(Node<T> graph) {
@@ -65,7 +70,10 @@ public class HibernateGraphServiceImpl<T> implements GraphService<T>{
 		criteria.setProjection(uniqueCriterion);
 		//now we only got the id (PK)
 		if (vertexConstraint != null) {
-			//add additional constraints
+			int i = 1;
+			for (final VertexConstraint constraint: vertexConstraint) {
+				translator.toCriteria(criteria, constraint, i++);
+			}
 		}
 		final List<Long> allGraphsIds = criteria.list();
 		final List<Node<T>> allGraphs = Lists.transform(allGraphsIds, new Function<Long, Node<T>>() {

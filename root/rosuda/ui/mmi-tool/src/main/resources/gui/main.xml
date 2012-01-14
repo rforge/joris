@@ -8,7 +8,7 @@
 			<menuitem text="Quit" id="quit" accelerator="shift meta Q"/>
 		</menu>
 		<menu text="Database">
-			<menuitem text="Search" accelerator="meta F" />
+			<menuitem text="Search" accelerator="meta F" id="searchData" />
 			<menuitem text="Configure" accelerator="meta C" />
 		</menu>
 	</menubar>

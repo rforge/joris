@@ -40,6 +40,9 @@
 	<bean id="graphDao" class="org.rosuda.graph.dao.HibernateGraphDaoImpl">
 	</bean>
 	
-	<bean id="graphService" class="org.rosuda.graph.service.HibernateGraphServiceImpl"/>
+	<bean id = "graphService-VertexConstraintToCriteriaTranslator" class="org.rosuda.graph.service.VertexConstraintToCriteriaTranslator" />
+	<bean id="graphService" class="org.rosuda.graph.service.HibernateGraphServiceImpl">
+		<property name="vertexConstraintToCriteriaTranslator" ref="graphService-VertexConstraintToCriteriaTranslator"/>
+	</bean>
 	
 </beans>

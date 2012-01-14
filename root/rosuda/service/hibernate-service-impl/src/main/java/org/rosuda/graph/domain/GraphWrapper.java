@@ -91,6 +91,7 @@ public class GraphWrapper implements NodeBuilderFactory<Vertex>, Serializable{
 		}
 	};
 
+	@SuppressWarnings("unchecked")
 	public Builder<Vertex> createRoot() {
 		final Builder<Vertex> delegateBuilder = new org.rosuda.type.impl.Graph<Vertex>().createRoot();
 		this.delegate = new Graph();

@@ -42,8 +42,9 @@ class NodeFilterDelegate<T> implements Node.Builder<T>{
 		return delegate.childAt(idx);
 	}
 	
-	public void add(final Node.Builder<T> child) {
+	public Node.Builder<T> add(final Node.Builder<T> child) {
 		delegate.add(unwrap(child));
+		return delegate;
 	}
 
 	public Node.Builder<T> createChild(final String... nodeNames) {
