@@ -1,6 +1,8 @@
 package org.rosuda.domain;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,6 +17,7 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.rosuda.domain.util.DebugUtil;
@@ -24,6 +27,8 @@ import org.rosuda.graph.domain.GraphWrapper;
 import org.rosuda.graph.domain.Vertex;
 import org.rosuda.graph.service.GraphService;
 import org.rosuda.graph.service.search.NameVertexConstraint;
+import org.rosuda.graph.service.search.NumberConstraint;
+import org.rosuda.graph.service.search.Relation;
 import org.rosuda.graph.service.search.VertexConstraint;
 import org.rosuda.mapper.ObjectTransformationHandler;
 import org.rosuda.type.Node;
@@ -120,7 +125,7 @@ public class PersistenceIntegrationTest {
 		Assert.assertEquals(2, graphCount);
 		DebugUtil.debugSchema(dataSource);
 	}
-	
+
 	@Test
 	public void testFindGraphsThatContainAVertexIdentifiedByName() {
 		final List<Map<String, Object>> nodeNames = jdbcTemplate.queryForList("SELECT v.* FROM GRAPH g JOIN VERTEX v ON v.gra_id = g.gra_id");
@@ -128,17 +133,65 @@ public class PersistenceIntegrationTest {
 		nodeNames.get(13).get("NUM");
 		//TODO how to cast to Number
 		final long graphCount = jdbcTemplate
-				.queryForLong("SELECT COUNT(DISTINCT(g.gra_id)) FROM GRAPH g JOIN VERTEX v ON v.gra_id = g.gra_id WHERE v.string = '"+ERSTES_ELEMENT+"'");
+				.queryForLong("SELECT COUNT(DISTINCT(g.gra_id)) FROM GRAPH g JOIN VERTEX v ON v.gra_id = g.gra_id WHERE v.name = 'iterable'");
 		Assert.assertEquals(2, graphCount);
 		
 		final Collection<VertexConstraint> validConstraint = new ArrayList<VertexConstraint>(); 
-		validConstraint.add(new NameVertexConstraint(ERSTES_ELEMENT));
-		assertEquals(2, graphService.find(validConstraint).size());	
+		validConstraint.add(new NameVertexConstraint("iterable"));
+		assertEquals(2, graphService.find(validConstraint).size());
+		final Node<?> n = graphService.find(validConstraint).get(0);
+		assertNotNull(n);
+		assertTrue(Node.class.isAssignableFrom(n.getChildren().iterator().next().getClass()));
 	}
 
 	@Test
+	public void testFindGraphsThatContainTwoVerticesIdentifiedByPathName() {		
+		Assert.assertEquals(2, getNodesOnTwoElementPathCount("String", "String"));
+		Assert.assertEquals(2, getNodesOnTwoElementPathCount("iterable", "String"));
+		Assert.assertEquals(0, getNodesOnTwoElementPathCount("String", "iterable"));
+		
+		
+		Collection<VertexConstraint> validConstraint = new ArrayList<VertexConstraint>(); 
+		validConstraint.add(new NameVertexConstraint("String").addChildConstraint(new NameVertexConstraint("String")));
+		assertEquals(2, graphService.find(validConstraint).size());
+		final Node<?> n = graphService.find(validConstraint).get(0);
+		assertNotNull(n);
+		assertTrue("No match for unordered pair", Node.class.isAssignableFrom(n.getChildren().iterator().next().getClass()));
+		
+		validConstraint = new ArrayList<VertexConstraint>(); 
+		validConstraint.add(new NameVertexConstraint("iterable").addChildConstraint(new NameVertexConstraint("String")));
+		assertEquals("Did not find in correct order",2, graphService.find(validConstraint).size());
+		
+		validConstraint = new ArrayList<VertexConstraint>(); 
+		validConstraint.add(new NameVertexConstraint("String").addChildConstraint(new NameVertexConstraint("iterable")));
+		assertEquals("Found order violation", 0, graphService.find(validConstraint).size());
+	}
+
+	private long getNodesOnTwoElementPathCount(final String child1, final String child2) {
+		final long graphCount = jdbcTemplate
+				.queryForLong("SELECT COUNT(DISTINCT(g.gra_id)) FROM GRAPH g JOIN VERTEX v ON (v.gra_id = g.gra_id AND v.name = ?)" +
+						" JOIN VERTEX v2 ON (v2.gra_id = g.gra_id AND v2.name = ?)" +
+						" JOIN EDGE e1 ON (e1.from_id = v.ver_id AND e1.to_id = v2.ver_id)"
+						, child1, child2);
+		return graphCount;
+	}
+	
+	@Test
+	public void testFindGraphThatContainsValue() {
+		final long graphCountLess3 = jdbcTemplate
+				.queryForLong("SELECT COUNT(DISTINCT(g.gra_id)) FROM GRAPH g JOIN VERTEX v ON v.gra_id = g.gra_id " +
+						" JOIN VERTEX v2 ON v2.gra_id = g.gra_id " +
+						" WHERE v.string = '"+ERSTES_ELEMENT+"' " +
+						" AND v2.num < 3");
+		Assert.assertEquals(1, graphCountLess3);
+		final Collection<VertexConstraint> validConstraint = new ArrayList<VertexConstraint>(); 
+		validConstraint.add(new NameVertexConstraint("Double").addValueConstraint(new NumberConstraint(3.0, Relation.GT)).addValueConstraint(new NumberConstraint(3.2, Relation.LT)));	
+		assertEquals(1, graphService.find(validConstraint).size());
+	}
+
+	@Ignore
+	@Test
 	public void testFindGraphsThatContainAVertexIdentifiedByNameWithDistinctSubValue() {
-		final List<Map<String, Object>> nodeNames = jdbcTemplate.queryForList("SELECT v.* FROM GRAPH g JOIN VERTEX v ON v.gra_id = g.gra_id");
 		final long graphCountAll = jdbcTemplate
 				.queryForLong("SELECT COUNT(DISTINCT(g.gra_id)) " +
 						" FROM GRAPH g " +
@@ -157,11 +210,12 @@ public class PersistenceIntegrationTest {
 		Assert.assertEquals(1, graphCountLess3);
 
 		final Collection<VertexConstraint> validConstraint = new ArrayList<VertexConstraint>(); 
-		validConstraint.add(new NameVertexConstraint(ERSTES_ELEMENT));
-		assertEquals(2, graphService.find(validConstraint).size());	
+		validConstraint.add(new NameVertexConstraint(ERSTES_ELEMENT).addValueConstraint(new NumberConstraint(3.0, Relation.GT)).addValueConstraint(new NumberConstraint(3.2, Relation.LT)));
+		assertEquals(1, graphService.find(validConstraint).size());
 	}
 
 	
+	//TODO move these tests to an abstract API test package!
 	@Test
 	public void testStoreAndDeleteGraph() throws IOException, ClassNotFoundException {
 		final int initialNodeCount = jdbcTemplate.queryForInt("SELECT count(*) FROM vertex");
@@ -186,6 +240,8 @@ public class PersistenceIntegrationTest {
 		Assert.assertNotNull(reloadedGraph);
 		final int reloadedNodeCount = countNodes(reloadedGraph);
 		Assert.assertEquals(currentNodes, reloadedNodeCount);
+		//TODO test different finders!
+		
 		//delete
 		graphService.delete(reloadedGraph);
 		//this may only be tested after flush

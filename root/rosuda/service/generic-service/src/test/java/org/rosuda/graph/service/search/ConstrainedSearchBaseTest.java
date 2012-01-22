@@ -76,9 +76,9 @@ public class ConstrainedSearchBaseTest implements InvocationHandler{
 	public void testFindAModel() {
 		service.store(null);
 		VertexConstraint distConstraint = new NameVertexConstraint("dist")
-			.addChildConstraint(new NameVertexConstraint("estimate").addValueConstraint(new MinNumberConstraint(0)).addValueConstraint(new MaxNumberConstraint(0.15)))
-			.addChildConstraint(new NameVertexConstraint("p-value").addValueConstraint(new MinNumberConstraint(0)).addValueConstraint(new MaxNumberConstraint(1e-10)))
-			;
+		.addChildConstraint(new NameVertexConstraint("estimate").addValueConstraint(new NumberConstraint(0, Relation.GT)).addValueConstraint(new NumberConstraint(0.15, Relation.LT)))
+		.addChildConstraint(new NameVertexConstraint("p-value").addValueConstraint(new NumberConstraint(0, Relation.GT)).addValueConstraint(new NumberConstraint(1e-10, Relation.LT)))
+		;
 		
 	}
 }

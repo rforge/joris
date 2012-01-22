@@ -6,6 +6,7 @@ import java.util.List;
 public abstract class AbstractVertexConstraint implements VertexConstraint {
 
 	private final List<VertexConstraint> childConstraints = new ArrayList<VertexConstraint>();
+	@SuppressWarnings("rawtypes")
 	private final List<ValueConstraint> valueConstraints = new ArrayList<ValueConstraint>();
 	
 	@Override
@@ -15,7 +16,7 @@ public abstract class AbstractVertexConstraint implements VertexConstraint {
 	}
 
 	@Override
-	public VertexConstraint addValueConstraint(final ValueConstraint valueConstraint) {
+	public VertexConstraint addValueConstraint(@SuppressWarnings("rawtypes") final ValueConstraint valueConstraint) {
 		valueConstraints.add(valueConstraint);
 		return this;
 	}
@@ -25,9 +26,12 @@ public abstract class AbstractVertexConstraint implements VertexConstraint {
 		return childConstraints;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	@Override
 	public Iterable<ValueConstraint> getValueConstraints() {
 		return valueConstraints;
 	}
+	
+	
 
 }

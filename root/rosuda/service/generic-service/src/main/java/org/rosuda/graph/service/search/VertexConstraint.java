@@ -1,16 +1,14 @@
 package org.rosuda.graph.service.search;
 
-import org.rosuda.type.Node;
 
 public interface VertexConstraint {
 
-	boolean matches(final Node<?> vertex);
-	
 	VertexConstraint addChildConstraint(final VertexConstraint childConstraint);
 	
-	VertexConstraint addValueConstraint(final ValueConstraint valueConstraint);
+	VertexConstraint addValueConstraint(@SuppressWarnings("rawtypes") final ValueConstraint valueConstraint);
 	
 	Iterable<VertexConstraint> getChildConstraints();
 	
+	@SuppressWarnings("rawtypes")
 	Iterable<ValueConstraint> getValueConstraints();
 }
