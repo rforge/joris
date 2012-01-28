@@ -71,7 +71,7 @@ public class RModelSerializationTest extends AbstractRTestCase {
 	
 	@Test
 	public void testReadLMSummary() throws ParserConfigurationException, TransformerException, IOException, ClassNotFoundException {
-		final ObjectInputStream ois = new ObjectInputStream(RModelSerializationTest.class.getResourceAsStream("/extendedLmSummary.rObj"));
+		final ObjectInputStream ois = new ObjectInputStream(RModelSerializationTest.class.getResourceAsStream("/models/extendedLmSummary.rObj"));
 		final Object rootNode = ois.readObject();
 		ois.close();
 		Assert.assertNotNull(ois);

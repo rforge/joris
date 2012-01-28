@@ -19,6 +19,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
+			<artifactId>test-data-resources</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.rosuda</groupId>
 			<artifactId>generic-type</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>

@@ -5,15 +5,17 @@
 		<artifactId>core</artifactId>
 		<version>1.0.2-SNAPSHOT</version>
 	</parent>
-
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.rosuda</groupId>
 	<artifactId>test-data</artifactId>
-	<packaging>jar</packaging>
-	<version>1.0.2-SNAPSHOT</version>
 	<name>rosuda-test-data</name>
+	<packaging>jar</packaging>
 	<url>http://maven.apache.org</url>
 	<dependencies>
+		<dependency>
+			<groupId>org.rosuda</groupId>
+			<artifactId>test-data-resources</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>jr-connect</artifactId>

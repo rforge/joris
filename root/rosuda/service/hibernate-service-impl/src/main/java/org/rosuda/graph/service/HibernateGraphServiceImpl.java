@@ -1,6 +1,8 @@
 package org.rosuda.graph.service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +25,7 @@ import com.google.common.collect.Lists;
 
 public class HibernateGraphServiceImpl<T> implements GraphService<T>{
 
+	private static final Collection<VertexConstraint> EMPTY_LIST = Collections.synchronizedList(new ArrayList<VertexConstraint>());
 	@Autowired
 	GraphDao graphDao;
 	@Autowired
@@ -62,9 +65,8 @@ public class HibernateGraphServiceImpl<T> implements GraphService<T>{
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
 	@Transactional(propagation=Propagation.REQUIRED, readOnly = true)
-	public List<Node<T>> find(final Collection<VertexConstraint> vertexConstraints) {
+	public List<Node<T>> find(final Iterable<VertexConstraint> vertexConstraints) {
 		
 		final Session session = sessionFactory.getCurrentSession();
 		final StringBuilder queryBuilderStub = new StringBuilder("SELECT DISTINCT(graph.gra_id) graphid FROM GRAPH graph");
@@ -93,5 +95,10 @@ public class HibernateGraphServiceImpl<T> implements GraphService<T>{
 			}
 		});
 		return allGraphs;
+	}
+
+	@Override
+	public List<Node<T>> list() {
+		return find(EMPTY_LIST);
 	}
 }

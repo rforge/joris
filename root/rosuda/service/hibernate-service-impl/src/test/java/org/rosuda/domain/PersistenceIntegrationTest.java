@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -17,12 +15,9 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.rosuda.domain.util.DebugUtil;
-import org.rosuda.graph.domain.EntityConverter;
-import org.rosuda.graph.domain.Graph;
 import org.rosuda.graph.domain.GraphWrapper;
 import org.rosuda.graph.domain.Vertex;
 import org.rosuda.graph.service.GraphService;
@@ -188,72 +183,5 @@ public class PersistenceIntegrationTest {
 		validConstraint.add(new NameVertexConstraint("Double").addValueConstraint(new NumberConstraint(3.0, Relation.GT)).addValueConstraint(new NumberConstraint(3.2, Relation.LT)));	
 		assertEquals(1, graphService.find(validConstraint).size());
 	}
-
-	@Ignore
-	@Test
-	public void testFindGraphsThatContainAVertexIdentifiedByNameWithDistinctSubValue() {
-		final long graphCountAll = jdbcTemplate
-				.queryForLong("SELECT COUNT(DISTINCT(g.gra_id)) " +
-						" FROM GRAPH g " +
-						"	JOIN VERTEX v ON v.gra_id = g.gra_id " +
-						" 	JOIN VERTEX v2 ON v2.gra_id = g.gra_id " +
-						" WHERE v.string = '"+ERSTES_ELEMENT+"' " +
-						" AND v2.num < 4");
-		//TODO check Number is stored correctly!
-		assertEquals(2, graphCountAll);
-
-		final long graphCountLess3 = jdbcTemplate
-				.queryForLong("SELECT COUNT(DISTINCT(g.gra_id)) FROM GRAPH g JOIN VERTEX v ON v.gra_id = g.gra_id " +
-						" JOIN VERTEX v2 ON v2.gra_id = g.gra_id " +
-						" WHERE v.string = '"+ERSTES_ELEMENT+"' " +
-						" AND v2.num < 3");
-		Assert.assertEquals(1, graphCountLess3);
-
-		final Collection<VertexConstraint> validConstraint = new ArrayList<VertexConstraint>(); 
-		validConstraint.add(new NameVertexConstraint(ERSTES_ELEMENT).addValueConstraint(new NumberConstraint(3.0, Relation.GT)).addValueConstraint(new NumberConstraint(3.2, Relation.LT)));
-		assertEquals(1, graphService.find(validConstraint).size());
-	}
-
 	
-	//TODO move these tests to an abstract API test package!
-	@Test
-	public void testStoreAndDeleteGraph() throws IOException, ClassNotFoundException {
-		final int initialNodeCount = jdbcTemplate.queryForInt("SELECT count(*) FROM vertex");
-		final ObjectInputStream ois = new ObjectInputStream(
-				PersistenceIntegrationTest.class
-						.getResourceAsStream("/extendedLmSummary.rObj"));
-		@SuppressWarnings("unchecked")
-		final Node<Vertex> rootNode = (Node<Vertex>) ois.readObject();
-		ois.close();
-		Assert.assertNotNull(rootNode);
-		final int currentNodes = countNodes(rootNode);
-		//convert:
-		final Graph domainGraph = EntityConverter.convertNodeToGraphEntity.apply(rootNode);
-		Assert.assertNotNull(domainGraph);
-		//store:
-		final Long pk = graphService.store(rootNode);
-		//test if stored:
-		final int storedNodeCount = jdbcTemplate.queryForInt("SELECT count(*) FROM vertex");
-		Assert.assertEquals(currentNodes, storedNodeCount - initialNodeCount);
-		//reload:
-		final Node<Vertex> reloadedGraph = graphService.read(pk);
-		Assert.assertNotNull(reloadedGraph);
-		final int reloadedNodeCount = countNodes(reloadedGraph);
-		Assert.assertEquals(currentNodes, reloadedNodeCount);
-		//TODO test different finders!
-		
-		//delete
-		graphService.delete(reloadedGraph);
-		//this may only be tested after flush
-		//final int nodeCountAfterDelete = jdbcTemplate.queryForInt("SELECT count(*) FROM vertex");
-		//Assert.assertEquals(0, nodeCountAfterDelete);
-	}
-	
-	private int countNodes(Node<?> node) {
-		int accumulator = 1;
-		for (Node<?> child : node.getChildren()) {
-			accumulator+=countNodes(child);
-		}
-		return accumulator;
-	}
 }

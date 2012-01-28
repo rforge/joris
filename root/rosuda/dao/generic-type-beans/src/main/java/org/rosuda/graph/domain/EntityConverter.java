@@ -72,6 +72,8 @@ public class EntityConverter {
 	public static final Function<Graph, Node<?>> convertGraphEntityToNode = new Function<Graph, Node<?>>() {
 		@Override
 		public Node<?> apply(final Graph graph) {
+			if (graph == null)
+				return null;
 			final Map<Long, Vertex> vertexIdMap = Maps.newHashMap();
 			final Map<Long, List<Long>> edgesMap = Maps.newHashMap();
 			final Map<Long, Long> parentIdMap = Maps.newHashMap();

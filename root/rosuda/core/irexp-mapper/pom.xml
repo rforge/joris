@@ -7,10 +7,8 @@
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.rosuda</groupId>
 	<artifactId>irexp-mapper</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.2-SNAPSHOT</version>
 	<name>rosuda-irexp-mapper</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
@@ -18,6 +16,12 @@
 			<groupId>org.rosuda</groupId>
 			<artifactId>jr-connect</artifactId>
 			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rosuda</groupId>
+			<artifactId>test-data-resources</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>test</scope>
 		</dependency>
 		<!-- reference impl -->
 		<dependency>
