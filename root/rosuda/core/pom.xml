@@ -16,6 +16,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>test-data-resources</module>
 		<module>generic-type</module>
 		<module>generic-mapper</module>
 		<module>generic-type-restructure</module>
