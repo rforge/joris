@@ -86,7 +86,7 @@ public class SQLQueryBuilder {
 			Map<String, Object> queryArguments, String parentJoinId) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
 		for (final ValueConstraint valueConstraint: valueConstraints) {
 			SQLValueQueryAppender appender = getAppender(valueConstraint);
-			appender.appendToSqlQuery(queryStub, queryArguments, valueConstraint.eval(), parentJoinId);
+			appender.appendToSqlQuery(queryStub, queryArguments, valueConstraint.getValue(), parentJoinId);
 		}
 		
 	}

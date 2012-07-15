@@ -18,8 +18,8 @@ public class SearchByConstraintTest {
 		//     p-value<1e-10
 		//and  extimate >0.15
 		VertexConstraint distConstraint = new NameVertexConstraint("dist")
-			.addChildConstraint(new NameVertexConstraint("estimate").addValueConstraint(new NumberConstraint(0, Relation.GT)).addValueConstraint(new NumberConstraint(0.15, Relation.LT)))
-			.addChildConstraint(new NameVertexConstraint("p-value").addValueConstraint(new NumberConstraint(0, Relation.GT)).addValueConstraint(new NumberConstraint(1e-10, Relation.LT)))
+			.addChildConstraint(new NameVertexConstraint("estimate").addValueConstraint(new NumberValueConstraint(0, Relation.GT)).addValueConstraint(new NumberValueConstraint(0.15, Relation.LT)))
+			.addChildConstraint(new NameVertexConstraint("p-value").addValueConstraint(new NumberValueConstraint(0, Relation.GT)).addValueConstraint(new NumberValueConstraint(1e-10, Relation.LT)))
 		;
 		Assert.assertNotNull(distConstraint);
 		

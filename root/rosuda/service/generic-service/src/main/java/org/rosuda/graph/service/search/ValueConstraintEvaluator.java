@@ -16,18 +16,18 @@ public interface ValueConstraintEvaluator<T, OP> {
 				final Number num = value.getNumber();
 				if (num == null)
 					return false;
-				final NumberConstraint numberConstraint = (NumberConstraint) vc;
+				final NumberValueConstraint numberConstraint = (NumberValueConstraint) vc;
 				switch (numberConstraint.getOperator()) {
 					case GT: 
-						return num.doubleValue() > numberConstraint.eval().doubleValue();
+						return num.doubleValue() > numberConstraint.getValue().doubleValue();
 					case GE: 
-						return num.doubleValue() >= numberConstraint.eval().doubleValue();
+						return num.doubleValue() >= numberConstraint.getValue().doubleValue();
 					case EQ: 
-						return num.doubleValue() == numberConstraint.eval().doubleValue();
+						return num.doubleValue() == numberConstraint.getValue().doubleValue();
 					case LE: 
-						return num.doubleValue() <= numberConstraint.eval().doubleValue();
+						return num.doubleValue() <= numberConstraint.getValue().doubleValue();
 					case LT: 
-						return num.doubleValue() < numberConstraint.eval().doubleValue();
+						return num.doubleValue() < numberConstraint.getValue().doubleValue();
 					
 				}
 				return true;

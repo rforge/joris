@@ -7,10 +7,8 @@
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.rosuda</groupId>
 	<artifactId>jr-connect-rengine-impl-test</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.2-SNAPSHOT</version>
 	<name>rosuda-jr-connect-rengine-impl-test</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
@@ -27,12 +25,10 @@
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>rengine</artifactId>
-			<version>0.63</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>rserveengine</artifactId>
-			<version>0.63</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>

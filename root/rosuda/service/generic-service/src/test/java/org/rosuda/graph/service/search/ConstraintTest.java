@@ -22,15 +22,15 @@ public class ConstraintTest{
 	@Test
 	public void testNumberConstraints() {
 		final Value int42 = Value.newNumber(42);
-		assertTrue(evaluator.matches(new NumberConstraint(1, Relation.GT), int42));
-		assertTrue(evaluator.matches(new NumberConstraint(1, Relation.GE), int42));
-		assertTrue(evaluator.matches(new NumberConstraint(42, Relation.EQ), int42));
-		assertTrue(evaluator.matches(new NumberConstraint(100, Relation.LE), int42));
-		assertTrue(evaluator.matches(new NumberConstraint(100, Relation.LT), int42));
-		assertFalse(evaluator.matches(new NumberConstraint(1, Relation.LT), int42));
-		assertFalse(evaluator.matches(new NumberConstraint(1, Relation.LE), int42));
-		assertFalse(evaluator.matches(new NumberConstraint(1, Relation.EQ), int42));
-		assertFalse(evaluator.matches(new NumberConstraint(100, Relation.GE), int42));
-		assertFalse(evaluator.matches(new NumberConstraint(100, Relation.GT), int42));
+		assertTrue(evaluator.matches(new NumberValueConstraint(1, Relation.GT), int42));
+		assertTrue(evaluator.matches(new NumberValueConstraint(1, Relation.GE), int42));
+		assertTrue(evaluator.matches(new NumberValueConstraint(42, Relation.EQ), int42));
+		assertTrue(evaluator.matches(new NumberValueConstraint(100, Relation.LE), int42));
+		assertTrue(evaluator.matches(new NumberValueConstraint(100, Relation.LT), int42));
+		assertFalse(evaluator.matches(new NumberValueConstraint(1, Relation.LT), int42));
+		assertFalse(evaluator.matches(new NumberValueConstraint(1, Relation.LE), int42));
+		assertFalse(evaluator.matches(new NumberValueConstraint(1, Relation.EQ), int42));
+		assertFalse(evaluator.matches(new NumberValueConstraint(100, Relation.GE), int42));
+		assertFalse(evaluator.matches(new NumberValueConstraint(100, Relation.GT), int42));
 	}
 }

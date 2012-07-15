@@ -17,6 +17,7 @@
 
 	<modules>
  	       	<module>generic-service</module>
+ 	       	<module>service-integration-util</module>
 	        <module>hibernate-service-impl</module>
 	</modules>
 </project>

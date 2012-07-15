@@ -35,5 +35,7 @@
 		<constructor-arg index="0" type="org.rosuda.irconnect.cfg.IRConnectionConfig" ref="timpConnectionConfig"/>
 	</bean>
 		
-	<bean id="messageBus" class="org.rosuda.ui.core.mvc.MessageBus.Impl"></bean>
+	<bean id="messageBus" class="org.rosuda.ui.core.mvc.MessageBus$Impl"></bean>
+	
+	<bean id="screen" class="org.rosuda.mvc.swing.SwingScreen"></bean>
 </beans>

@@ -6,5 +6,5 @@ public interface ValueConstraint<TYPE, OPERATOR> {
 
 	Value.Type getType();
 	OPERATOR getOperator();
-	TYPE eval();
+	TYPE getValue();
 }

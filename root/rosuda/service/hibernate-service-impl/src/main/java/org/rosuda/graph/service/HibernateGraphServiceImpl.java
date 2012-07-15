@@ -97,6 +97,7 @@ public class HibernateGraphServiceImpl<T> implements GraphService<T>{
 		return allGraphs;
 	}
 
+	@Transactional(propagation=Propagation.REQUIRED, readOnly = true)
 	@Override
 	public List<Node<T>> list() {
 		return find(EMPTY_LIST);

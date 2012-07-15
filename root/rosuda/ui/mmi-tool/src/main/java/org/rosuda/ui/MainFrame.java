@@ -9,8 +9,10 @@ import java.io.InputStreamReader;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
+import javax.swing.JRootPane;
 import javax.swing.JTextArea;
 
+import org.omg.CORBA.portable.ApplicationException;
 import org.rosuda.irconnect.IRConnection;
 import org.rosuda.irconnect.IREXP;
 import org.rosuda.ui.context.UIContext;
@@ -49,11 +51,11 @@ public class MainFrame extends JFrame implements UIContext{
 		private final MainModel model;
 		private final MainView<Container> view;
 
-		public JPanelImpl(final Container panel, final MessageBus mb) throws Exception {
+		public JPanelImpl(final Container panel, ApplicationContext context) throws Exception {
 			this.presenter = new MainPresenter();
-			this.model = new MainModel();
+			this.model = new MainModel(context);
 			this.view = new MainViewContainerImpl(panel, input, protocol);
-			presenter.bind(model, view, mb);
+			presenter.bind(model, view, context.getBean(MessageBus.class));
 		}
 
 	}
@@ -96,7 +98,7 @@ public class MainFrame extends JFrame implements UIContext{
 		frame.setVisible(true);
 		protocol.setText(htmlBuilder.toString());
 		input.requestFocus();
-		new JPanelImpl(this.getRootPane(), bus);
+		new JPanelImpl(this.getRootPane(), context);
 		bus.registerListener(new EventListener<CRTKeyEvent>() {
 			@Override
 			public void onEvent(final CRTKeyEvent crtEvent) {

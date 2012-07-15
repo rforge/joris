@@ -24,7 +24,7 @@ public class StringValueConstraint implements ValueConstraint<String, StringComp
 	}
 
 	@Override
-	public String eval() {
+	public String getValue() {
 		return value;
 	}
 

@@ -7,10 +7,8 @@
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.rosuda</groupId>
 	<artifactId>jr-connection-mgr</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.2-SNAPSHOT</version>
 	<name>rosuda-jr-connect</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>

@@ -21,6 +21,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>libs</module>
 		<module>infrastructure</module>	
 		<module>core</module>
 		<module>dao</module>

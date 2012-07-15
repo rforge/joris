@@ -43,6 +43,11 @@
 			<artifactId>generic-service</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.rosuda</groupId>
+			<artifactId>service-integration-util</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
 		<!--<dependency> <groupId>javax.persistence</groupId> <artifactId>persistence-api</artifactId> 
 			</dependency> -->
 		<dependency>

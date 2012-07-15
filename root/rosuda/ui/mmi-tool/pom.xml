@@ -63,7 +63,7 @@
 		<dependency>
 			<groupId>org.apache.derby</groupId>
 			<artifactId>derbyclient</artifactId>
-		</dependency>		
+		</dependency>
 		<dependency>
 			<groupId>org.rosuda.ui</groupId>
 			<artifactId>swing-impl</artifactId>
@@ -80,10 +80,6 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>openxls</groupId>
-			<artifactId>openxls</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>org.swixml</groupId>
 			<artifactId>swixml</artifactId>
 		</dependency>
@@ -98,10 +94,15 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context-support</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.swinglabs.swingx</groupId>
+			<artifactId>swingx-all</artifactId>
 		</dependency>
 	</dependencies>
 </project>
