@@ -1,8 +1,11 @@
 package org.rosuda.util.db;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 
+import javax.sql.DataSource;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.rosuda.util.process.HasRunState;
 import org.rosuda.util.process.ProcessFactory;
 import org.rosuda.util.process.ProcessStarter;
@@ -11,12 +14,14 @@ import org.rosuda.util.process.RunStateHolder;
 import org.rosuda.util.process.RunningInstance;
 import org.springframework.beans.factory.annotation.Required;
 
-public class DatabaseStarterFactory extends ProcessFactory<Connection> {
+public class DatabaseStarterFactory extends ProcessFactory<DataSource> {
 
-	private final RunStateHolder<Connection> runStateHolder = new RunStateHolder<Connection>();
+	private static final Log LOG = LogFactory
+			.getLog(DatabaseStarterFactory.class);
+	private final RunStateHolder<DataSource> runStateHolder = new RunStateHolder<DataSource>();
 
 	private DerbyContext context = new DerbyContext();
-	
+
 	public DerbyContext getContext() {
 		return context;
 	}
@@ -26,25 +31,26 @@ public class DatabaseStarterFactory extends ProcessFactory<Connection> {
 		this.context = context;
 	}
 
-	
 	@Override
-	protected ProcessStarter<Connection> createStarter() {
+	protected ProcessStarter<DataSource> createStarter() {
 		try {
-			final Connection con = context.getConnection();
-			if (con != null)
-				return new RunningInstance<Connection>(runStateHolder);
+			final DataSource dataSource = context.getDataSource();
+			if (dataSource != null) {
+				return new RunningInstance<DataSource>(runStateHolder);
+			} 
 		} catch (final SQLException sqlException) {
+			LOG.error("Database not ready", sqlException);
 		}
 		return new DatabaseStarter(runStateHolder, context);
 	}
 
 	@Override
-	protected ProcessStopper<Connection> createStopper() {
+	protected ProcessStopper<DataSource> createStopper() {
 		return new DatabaseStopper(runStateHolder, context);
 	}
 
 	@Override
-	protected HasRunState<Connection> createHasRunState() {
+	protected HasRunState<DataSource> createHasRunState() {
 		return runStateHolder;
 	}
 }

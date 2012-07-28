@@ -10,7 +10,6 @@
 	<groupId>org.rosuda.ui</groupId>
 	<artifactId>generic-type-visualizer</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.2-SNAPSHOT</version>
 	<name>rosuda-generic-type-visualizer</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>

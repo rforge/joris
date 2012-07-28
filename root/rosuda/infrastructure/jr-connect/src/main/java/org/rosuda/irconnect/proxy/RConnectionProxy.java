@@ -27,7 +27,7 @@ public class RConnectionProxy implements InvocationHandler{
 
 
 
-    private final static Class[] interfaces = new Class[]{IRConnection.class, IJava2RConnection.class, ITwoWayConnection.class};
+    private final static Class<?>[] interfaces = new Class[]{IRConnection.class, IJava2RConnection.class, ITwoWayConnection.class};
     private final Object[] delegates;
     private static Method hashCodeMethod;
     private static Method equalsMethod;
@@ -84,7 +84,7 @@ public class RConnectionProxy implements InvocationHandler{
     public Object invoke(final Object proxy, final Method m, final Object[] args)
 	throws Throwable
     {
-	Class declaringClass = m.getDeclaringClass();
+	Class<?> declaringClass = m.getDeclaringClass();
 
 	if (declaringClass == Object.class) {
 	    if (m.equals(hashCodeMethod)) {

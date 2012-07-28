@@ -1,7 +1,8 @@
 package org.rosuda.util.db;
 
 import java.io.IOException;
-import java.sql.Connection;
+
+import javax.sql.DataSource;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -9,12 +10,12 @@ import org.rosuda.util.process.ProcessStopper;
 import org.rosuda.util.process.RUNSTATE;
 import org.rosuda.util.process.RunStateHolder;
 
-public class DatabaseStopper implements ProcessStopper<Connection>{
+public class DatabaseStopper implements ProcessStopper<DataSource>{
 
-	private final RunStateHolder<Connection> runstateHolder;
+	private final RunStateHolder<DataSource> runstateHolder;
 	private final DerbyContext context;
 	
-	DatabaseStopper(final RunStateHolder<Connection> runstateHolder, final DerbyContext context) {
+	DatabaseStopper(final RunStateHolder<DataSource> runstateHolder, final DerbyContext context) {
 		this.runstateHolder = runstateHolder;
 		this.context = context;
 	}

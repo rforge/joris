@@ -6,7 +6,6 @@ import org.rosuda.REngine.RFactor;
 import org.rosuda.REngine.RList;
 import org.rosuda.irconnect.AREXP;
 import org.rosuda.irconnect.IREXP;
-import org.rosuda.irconnect.IRVector;
 
 public class REngineObjectWrapper {
 

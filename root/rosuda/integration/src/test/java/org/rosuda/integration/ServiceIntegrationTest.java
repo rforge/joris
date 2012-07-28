@@ -25,7 +25,7 @@ import org.rosuda.util.r.impl.RStarterFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.transaction.TransactionConfiguration;
@@ -42,7 +42,7 @@ public class ServiceIntegrationTest {
 	private IRConnection connection;
 	private ObjectTransformationHandler<Object> handler;
 	private DataSource dataSource;
-	private SimpleJdbcTemplate jdbcTemplate;
+	private JdbcTemplate jdbcTemplate;
 	private GraphService<Object> graphService;
 	
 	private long tick;
@@ -50,7 +50,7 @@ public class ServiceIntegrationTest {
 	
 	@Autowired
 	public void setDataSource(final DataSource dataSource) {
-		this.jdbcTemplate = new SimpleJdbcTemplate(dataSource);
+		this.jdbcTemplate = new JdbcTemplate(dataSource);
 		this.dataSource = dataSource;
 	}
 	
@@ -81,7 +81,7 @@ public class ServiceIntegrationTest {
 		log.info("cleaning up database");
 		final ApplicationContext factory = new ClassPathXmlApplicationContext("spring-integration-test.xml");
 		final DataSource dataSource = (DataSource) factory.getBean("dataSource");
-		final SimpleJdbcTemplate jdbcTemplate = new SimpleJdbcTemplate(dataSource);
+		final JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
 		jdbcTemplate.update("DELETE FROM graph_edge");
 		jdbcTemplate.update("DELETE FROM edge");
 		jdbcTemplate.update("DELETE FROM vertex");

@@ -12,7 +12,6 @@ import org.rosuda.ui.core.mvc.HasKeyEvent;
 import org.rosuda.ui.core.mvc.MVP;
 import org.rosuda.ui.core.mvc.MessageBus;
 import org.rosuda.ui.core.mvc.MessageBus.EventListener;
-import org.rosuda.ui.event.ModelSearchEvent;
 import org.rosuda.ui.handler.ModelSearchEventHandler;
 
 public class MainPresenter implements MVP.Presenter<MainModel,MainView<?>>{

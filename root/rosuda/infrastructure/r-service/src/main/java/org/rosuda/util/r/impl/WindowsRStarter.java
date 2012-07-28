@@ -106,7 +106,10 @@ class WindowsRStarter extends AbstractRStarter {
 		searchInPathList(Collections.singletonList(new File(System.getProperty("user.home"))), list, fileMatcher);
 		searchInPathList(Collections.singletonList(new File(System.getenv("ProgramFiles"))), list, fileMatcher);
 		searchInPathList(Collections.singletonList(new File(System.getenv("ProgramFiles") +" (x86)")), list, fileMatcher);
-		searchInPathList(getRootFolders(), list, fileMatcher);
+		Iterable<File> rootFolders = getRootFolders();
+		for (final File file: rootFolders) {
+			searchInPathList(Collections.singletonList(file), list, fileMatcher);
+		}
 		Collections.sort(list, new FileDateComparator());
 	}
 	

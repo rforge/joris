@@ -30,7 +30,6 @@ import org.rosuda.type.Node;
 import org.rosuda.type.impl.NodeBuilderFactory;
 import org.rosuda.ui.core.mvc.MessageBus;
 import org.rosuda.util.process.ProcessStarter;
-import org.rosuda.util.process.ProcessStopper;
 import org.rosuda.util.r.impl.RStarterFactory;
 import org.rosuda.visualizer.NodeTreeModel.NodeToTreeNodeWrapper;
 import org.rosuda.visualizer.NodeTreeModel.ValueToTreeNodeWrapper;
@@ -193,7 +192,6 @@ public class VisualizerFrame extends JFrame {
 		final RStarterFactory factory = new RStarterFactory();
 		// final ProcessFactory<IRConnection> rController = new ProcessF
 		final ProcessStarter<IRConnection> starter = factory.createService();
-		final ProcessStopper<IRConnection> stopper = (ProcessStopper<IRConnection>) starter;
 		starter.start();
 		try {
 		final ObjectTransformationManager<Object> filterMgr

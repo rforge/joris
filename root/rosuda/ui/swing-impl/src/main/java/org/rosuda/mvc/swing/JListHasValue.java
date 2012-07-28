@@ -29,7 +29,7 @@ public class JListHasValue implements HasValue<List<String>> {
 		}
 
 		@Override
-		public Object getElementAt(final int index) {
+		public String getElementAt(final int index) {
 			return elements.get(index);
 		}
 		

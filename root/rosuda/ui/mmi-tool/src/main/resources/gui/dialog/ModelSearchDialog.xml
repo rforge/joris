@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog size="640,480">
+	<menubar>
+		<menu text="DataBase">
+			<menuitem text="Search" accelerator="meta S" id="search" />
+			<separator />
+			<menuitem text="Close" accelerator="meta C" id="close" />
+		</menu>
+	</menubar>
+
+	<panel layout="BorderLayout">
+		<panel constraints="BorderLayout.CENTER" id="panel" />
+		<panel constraints="BorderLayout.SOUTH">
+			<button id="searchButton" text="search" />
+		</panel>
+	</panel>
+</dialog>

@@ -27,6 +27,7 @@
 		<commons-dbcp.commons-dbcp>1.4</commons-dbcp.commons-dbcp>
 		<commons-lang.commons-lang>2.6</commons-lang.commons-lang>
 		<commons-logging.commons-logging>1.1.1</commons-logging.commons-logging>
+		<flyway.version>1.7</flyway.version>
 		<org.jasypt.jasypt>1.7</org.jasypt.jasypt>
 		<org.swixml.swixml>2.6.20111005</org.swixml.swixml>
 		<org.swinglabs.swingx.swingx-all>1.6.3</org.swinglabs.swingx.swingx-all>
@@ -34,7 +35,7 @@
 		<javax.transaction.jta>1.1</javax.transaction.jta>
 		<net.sf.jasperreports.jasperreports>4.6.0</net.sf.jasperreports.jasperreports>
 		<spring.version>3.1.0.RELEASE</spring.version>
-		<derby.version>10.7.1.1</derby.version>
+		<derby.version>10.9.1.0</derby.version>
 		<rserve.version>0.68</rserve.version>
 		<org.hibernate.hibernate-validator>4.3.0.Final</org.hibernate.hibernate-validator>
 		<org.hibernate.hibernate-core>4.1.4.Final</org.hibernate.hibernate-core>
@@ -233,6 +234,11 @@
 				<version>${com.oracle.ojdbc}</version>
 			</dependency>
 
+			<dependency>
+    			<groupId>com.googlecode.flyway</groupId>
+    			<artifactId>flyway-core</artifactId>
+    			<version>${flyway.version}</version>
+			</dependency>
 			<dependency>
 				<groupId>org.apache.derby</groupId>
 				<artifactId>derby</artifactId>

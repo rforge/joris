@@ -1,10 +1,7 @@
 package org.rosuda.util.r.impl;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -13,6 +10,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rosuda.irconnect.IRConnection;
 import org.rosuda.rengine.REngineConnectionFactory;
+import org.rosuda.util.process.AbstractMaxTimeoutProcessProvider;
 import org.rosuda.util.process.ProcessStarter;
 import org.rosuda.util.process.RUNSTATE;
 import org.rosuda.util.process.RunStateHolder;
@@ -20,8 +18,6 @@ import org.rosuda.util.process.RunstateAware;
 
 abstract class AbstractRStarter extends RunstateAware<IRConnection> implements ProcessStarter<IRConnection> {
 
-	private long MAX_TIMEOUT = 1000;
-	private long POLL_TIME = 100;
 	protected final Log log = LogFactory.getLog(getClass());
 	protected final String R_ARGS = "--vanilla --slave";
 	protected final String R_SERVE_ARGS = "--no-save --slave";
@@ -62,100 +58,34 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
 				
 				process = setup.createProcessForArgs(runtimeArgs);
 				//append loggers
-				final StreamLogger infoStream = new StreamLogger("RServe>", Mode.INFO, process.getInputStream());
-				new Thread(new StreamLogger("RServe>", Mode.ERROR, process.getErrorStream())).start();
-				new Thread(infoStream).start();
-				new Thread(new ProcessMonitor()).start();
-				//TODO: wait until started ...
-				long totalTimeOut = 0;
-				IRConnection rcon = null;
-				while (rcon == null && totalTimeOut < MAX_TIMEOUT) {
-					synchronized (this) {
-						try {
-							this.wait(POLL_TIME);
-							try {
-								rcon = REngineConnectionFactory.getInstance().createRConnection(null);
-							} catch (final Exception x) {}
-							totalTimeOut += POLL_TIME;
-						} catch (InterruptedException e) {
-							log.debug("woke up");
-						}
-					}
-				}
+				final IRConnection rcon = new RetryStarter().create(process, runStateHolder);
 				if (rcon != null) {
 					rcon.close();
 					runStateHolder.setRunState(RUNSTATE.RUNNING);
 					//TODO kill process for maven ?
-				} else 
+				} else {
 					log.warn("no answer from R - please make sure R is installed an Rserve running.");
-			}catch (final IOException x) {
+				}
+			} catch (final IOException x) {
 				log.fatal(x);
 			} 
 		}
 	}
-	
-	class ProcessMonitor implements Runnable {
-		
-		ProcessMonitor() {
-		}
-		
-		@Override
-		public void run() {
-			try {
-				final int exitCode = process.waitFor();
-				log.info("R process exited : "+exitCode);
-			} catch (InterruptedException e) {
-				log.error("process was forcefully killed.");
-			}
-			runStateHolder.setRunState(RUNSTATE.TERMINATED);
-		}
-		
-	}
-	
-	enum Mode {
-		ERROR, INFO
-	}
-	class StreamLogger implements Runnable{
 
-		private final String prefix;
-		private final Mode mode;
-		private final BufferedReader reader;
-		private long length;
-		
-		StreamLogger(final String prefix, final Mode mode, final InputStream in) {
-			this.prefix = prefix;
-			this.mode = mode;
-			if (in == null)
-				throw new NullPointerException("missing io stream for r process");
-			this.reader = new BufferedReader(new InputStreamReader(in));
-		}
-
-		@Override
-		public void run() {
-			String line = null;
-			try {
-				while ( (line = reader.readLine()) != null ) {
-					length += line.length();
-					switch (mode) {
-						case ERROR: log.error(prefix +" "+ line); break;
-						case INFO:	log.info(prefix +" "+ line); break;
-					}
-				}
-			} catch (final IOException e) {
-				log.fatal(e);
-			}
-		}
-		
-		public long getLogLength() {
-			return length;
-		}
-	}
-	
 	@Override
 	protected void finalize() throws Throwable {
 		try {
 			process.destroy();
 		} catch (final Throwable tx) {}
 		super.finalize();
+	}
+	
+	private static final class RetryStarter extends AbstractMaxTimeoutProcessProvider<IRConnection> {
+
+		@Override
+		protected IRConnection createResultInstance() {
+			return REngineConnectionFactory.getInstance().createRConnection(null);
+		}
+		
 	}
 }

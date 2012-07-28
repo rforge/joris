@@ -6,9 +6,7 @@
 		<groupId>org.rosuda</groupId>
 		<version>1.0.2-SNAPSHOT</version>
 	</parent>
-	<groupId>org.rosuda</groupId>
 	<artifactId>hibernate-dao-impl</artifactId>
-	<version>1.0.2-SNAPSHOT</version>
 	<dependencies>
 		<dependency>
 			<groupId>org.rosuda</groupId>

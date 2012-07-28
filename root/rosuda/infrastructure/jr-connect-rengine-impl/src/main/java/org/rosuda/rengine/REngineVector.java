@@ -7,7 +7,7 @@ import org.rosuda.REngine.RList;
 import org.rosuda.irconnect.IREXP;
 import org.rosuda.irconnect.IRVector;
 
-public class REngineVector extends Vector implements IRVector{
+public class REngineVector extends Vector<Object> implements IRVector{
 
 	private static final long serialVersionUID = 8310271150504477455L;
 	private final RList delegate;

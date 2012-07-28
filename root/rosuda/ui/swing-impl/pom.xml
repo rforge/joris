@@ -10,7 +10,6 @@
 	<groupId>org.rosuda.ui</groupId>
 	<artifactId>swing-impl</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.2-SNAPSHOT</version>
 	<name>swing-impl</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>

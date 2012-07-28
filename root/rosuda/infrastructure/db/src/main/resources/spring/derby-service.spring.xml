@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context
 http://www.springframework.org/schema/context/spring-context-3.0.xsd">
@@ -22,29 +21,43 @@ http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 		class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
 		<property name="algorithm" value="PBEWithMD5AndDES" />
 		<property name="passwordEnvName" value="CAS_PBE_PASSWORD" />
-		<property name="password" value="default"/>
+		<property name="password" value="default" />
 		<!-- <property name="password" value="actual password here for testing 
 			ONLY" /> -->
 	</bean>
 
-	<bean id="driverManagerDataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+	<bean id="derbyStartCommand" class="java.lang.String">
+		<constructor-arg
+			value="java -cp {0} org.apache.derby.drda.NetworkServerControl start -noSecurityManager -p 1600" />
+	</bean>
+
+	<bean id="derbyStopCommand" class="java.lang.String">
+		<constructor-arg
+			value="java -cp {0} org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager -p 1600" />
+	</bean>
+
+	<bean name="derbyContext" class="org.rosuda.util.db.DerbyContext" />
+
+	<bean name="derbyConnectionFactory" class="org.rosuda.util.db.DatabaseStarterFactory">
+		<property name="context" ref="derbyContext" />
+	</bean>
+
+	<bean name="derbyStarterProcess" class="org.rosuda.util.process.ProcessService"
+		factory-bean="derbyConnectionFactory" factory-method="createService" />
+
+	<bean name="databaseMgr-derby" class="org.rosuda.util.db.DatabaseMgr">
+		<property name="databaseStarterFactory" ref="derbyConnectionFactory" />
+	</bean>
+
+	<bean id="dataSourceConfig-derby" class="org.rosuda.util.db.DataSourceConfiguration">
 		<property name="driverClassName" value="${datasource.driverClassName}" />
 		<property name="url" value="${datasource.url}" />
 		<property name="username" value="${datasource.username}" />
 		<property name="password" value="${datasource.password}" />
 	</bean>
-
-	<bean id="derbyStartCommand" class="java.lang.String"><constructor-arg value="java -cp {0} org.apache.derby.drda.NetworkServerControl start -noSecurityManager"/></bean>
 	
-	<bean id="derbyStopCommand" class="java.lang.String"><constructor-arg value="java -cp {0} org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager"/></bean>
-	
-	<bean name="derbyContext" class="org.rosuda.util.db.DerbyContext" />	
-
-	<bean name="derbyConnectionFactory" class="org.rosuda.util.db.DatabaseStarterFactory">
-		<property name="context" ref="derbyContext" />
+	<bean id="dataSource" factory-bean="databaseMgr-derby"
+		factory-method="createDataSource">
+		<constructor-arg index="0" ref="dataSourceConfig-derby" />
 	</bean>
-	
-	<bean name="derbyStarterProcess" class="org.rosuda.util.process.ProcessService" factory-bean="derbyConnectionFactory" factory-method="createService"/>
-	
 </beans>

@@ -9,10 +9,8 @@ import java.io.InputStreamReader;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
-import javax.swing.JRootPane;
 import javax.swing.JTextArea;
 
-import org.omg.CORBA.portable.ApplicationException;
 import org.rosuda.irconnect.IRConnection;
 import org.rosuda.irconnect.IREXP;
 import org.rosuda.ui.context.UIContext;
@@ -69,10 +67,11 @@ public class MainFrame extends JFrame implements UIContext{
 	public MainFrame() throws Exception {
 		context = new ClassPathXmlApplicationContext(
 				new String[]{
-					"classpath*:spring/r-service.spring.xml",
 					"classpath*:spring/hibernate-service-impl.spring.xml",
-					"classpath:/spring/dbContext.spring.xml",
-					"classpath:/spring/applicationContext.spring.xml"});
+					"classpath:/spring/mmi-jrConnectionContext.spring.xml",
+					"classpath*:spring/r-service.spring.xml",
+					"classpath:/spring/mmi-databaseContext.spring.xml",
+					"classpath:/spring/mmi-applicationContext.spring.xml"});
 		rConnection = context.getBean("managedConnection", IRConnection.class);
 		
 		//TODO load this file Localized
