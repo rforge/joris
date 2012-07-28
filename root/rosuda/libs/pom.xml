@@ -56,6 +56,24 @@
 							<file>jar/rserveengine-0.68.jar</file>
 						</configuration>
 					</execution>
+          <execution>
+						<id>install-log4jdbc4</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<groupId>com.google.code</groupId>
+							<artifactId>log4jdbc4</artifactId>
+							<version>1.2</version>
+							<packaging>jar</packaging>
+							<createChecksum>true</createChecksum>
+							<generatePom>true</generatePom>
+							<file>jar/log4jdbc4-1.2.jar</file>
+						</configuration>
+					</execution>
+          
+          
 					<!-- <execution>
 						<id>install-swingx-all</id>
 						<phase>validate</phase>

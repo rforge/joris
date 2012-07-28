@@ -17,7 +17,7 @@
 	<bean id="propertyPlaceholderConfigurer"
 		class="org.jasypt.spring.properties.EncryptablePropertyPlaceholderConfigurer">
 		<constructor-arg ref="configurationEncryptor" />
-		<property name="location" value="/spring/datasource.properties" />
+		<property name="location" value="/spring/mmi-jdbc.properties" />
 	</bean>
 
 	<bean id="configurationEncryptor" class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
@@ -35,15 +35,17 @@
 
 	<bean id="derbyStartCommand" class="java.lang.String">
 		<constructor-arg
-			value="java -cp {0} org.apache.derby.drda.NetworkServerControl start -noSecurityManager -p 1600" />
+			value="java -cp {0} org.apache.derby.drda.NetworkServerControl start -noSecurityManager -p 1642" />
 	</bean>
 
 	<bean id="derbyStopCommand" class="java.lang.String">
 		<constructor-arg
-			value="java -cp {0} org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager -p 1600" />
+			value="java -cp {0} org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager -p 1642" />
 	</bean>
 
-	<bean name="derbyContext" class="org.rosuda.util.db.DerbyContext" />
+	<bean name="derbyContext" class="org.rosuda.util.db.DerbyContext">
+		<property name="dataSourceConfiguration" ref="dataSourceConfig-derby" />
+	</bean>
 
 	<bean name="derbyConnectionFactory" class="org.rosuda.util.db.DatabaseStarterFactory">
 		<property name="context" ref="derbyContext" />
@@ -58,15 +60,22 @@
 	</bean>
 
 	<bean id="dataSourceConfig-derby" class="org.rosuda.util.db.DataSourceConfiguration">
-		<property name="driverClassName" value="${datasource.driverClassName}" />
-		<property name="url" value="${datasource.url}" />
-		<property name="username" value="${datasource.username}" />
-		<property name="password" value="${datasource.password}" />
+		<property name="driverClassName" value="${ddl.driverClassName}" />
+		<property name="url" value="${ddl.url}" />
+		<property name="username" value="${ddl.username}" />
+		<property name="password" value="${ddl.password}" />
 	</bean>
 	
-	<bean id="dataSource" factory-bean="databaseMgr-derby"
+	<bean factory-bean="databaseMgr-derby"
 		factory-method="createDataSource">
 		<constructor-arg index="0" ref="dataSourceConfig-derby" />
+	</bean>
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+		<property name="driverClassName" value="${dml.driverClassName}" />
+		<property name="url" value="${dml.url}" />
+		<property name="username" value="${dml.username}" />
+		<property name="password" value="${dml.password}" />
 	</bean>
 
 </beans>

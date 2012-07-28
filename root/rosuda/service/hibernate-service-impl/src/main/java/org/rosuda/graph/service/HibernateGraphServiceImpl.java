@@ -76,7 +76,7 @@ public class HibernateGraphServiceImpl<T> implements GraphService<T>{
 		} catch (final Exception x) {
 			throw new RuntimeException(x);
 		}
-		final SQLQuery query = session.createSQLQuery(queryBuilderStub.toString());
+		final SQLQuery query = session.createSQLQuery(queryBuilderStub.toString().replace("JOIN", "\r\nJOIN").replace("WHERE", "\r\nWHERE"));
 		for (final Map.Entry<String, Object> arg : arguments.entrySet()) {
 			query.setParameter(arg.getKey(), arg.getValue());
 		}

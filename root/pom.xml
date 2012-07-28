@@ -33,6 +33,7 @@
 		<org.swinglabs.swingx.swingx-all>1.6.3</org.swinglabs.swingx.swingx-all>
 		<javax.validation.validation-api>1.0.0.GA</javax.validation.validation-api>
 		<javax.transaction.jta>1.1</javax.transaction.jta>
+		<log4jdbc4.version>1.2</log4jdbc4.version>
 		<net.sf.jasperreports.jasperreports>4.6.0</net.sf.jasperreports.jasperreports>
 		<spring.version>3.1.0.RELEASE</spring.version>
 		<derby.version>10.9.1.0</derby.version>
@@ -235,10 +236,17 @@
 			</dependency>
 
 			<dependency>
-    			<groupId>com.googlecode.flyway</groupId>
-    			<artifactId>flyway-core</artifactId>
-    			<version>${flyway.version}</version>
+				<groupId>com.googlecode.flyway</groupId>
+				<artifactId>flyway-core</artifactId>
+				<version>${flyway.version}</version>
 			</dependency>
+
+			<dependency>
+				<groupId>com.google.code</groupId>
+				<artifactId>log4jdbc4</artifactId>
+				<version>${log4jdbc4.version}</version>
+			</dependency>
+			
 			<dependency>
 				<groupId>org.apache.derby</groupId>
 				<artifactId>derby</artifactId>
