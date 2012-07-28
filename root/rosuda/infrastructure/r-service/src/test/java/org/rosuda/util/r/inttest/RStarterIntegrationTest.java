@@ -14,38 +14,38 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
- * this tests the start/stop of an REngine-Server-Process
- * the @Ignore test cases work but block maven build
+ * this tests the start/stop of an REngine-Server-Process the @Ignore test cases
+ * work but block maven build
+ * 
  * @author ralfseger
- *
+ * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/spring/r-service.spring.xml"})
+@ContextConfiguration(locations = { "classpath:/spring/r-service.spring.xml" })
 @Configurable
 public class RStarterIntegrationTest {
-	
-	
-	@Autowired
-	@Qualifier("rStarterProcess")
-	private ProcessService<IRConnection> service;
-		
-	@Test
-	public void testSpringServiceAvailable() {
-		Assert.assertNotNull(service);
+
+    @Autowired
+    @Qualifier("rStarterProcess")
+    private ProcessService<IRConnection> service;
+
+    @Test
+    public void testSpringServiceAvailable() {
+	Assert.assertNotNull(service);
+    }
+
+    @Test
+    public void testStartStopProcess() {
+	Assert.assertNotNull(service);
+	service.start();
+	Assert.assertEquals(RUNSTATE.RUNNING, service.getRunState());
+	service.stop();
+	Assert.assertEquals(RUNSTATE.TERMINATED, service.getRunState());
+	try {
+	    REngineConnectionFactory.getInstance().createRConnection(null);
+	    Assert.fail("no error raised, there is a connection available.");
+	} catch (final Exception x) {
+	    Assert.assertNotNull(x);
 	}
-		
-	@Test
-	public void testStartStopProcess() {
-		Assert.assertNotNull(service);
-		service.start();
-		Assert.assertEquals(RUNSTATE.RUNNING, service.getRunState());
-		service.stop();
-		Assert.assertEquals(RUNSTATE.TERMINATED, service.getRunState());	
-		try {
-			REngineConnectionFactory.getInstance().createRConnection(null);
-			Assert.fail("no error raised, there is a connection available.");
-		} catch (final Exception x) {
-			Assert.assertNotNull(x);
-		}
-	}
+    }
 }
