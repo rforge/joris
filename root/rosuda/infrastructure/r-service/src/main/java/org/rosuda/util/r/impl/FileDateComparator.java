@@ -15,7 +15,7 @@ public class FileDateComparator implements Comparator<File> {
 	} else {
 	    final Date fileAge1 = new Date(f1.lastModified());
 	    final Date fileAge2 = new Date(f2.lastModified());
-	    if (fileAge1.compareTo(fileAge2) == 0) {
+	    if (Math.abs(fileAge1.compareTo(fileAge2)) < 60) {
 		return f1.getName().compareTo(f2.getName());
 	    } else {
 		return -fileAge1.compareTo(fileAge2);

@@ -32,6 +32,10 @@ public interface MessageBus {
     public static class Impl implements MessageBus {
 
 	private boolean asynchMode = true;
+	
+	protected void setAsynchMode(boolean asynchMode) {
+	    this.asynchMode = asynchMode;
+	}
 
 	private final Map<Class<? extends Event>, List<EventListener<? extends Event>>> eventListeners = new HashMap<Class<? extends Event>, List<EventListener<? extends Event>>>();
 

@@ -59,6 +59,7 @@ public class HibernateGraphServiceImpl<T> implements GraphService<T>{
 	
 	@SuppressWarnings("unchecked")
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED, readOnly = true)
 	public Node<T> read(final Long pk) {
 		final Graph entity = readEntity(pk);
 		return (Node<T>) EntityConverter.convertGraphEntityToNode.apply(entity);

@@ -1,5 +1,6 @@
 package org.rosuda.ui.model;
 
+import java.util.Collection;
 import java.util.Collections;
 
 import org.rosuda.graph.service.search.BoolCompareType;
@@ -15,7 +16,7 @@ import org.rosuda.ui.model.SearchDataNode.ConstraintType;
 
 public class SearchDataNodeTransformer {
 
-	public Iterable<VertexConstraint> transform(SearchDataNode root) {
+	public Collection<VertexConstraint> transform(SearchDataNode root) {
 		final VertexConstraint vc = toVertexConstraint(root);
 		if (vc == null)
 			return Collections.emptyList();

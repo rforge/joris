@@ -31,7 +31,7 @@ public class Graph{
 	//private final Map<Long, Vertex> vertices = new HashMap<Long, Vertex>();
 	private final Set<Vertex> vertices = new HashSet<Vertex>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY, mappedBy = "graph", orphanRemoval=true)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.EAGER, mappedBy = "graph", orphanRemoval=true)
 	@Column(name = "EDGE")
 	private final List<Edge> edges = new ArrayList<Edge>();
 				

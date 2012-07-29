@@ -1,16 +1,26 @@
 package org.rosuda.ui.core.mvc;
 
-import junit.framework.TestCase;
+import static org.junit.Assert.assertEquals;
 
-public class MessageBusTest extends TestCase{
+import org.junit.Before;
+import org.junit.Test;
 
-	private MessageBus bus = MessageBus.INSTANCE;
+public class MessageBusTest{
+
+	private MessageBus bus;
 	int eventCount = 0;
 	
-	class TestEvent implements MessageBus.Event {
-		
+	@Before
+	public void setUp() {
+	    MessageBus.Impl impl = new MessageBus.Impl();
+	    impl.setAsynchMode(false);
+	    bus = impl;   
 	}
 	
+	class TestEvent implements MessageBus.Event {	
+	}
+	
+	@Test
 	public void testSendMessage() {
 		bus.registerListener(new MessageBus.EventListener<MessageBusTest.TestEvent>() {
 			public void onEvent(TestEvent event) {
