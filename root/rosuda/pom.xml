@@ -6,15 +6,14 @@
         <parent>
        	        <groupId>root</groupId>
                	<artifactId>root</artifactId>
-	        <version>1.0.0-SNAPSHOT</version>
+	        <version>${joris.version}</version>
         </parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.rosuda</groupId>
 	<artifactId>root</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
-
-	<name>org.rosuda.root</name>
+	
+	<name>rosuda-${parent.artifactId}-${project.artifactId}</name>
 	<description>Model Repository - redesign</description>
 	<inceptionYear>2010</inceptionYear>
 

@@ -6,12 +6,12 @@
 	<parent>
 		<groupId>org.rosuda</groupId>
 		<artifactId>infrastructure</artifactId>
-		<version>1.0.2-SNAPSHOT</version>
+		<version>${joris.version}</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.rosuda.infrastructure</groupId>
-	<artifactId>db</artifactId>
+	<artifactId>infrastructure-db</artifactId>
+  <name>rosuda-${parent.artifactId}-${project.artifactId}</name>
 	<description>utility package to use the derby database as a service</description>
 	<packaging>jar</packaging>
 	<dependencies>

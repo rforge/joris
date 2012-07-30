@@ -3,14 +3,14 @@
 	<parent>
 		<groupId>org.rosuda</groupId>
 		<artifactId>ui</artifactId>
-		<version>1.0.2-SNAPSHOT</version>
+		<version>${joris.version}</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.rosuda.ui</groupId>
 	<artifactId>mmi-tool</artifactId>
 	<packaging>jar</packaging>
-	<name>mmi-tool</name>
+	<name>rosuda-${parent.artifactId}-${project.artifactId}</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
@@ -79,8 +79,8 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda.infrastructure</groupId>
-			<artifactId>db</artifactId>
+			<groupId>org.rosuda</groupId>
+			<artifactId>infrastructure-db</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>

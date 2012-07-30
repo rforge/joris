@@ -3,11 +3,11 @@
 	<parent>
 		<groupId>org.rosuda</groupId>
 		<artifactId>core</artifactId>
-		<version>1.0.2-SNAPSHOT</version>
+		<version>${joris.version}</version>
 	</parent>
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>test-data</artifactId>
-	<name>rosuda-test-data</name>
+	<name>rosuda-${parent.artifactId}-${project.artifactId}</name>
 	<packaging>jar</packaging>
 	<url>http://maven.apache.org</url>
 	<dependencies>
@@ -27,8 +27,8 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda.util</groupId>
-			<artifactId>combinatorics</artifactId>
+			<groupId>org.rosuda</groupId>
+			<artifactId>util-combinatorics</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<!-- reference impl -->

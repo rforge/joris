@@ -4,14 +4,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
         <parent>
-       	        <groupId>org.rosuda</groupId>
-               	<artifactId>util</artifactId>
-	        <version>1.0.2-SNAPSHOT</version>
+       	  <groupId>org.rosuda</groupId>
+          <artifactId>util</artifactId>
+	        <version>${joris.version}</version>
         </parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>util-logging</artifactId>
-
+  <name>rosuda-${parent.artifactId}-${project.artifactId}</name>
 	<packaging>jar</packaging>
 	
 	<dependencies>

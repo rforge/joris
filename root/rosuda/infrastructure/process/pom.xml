@@ -3,13 +3,13 @@
 	<parent>
 		<groupId>org.rosuda</groupId>
 		<artifactId>infrastructure</artifactId>
-		<version>1.0.2-SNAPSHOT</version>
+		<version>${joris.version}</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>process</artifactId>
 	<packaging>jar</packaging>
-	<name>rosuda-${project.artifactId}</name>
+	<name>rosuda-${parent.artifactId}-${project.artifactId}</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
