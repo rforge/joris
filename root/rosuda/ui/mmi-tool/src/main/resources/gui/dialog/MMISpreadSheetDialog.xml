@@ -11,13 +11,17 @@
 	<panel layout="BorderLayout">
 		<splitpane orientation="JSplitPane.HORIZONTAL_SPLIT"
 			dividerLocation="150" dividerSize="10">
-			<scrollpane height="500" width="200" PreferredSize="800,500"
+			<scrollpane width="150" height="480" PreferredSize="150,480"
 				HorizontalScrollBarPolicy="JScrollPane.HORIZONTAL_SCROLLBAR_NEVER"
 				VerticalScrollBarPolicy="JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED">
 				<tree id="multiselector"/>
 			</scrollpane>
-			<textarea >
-			</textarea>
+			<scrollpane  width="490" height="480" PreferredSize="490,480"
+				HorizontalScrollBarPolicy="JScrollPane.HORIZONTAL_SCROLLBAR_NEVER"
+				VerticalScrollBarPolicy="JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED">
+				<table id="valuetable"/>
+			</scrollpane>
+			
 		</splitpane>
 	</panel>
 </dialog>

@@ -48,6 +48,7 @@
 
 	<modules>
 		<module>rosuda</module>
+    <module>examples</module>
 	</modules>
 
 	<build>

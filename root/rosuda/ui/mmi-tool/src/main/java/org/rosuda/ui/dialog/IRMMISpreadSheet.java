@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JTree;
 import javax.swing.tree.TreeModel;
 
+import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTree;
 import org.rosuda.irconnect.IREXP;
 import org.rosuda.type.Node;
@@ -27,7 +28,8 @@ public class IRMMISpreadSheet extends JDialog {
     private final List<Node<IREXP>> data = new ArrayList<Node<IREXP>>();
     private final List<String> paths = new ArrayList<String>();
 
-    public JTree multiselector;
+    public JXTree multiselector;
+    public JXTable valuetable;
 
     public IRMMISpreadSheet(final UIContext context, final Collection<Node<IREXP>> data) throws Exception {
 	super(context.getUIFrame(), ModalityType.MODELESS);
