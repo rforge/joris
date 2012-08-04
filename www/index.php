@@ -60,6 +60,12 @@ like a windows machine blocking in a non forking process. If the build seems to 
 	You need to install R and a connection to R first in order to utilize
 	<a href="docu/irconnection.php">IRConnection</a>.
 </p>
+<p>
+	<h3>Example</h3>
+	After finishing an R and Rserve installation you might want to use some fancy R libraries, too within your project.
+	Using JORIS this is one file configuration and you're up to do what you like in your application.
+	<a href="docu/example-1.php">Example create IRConnection with loaded R-libraries</a>.
+</p>
 <p> The <strong>project summary page</strong> you can find <a href="http://<?php echo $domain; ?>/projects/<?php echo $group_name; ?>/"><strong>here</strong></a>. </p>
 
 </body>
