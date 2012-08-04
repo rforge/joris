@@ -7,6 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public interface MessageBus {
 
     public interface Event {
@@ -31,6 +34,7 @@ public interface MessageBus {
 
     public static class Impl implements MessageBus {
 
+	private static final Log LOG = LogFactory.getLog(Impl.class);
 	private boolean asynchMode = true;
 	
 	protected void setAsynchMode(boolean asynchMode) {
@@ -89,6 +93,7 @@ public interface MessageBus {
 	public void registerListener(final EventListener<?> c) {
 	    final Class<? extends Event> registerClass = determineEventClass(c);
 	    final List<EventListener<?>> listenerList;
+	    LOG.debug("registering listener "+c);
 	    if (eventListeners.containsKey(registerClass)) {
 		listenerList = eventListeners.get(registerClass);
 	    } else {
@@ -99,6 +104,7 @@ public interface MessageBus {
 	}
 
 	public void removeListener(final EventListener<?> c) {
+	    LOG.debug("removing listener "+c);
 	    final Class<? extends Event> registerClass = determineEventClass(c);
 	    if (eventListeners.containsKey(registerClass)) {
 		eventListeners.get(registerClass).remove(c);

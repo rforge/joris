@@ -15,7 +15,6 @@ import javax.swing.table.TableColumn;
 
 import org.jdesktop.swingx.JXTreeTable;
 import org.rosuda.ui.MainFrame;
-import org.rosuda.ui.UIProcessor;
 import org.rosuda.ui.context.UIContext;
 import org.rosuda.ui.core.mvc.MessageBus;
 import org.rosuda.ui.core.mvc.Screen;
@@ -37,14 +36,13 @@ public class IRModelSearchDialog extends JDialog {
 	private Screen screen;
 
 	public IRModelSearchDialog(final UIContext context) throws Exception {
-		super(context.getUIFrame());
+		super(context.getUIFrame(), ModalityType.MODELESS);
 		final InputStream rsc = MainFrame.class.getResourceAsStream("/gui/dialog/ModelSearchDialog.xml");
 		final BufferedReader reader = new BufferedReader(new InputStreamReader(
 				rsc));
 		new SwingEngine<JDialog>(this).render(reader);
 		reader.close();
 		final MessageBus messageBus = context.getAppContext().getBean(MessageBus.class);
-		new UIProcessor().bindEvents(messageBus, this, context);
 		close.addActionListener(new WindowCloseListener(messageBus, this));
 		search.addActionListener(new ModelSearchActionListener(messageBus));
 		searchButton.addActionListener(new ModelSearchActionListener(messageBus));

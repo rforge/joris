@@ -6,7 +6,7 @@ import org.rosuda.irconnect.IRConnection;
 import org.rosuda.irconnect.IREXP;
 import org.rosuda.type.Node;
 import org.rosuda.ui.context.UIContext;
-import org.rosuda.ui.context.UIContextAware;
+import org.rosuda.ui.context.Aware;
 import org.rosuda.ui.core.mvc.MessageBus;
 import org.rosuda.ui.dialog.IREXPModelSelectionDialog;
 import org.rosuda.ui.event.ScanWorkspaceEvent;
@@ -21,7 +21,7 @@ import com.google.common.base.Functions;
 
 @Component
 public class ScanWorkspaceEventHandler extends
-		MessageBus.EventListener<ScanWorkspaceEvent> implements UIContextAware{
+		MessageBus.EventListener<ScanWorkspaceEvent> implements Aware<UIContext>{
 
 	private static final Log LOG = LogFactory.getLog(ScanWorkspaceEventHandler.class);
 	
@@ -51,7 +51,7 @@ public class ScanWorkspaceEventHandler extends
 	}
 
 	@Override
-	public void setUIContext(final UIContext context) {
+	public void setContext(final UIContext context) {
 		this.context = context;
 	}
 }

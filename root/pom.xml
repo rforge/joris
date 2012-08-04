@@ -18,7 +18,7 @@
 	<inceptionYear>2010</inceptionYear>
 
 	<properties>
-    <joris.version>1.0.2-SNAPSHOT</joris.version>
+		<joris.version>1.0.2-SNAPSHOT</joris.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<cglib.cglib-nodep>2.2.2</cglib.cglib-nodep>
 		<com.google.guava.guava>12.0</com.google.guava.guava>
@@ -30,6 +30,7 @@
 		<commons-logging.commons-logging>1.1.1</commons-logging.commons-logging>
 		<flyway.version>1.7</flyway.version>
 		<org.jasypt.jasypt>1.7</org.jasypt.jasypt>
+		<org.reflections.reflections>0.9.8</org.reflections.reflections>
 		<org.swixml.swixml>2.6.20111005</org.swixml.swixml>
 		<org.swinglabs.swingx.swingx-all>1.6.3</org.swinglabs.swingx.swingx-all>
 		<javax.validation.validation-api>1.0.0.GA</javax.validation.validation-api>
@@ -247,7 +248,7 @@
 				<artifactId>log4jdbc4</artifactId>
 				<version>${log4jdbc4.version}</version>
 			</dependency>
-			
+
 			<dependency>
 				<groupId>org.apache.derby</groupId>
 				<artifactId>derby</artifactId>
@@ -299,6 +300,11 @@
 				<version>${com.google.guava.guava}</version>
 			</dependency>
 
+			<dependency>
+				<groupId>org.reflections</groupId>
+				<artifactId>reflections</artifactId>
+				<version>${org.reflections.reflections}</version>
+			</dependency>
 			<!-- #################### Jasper Reports ################## -->
 			<dependency>
 				<groupId>net.sf.jasperreports</groupId>

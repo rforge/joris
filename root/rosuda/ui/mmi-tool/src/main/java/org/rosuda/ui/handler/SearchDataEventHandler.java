@@ -1,7 +1,7 @@
 package org.rosuda.ui.handler;
 
 import org.rosuda.ui.context.UIContext;
-import org.rosuda.ui.context.UIContextAware;
+import org.rosuda.ui.context.Aware;
 import org.rosuda.ui.core.mvc.MessageBus;
 import org.rosuda.ui.dialog.IRModelSearchDialog;
 import org.rosuda.ui.event.SearchDataEvent;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SearchDataEventHandler extends
-		MessageBus.EventListener<SearchDataEvent> implements UIContextAware{
+		MessageBus.EventListener<SearchDataEvent> implements Aware<UIContext>{
 
 	private UIContext context;
 
@@ -26,7 +26,7 @@ public class SearchDataEventHandler extends
 	}
 
 	@Override
-	public void setUIContext(final UIContext context) {
+	public void setContext(final UIContext context) {
 		this.context = context;
 	}
 }

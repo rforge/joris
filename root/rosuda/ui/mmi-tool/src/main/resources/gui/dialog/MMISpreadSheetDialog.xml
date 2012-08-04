@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dialog size="640,480">
+	<!-- <menubar>
+		<menu text="DataBase">
+			<menuitem text="Search" accelerator="meta S" id="search" />
+			<separator />
+			<menuitem text="Close" accelerator="meta C" id="close" />
+		</menu>
+	</menubar> -->
+
+	<panel layout="BorderLayout">
+		<splitpane orientation="JSplitPane.HORIZONTAL_SPLIT"
+			dividerLocation="150" dividerSize="10">
+			<scrollpane height="500" width="200" PreferredSize="800,500"
+				HorizontalScrollBarPolicy="JScrollPane.HORIZONTAL_SCROLLBAR_NEVER"
+				VerticalScrollBarPolicy="JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED">
+				<tree id="multiselector"/>
+			</scrollpane>
+			<textarea >
+			</textarea>
+		</splitpane>
+	</panel>
+</dialog>

@@ -120,7 +120,7 @@ class WindowsRStarter extends AbstractRStarter {
 	    final String preferenceValue = winRStarterPrefs.get(preferenceName, "");
 	    if (!"".equals(preferenceValue)) {
 		fileList.add(new File(preferenceValue));
-		log.info("using \"" + preferenceValue + "\" as configured in the user preferences");
+		log.info("using \"" + preferenceValue + "\" as . configured in the user preferences");
 		return preferenceValue;
 	    } else {
 		final String winRExeFilePath = handleFind(fileList);

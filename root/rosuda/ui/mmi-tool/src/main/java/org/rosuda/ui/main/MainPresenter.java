@@ -50,9 +50,6 @@ public class MainPresenter implements MVP.Presenter<MainModel,MainView<?>>{
 						.append("</pre>").toString()		
 				);
 			}});
-		//bind to swing context ..
-		final ModelSearchEventHandler searchEventHandler = model.getContext().getBean(ModelSearchEventHandler.class);
-		messageBus.registerListener(searchEventHandler);
 	}
 
 	private void appendHTML(final MainView<?> view, final String htmlText) {
