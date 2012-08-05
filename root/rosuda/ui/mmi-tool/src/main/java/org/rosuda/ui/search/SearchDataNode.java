@@ -1,4 +1,4 @@
-package org.rosuda.ui.model;
+package org.rosuda.ui.search;
 
 import java.math.BigDecimal;
 import java.util.List;

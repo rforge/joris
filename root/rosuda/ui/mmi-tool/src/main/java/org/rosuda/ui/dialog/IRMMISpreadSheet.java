@@ -19,6 +19,7 @@ import org.rosuda.irconnect.IREXP;
 import org.rosuda.type.Node;
 import org.rosuda.type.Value;
 import org.rosuda.ui.MainFrame;
+import org.rosuda.ui.SwingLayoutProcessor;
 import org.rosuda.ui.context.UIContext;
 import org.rosuda.visualizer.NodeTreeModel;
 import org.swixml.SwingEngine;
@@ -37,10 +38,7 @@ public class IRMMISpreadSheet extends JDialog {
 	    // TODO show empty warning dialog
 	} else {
 	    this.data.addAll(data);
-	    final InputStream rsc = MainFrame.class.getResourceAsStream("/gui/dialog/MMISpreadSheetDialog.xml");
-	    final BufferedReader reader = new BufferedReader(new InputStreamReader(rsc));
-	    new SwingEngine<JDialog>(this).render(reader);
-	    reader.close();
+	    SwingLayoutProcessor.processLayout(this, "/gui/dialog/MMISpreadSheetDialog.xml");	    
 	    multiselector.setModel(new NodeTreeModel<IREXP>(new RootNodeWrapper(null, data)));
 	    setVisible(true);
 	    // TODO present data

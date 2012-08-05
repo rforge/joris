@@ -14,7 +14,7 @@
 			<scrollpane width="150" height="480" PreferredSize="150,480"
 				HorizontalScrollBarPolicy="JScrollPane.HORIZONTAL_SCROLLBAR_NEVER"
 				VerticalScrollBarPolicy="JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED">
-				<tree id="multiselector"/>
+				<jxtree id="multiselector"/>
 			</scrollpane>
 			<scrollpane  width="490" height="480" PreferredSize="490,480"
 				HorizontalScrollBarPolicy="JScrollPane.HORIZONTAL_SCROLLBAR_NEVER"

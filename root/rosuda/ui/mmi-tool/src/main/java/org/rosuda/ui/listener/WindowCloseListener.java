@@ -1,13 +1,13 @@
 package org.rosuda.ui.listener;
 
 import java.awt.Window;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
+import org.rosuda.ui.core.mvc.HasClickable.ClickEvent;
+import org.rosuda.ui.core.mvc.HasClickable.ClickListener;
 import org.rosuda.ui.core.mvc.MessageBus;
 import org.rosuda.ui.event.CloseEvent;
 
-public class WindowCloseListener extends MessageBusListener implements ActionListener{
+public class WindowCloseListener extends MessageBusListener implements ClickListener{
 
 	private final Window window;
 	
@@ -16,9 +16,10 @@ public class WindowCloseListener extends MessageBusListener implements ActionLis
 		this.window = window;
 	}
 
+
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		messageBus.fireEvent(new CloseEvent(window));
+	public void onClick(ClickEvent event) {
+	    messageBus.fireEvent(new CloseEvent(window));
 		window.setVisible(false);
 		window.dispose();
 	}

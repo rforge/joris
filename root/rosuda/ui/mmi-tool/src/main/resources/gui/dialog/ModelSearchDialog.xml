@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dialog size="640,480">
+<dialog width="640" height="480">
 	<menubar>
 		<menu text="DataBase">
-			<menuitem text="Search" accelerator="meta S" id="search" />
-			<separator />
 			<menuitem text="Close" accelerator="meta C" id="close" />
 		</menu>
 	</menubar>
 
 	<panel layout="BorderLayout">
-		<panel constraints="BorderLayout.CENTER" id="panel" />
+		<panel constraints="BorderLayout.CENTER">
+			<scrollpane width="640" height="440" PreferredSize="640,440"
+				HorizontalScrollBarPolicy="JScrollPane.HORIZONTAL_SCROLLBAR_NEVER"
+				VerticalScrollBarPolicy="JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED">
+				<treetable id="searchtree"/>
+			</scrollpane>
+		</panel>
 		<panel constraints="BorderLayout.SOUTH">
-			<button id="searchButton" text="search" />
+			<button id="searchbutton" text="search" />
 		</panel>
 	</panel>
 </dialog>

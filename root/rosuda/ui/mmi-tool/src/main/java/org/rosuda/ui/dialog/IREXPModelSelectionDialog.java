@@ -41,7 +41,8 @@ public class IREXPModelSelectionDialog extends JDialog {
 		new SwingEngine<JDialog>(this).render(reader);
 		reader.close();
 		final MessageBus messageBus = context.getAppContext().getBean(MessageBus.class);
-		close.addActionListener(new WindowCloseListener(messageBus, this));
+		//TODO MVP
+		//close.addActionListener(new WindowCloseListener(messageBus, this));
 		storeSelection.addActionListener(new StoreSelectionActionListener(messageBus));
 	}
 	

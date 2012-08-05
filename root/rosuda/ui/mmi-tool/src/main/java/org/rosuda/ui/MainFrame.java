@@ -52,6 +52,7 @@ public class MainFrame extends JFrame implements UIContext{
 		public JPanelImpl(final Container panel, ApplicationContext context) throws Exception {
 			this.presenter = new MainPresenter();
 			this.model = new MainModel(context);
+			//TODO: push panel, input and SwingEngine .. to viewImpl!
 			this.view = new MainViewContainerImpl(panel, input, protocol);
 			presenter.bind(model, view, context.getBean(MessageBus.class));
 		}

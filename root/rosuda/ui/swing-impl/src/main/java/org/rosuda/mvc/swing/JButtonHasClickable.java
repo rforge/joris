@@ -7,20 +7,21 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 
 import org.rosuda.ui.core.mvc.HasClickable;
 
 public class JButtonHasClickable implements HasClickable {
 
-	private final JButton button;
+	private final AbstractButton button;
 	private final List<HasClickable.ClickListener> listeners = new ArrayList<HasClickable.ClickListener>();
 	
 	public JButtonHasClickable() {
-		this(new JButton());
+	    this(new JButton());
 	}
 	
-	public JButtonHasClickable(final JButton button) {
+	public JButtonHasClickable(final AbstractButton button) {
 		this.button = button;
 		this.button.addMouseListener(new MouseAdapter() {
 			@Override
@@ -31,7 +32,7 @@ public class JButtonHasClickable implements HasClickable {
 		});
 	}
 	
-	public JButton getJButton() {
+	public AbstractButton getJButton() {
 		return button;
 	}
 

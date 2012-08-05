@@ -1,4 +1,4 @@
-package org.rosuda.ui.model;
+package org.rosuda.ui.search;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -12,7 +12,7 @@ import org.rosuda.graph.service.search.StringCompareType;
 import org.rosuda.graph.service.search.StringValueConstraint;
 import org.rosuda.graph.service.search.ValueConstraint;
 import org.rosuda.graph.service.search.VertexConstraint;
-import org.rosuda.ui.model.SearchDataNode.ConstraintType;
+import org.rosuda.ui.search.SearchDataNode.ConstraintType;
 
 public class SearchDataNodeTransformer {
 

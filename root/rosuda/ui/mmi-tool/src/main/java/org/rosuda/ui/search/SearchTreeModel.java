@@ -1,4 +1,4 @@
-package org.rosuda.ui.model;
+package org.rosuda.ui.search;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -13,7 +13,7 @@ import org.apache.commons.logging.LogFactory;
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
 import org.rosuda.graph.service.search.Relation;
 import org.rosuda.graph.service.search.VertexConstraint;
-import org.rosuda.ui.model.SearchDataNode.ConstraintType;
+import org.rosuda.ui.search.SearchDataNode.ConstraintType;
 import org.rosuda.visualizer.Localized;
 
 public class SearchTreeModel extends AbstractTreeTableModel implements Serializable {
