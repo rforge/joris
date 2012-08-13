@@ -5,8 +5,8 @@ import org.apache.commons.logging.LogFactory;
 import org.rosuda.ui.context.Aware;
 import org.rosuda.ui.context.UIContext;
 import org.rosuda.ui.core.mvc.MessageBus;
-import org.rosuda.ui.dialog.IRMMISpreadSheet;
 import org.rosuda.ui.event.ModelSearchResultEvent;
+import org.rosuda.ui.mmi.IRMMISpreadSheet;
 import org.springframework.stereotype.Component;
 
 @Component
