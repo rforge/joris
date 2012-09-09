@@ -18,7 +18,7 @@ public abstract class AbstractMaxTimeoutProcessProvider<T> {
 
 	private static final Log log = LogFactory.getLog(AbstractMaxTimeoutProcessProvider.class);
 
-	private long maxtimeout = 1000;
+	private long maxtimeout = 500;
 	private long polltime = 100;
 
 	public void setMaxtimeout(long maxtimeout) {
@@ -29,11 +29,17 @@ public abstract class AbstractMaxTimeoutProcessProvider<T> {
 		this.polltime = polltime;
 	}
 	
-	public T create(final Process process, final RunStateHolder<T> runstateHolder) {
+	public T create(final Process process, final RunStateHolder<T> runstateHolder, boolean isBlocking) {
 		new Thread(new StreamLogger(this.getClass(), "RServe>", LogMode.ERROR, process.getErrorStream())).start();
 		new Thread(new StreamLogger(this.getClass(), "RServe>", LogMode.INFO, process.getInputStream())).start();
 		new Thread(new ProcessMonitor(runstateHolder, process)).start();
-		//TODO: wait until started ...
+		if (!isBlocking) {
+			try {
+				process.waitFor();
+			} catch (InterruptedException e) {
+				log.debug("process was interrupted.");
+			}
+		}
 		long totalTimeOut = 0;
 		T result = null;
 		while (result == null && totalTimeOut < maxtimeout) {

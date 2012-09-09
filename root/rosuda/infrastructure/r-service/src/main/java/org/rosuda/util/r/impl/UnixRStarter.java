@@ -36,9 +36,14 @@ class UnixRStarter extends AbstractRStarter {
 		return new String[]{
 			"/bin/sh",
 			"-c",
-			"echo 'library(Rserve);Rserve(args\"" + R_SERVE_ARGS + "\")' | "
+			"echo 'library(Rserve);Rserve(args=\"" + R_SERVE_ARGS + "\")' | "
 			+ executableRFile + " " + R_ARGS
 		};
+	}
+	
+	@Override
+	protected boolean isBlocking() {
+		return false;
 	}
 
 }

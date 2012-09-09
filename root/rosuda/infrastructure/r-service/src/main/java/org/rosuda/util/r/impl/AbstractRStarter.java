@@ -46,6 +46,10 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
 	@Override
 	public final void start() {
 		for (final File startFile : fileLocations) {
+			if (!startFile.exists()) {
+				log.info("skipping configured but not present r start file \""+startFile.getAbsolutePath()+"\"");
+				continue;
+			}
 			log.info("starting R process for '"+startFile.getAbsolutePath()+"'");
 			try {
 				final String[] runtimeArgs = getRuntimeArgs(startFile.getAbsolutePath());
@@ -58,7 +62,7 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
 				
 				process = setup.createProcessForArgs(runtimeArgs);
 				//append loggers
-				final IRConnection rcon = new RetryStarter().create(process, runStateHolder);
+				final IRConnection rcon = new RetryStarter().create(process, runStateHolder, isBlocking());
 				if (rcon != null) {
 					rcon.close();
 					runStateHolder.setRunState(RUNSTATE.RUNNING);
@@ -71,6 +75,8 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
 			} 
 		}
 	}
+
+	protected abstract boolean isBlocking();
 
 	@Override
 	protected void finalize() throws Throwable {

@@ -1,12 +1,10 @@
 package org.rosuda.util.db;
 
 import java.io.IOException;
-import java.net.InetAddress;
 import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import org.apache.derby.drda.NetworkServerControl;
 import org.rosuda.util.process.AbstractMaxTimeoutProcessProvider;
 import org.rosuda.util.process.ProcessStarter;
 import org.rosuda.util.process.RUNSTATE;
@@ -28,7 +26,7 @@ public class DatabaseStarter implements ProcessStarter<DataSource>{
 			//try to get connection - if this works the service has already been started. Else start service
 			if (!context.canCreateConnection()) {
 				final Process process = context.processStartScript();
-				final DataSource dataSource = new RetryStarter().create(process, runStateHolder);
+				final DataSource dataSource = new RetryStarter().create(process, runStateHolder, true);
 				if (dataSource == null) {
 					throw new IllegalStateException("could not start DerbyDB, please check your environment and user rights!");
 				}

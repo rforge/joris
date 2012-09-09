@@ -196,6 +196,10 @@ class WindowsRStarter extends AbstractRStarter {
 	return new String[] { executableRFile, "CMD", usedRserveExecutable, R_SERVE_ARGS };
     }
 
+    @Override
+    protected boolean isBlocking() {
+    	return true;
+    }
     // -- helper
     private void fillFileListWhereRulesMatchWhileNoEntryHasBeenFound(final List<File> list, final FileFilter fileMatcher, final Matcher<String> pathTokenMatcher) {
 	searchInPathList(getRPathFromPathEnvironment(pathTokenMatcher), list, fileMatcher);
