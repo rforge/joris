@@ -1,19 +1,11 @@
 package org.rosuda.ui.core.mvc.impl;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.apache.commons.beanutils.WrapDynaBean;
-import org.rosuda.ui.core.mvc.HasValue;
-
-public class PropertyHasValueImpl<T> implements HasValue<T> {
+public class PropertyHasValueImpl<T> extends AbstractHasValue<T> {
 
     private final Field propertyDescriptor;
     private final Object propertyHolder;
-
-    private List<HasValue.ValueChangeListener<T>> listeners = new ArrayList<HasValue.ValueChangeListener<T>>();
 
     public PropertyHasValueImpl(final Object object, final String fieldName) {
 	try {
@@ -34,30 +26,12 @@ public class PropertyHasValueImpl<T> implements HasValue<T> {
 	}
     }
 
-    public void setValue(T value) {
-	final boolean valueChanged = getValue() != value;
+    @Override
+    protected void onValueChange(T newValue) {
 	try {
-	    propertyDescriptor.set(propertyHolder, value);
+	    propertyDescriptor.set(propertyHolder, newValue);
 	} catch (final Exception e) {
 	    throw new RuntimeException(e);
 	}
-	if (valueChanged) {
-	    fireChangeEvent(value);
-	}
     }
-
-    protected void fireChangeEvent(final T newValue) {
-	for (final HasValue.ValueChangeListener<T> listener : listeners) {
-	    listener.onValueChange(newValue);
-	}
-    }
-
-    public void addChangeListener(final HasValue.ValueChangeListener<T> listener) {
-	this.listeners.add(listener);
-    }
-
-    public void removeChangeListener(final HasValue.ValueChangeListener<T> listener) {
-	this.listeners.remove(listener);
-    }
-
 }

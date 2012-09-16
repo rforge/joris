@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import javax.swing.JComponent;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
@@ -43,17 +44,17 @@ public class MainFrame extends JFrame implements UIContext{
 
 	public JMenuItem searchData;
 	
-	public class JPanelImpl {
+	public class Impl<C extends Container> {
 
-		private final MainPresenter presenter;
+		private final MainPresenter<C> presenter;
 		private final MainModel model;
-		private final MainView<Container> view;
+		private final MainView<C> view;
 
-		public JPanelImpl(final Container panel, ApplicationContext context) throws Exception {
-			this.presenter = new MainPresenter();
+		public Impl(final C panel, ApplicationContext context) throws Exception {
+			this.presenter = new MainPresenter<C>();
 			this.model = new MainModel(context);
 			//TODO: push panel, input and SwingEngine .. to viewImpl!
-			this.view = new MainViewContainerImpl(panel, input, protocol);
+			this.view = new MainViewContainerImpl<C>(panel, input, protocol);
 			presenter.bind(model, view, context.getBean(MessageBus.class));
 		}
 
@@ -98,7 +99,7 @@ public class MainFrame extends JFrame implements UIContext{
 		frame.setVisible(true);
 		protocol.setText(htmlBuilder.toString());
 		input.requestFocus();
-		new JPanelImpl(this.getRootPane(), context);
+		new Impl<JComponent>(this.getRootPane(), context);
 		bus.registerListener(new EventListener<CRTKeyEvent>() {
 			@Override
 			public void onEvent(final CRTKeyEvent crtEvent) {

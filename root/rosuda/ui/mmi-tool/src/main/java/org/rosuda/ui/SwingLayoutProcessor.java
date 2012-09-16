@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTree;
 import org.jdesktop.swingx.JXTreeTable;
 import org.swixml.SwingEngine;
@@ -17,7 +18,8 @@ public class SwingLayoutProcessor {
 	final BufferedReader reader = new BufferedReader(new InputStreamReader(rsc));
 	final SwingEngine<T> renderer = new SwingEngine<T>(container);
 	renderer.getTaglib().registerTag("treetable", new BeanFactory(JXTreeTable.class));
-	renderer.getTaglib().registerTag("jxTree", new BeanFactory(JXTree.class));
+	renderer.getTaglib().registerTag("jxtree", new BeanFactory(JXTree.class));
+	renderer.getTaglib().registerTag("jxtable", new BeanFactory(JXTable.class));
 	renderer.render(reader);
 	reader.close();
     }

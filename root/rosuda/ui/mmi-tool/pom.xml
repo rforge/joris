@@ -16,44 +16,49 @@
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>jr-connect</artifactId>
-			<version>${project.parent.version}</version>
+			<version>${joris.version}</version>
 		</dependency>
 		<!-- reference impl -->
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>jr-connect-rengine-impl</artifactId>
-			<version>${project.parent.version}</version>
+			<version>${joris.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>irexp-mapper</artifactId>
-			<version>${project.parent.version}</version>
+			<version>${joris.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>generic-type-mapper-filter</artifactId>
-			<version>${project.parent.version}</version>
+			<version>${joris.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>generic-type-restructure</artifactId>
-			<version>${project.parent.version}</version>
+			<version>${joris.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda.ui</groupId>
 			<artifactId>generic-type-visualizer</artifactId>
-			<version>${project.parent.version}</version>
+			<version>${joris.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.rosuda</groupId>
+			<artifactId>util-nodelist-calculator</artifactId>
+			<version>${joris.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>commons-messagebus</artifactId>
-			<version>${project.parent.version}</version>
+			<version>${joris.version}</version>
 		</dependency>
 		<!-- one implementatino of generic-service: -->
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>hibernate-service-impl</artifactId>
-			<version>${project.parent.version}</version>
+			<version>${joris.version}</version>
 		</dependency>
 		<!-- database libraries -->
 		<dependency>
@@ -71,21 +76,28 @@
 		<dependency>
 			<groupId>org.rosuda.ui</groupId>
 			<artifactId>swing-impl</artifactId>
-			<version>${project.parent.version}</version>
+			<version>${joris.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>jr-connection-mgr</artifactId>
-			<version>${project.parent.version}</version>
+			<version>${joris.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>infrastructure-db</artifactId>
-			<version>${project.parent.version}</version>
+			<version>${joris.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
+			<groupId>org.rosuda</groupId>
+			<artifactId>commons-messagebus-testutil</artifactId>
+			<version>${joris.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.rosuda</groupId>
+			<artifactId>test-data</artifactId>
+			<version>${parent.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

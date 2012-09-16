@@ -9,15 +9,15 @@ import org.rosuda.ui.core.mvc.MessageBus;
 import org.rosuda.ui.event.ModelSearchEvent;
 import org.rosuda.ui.listener.WindowCloseListener;
 
-public class SearchDialogPresenter implements MVP.Presenter<SearchDialogModel,SearchDialogView<?>>{
+public class SearchDialogPresenter<C> implements MVP.Presenter<SearchDialogModel,SearchDialogView<C>>{
 
     private ClickListener searchListener;
     
     @Override
-    public void bind(final SearchDialogModel model, final SearchDialogView<?> view, final MessageBus messageBus) {
+    public void bind(final SearchDialogModel model, final SearchDialogView<C> view, final MessageBus messageBus) {
 	view.getTree().setValue(model.getSearchTreeModel());
-	if (view.getContainer() instanceof Window) {
-	    final Window container = (Window) view.getContainer();
+	if (view.getViewContainer() instanceof Window) {
+	    final Window container = (Window) view.getViewContainer();
 	    view.getCloseButton().addClickListener(new WindowCloseListener(messageBus, container));
 	}
 	searchListener = new ClickListener() {  
@@ -30,7 +30,7 @@ public class SearchDialogPresenter implements MVP.Presenter<SearchDialogModel,Se
     }
 
     @Override
-    public void unbind(final SearchDialogModel model, final SearchDialogView<?> view, final MessageBus messageBus) {
+    public void unbind(final SearchDialogModel model, final SearchDialogView<C> view, final MessageBus messageBus) {
 	if (searchListener != null) {
 	    view.getSearchButton().removeClickListener(searchListener);
 	}	

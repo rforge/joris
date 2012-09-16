@@ -1,43 +1,46 @@
 package org.rosuda.ui.core.mvc;
 
-public interface MVP<M extends MVP.Model, V extends MVP.View> {
+public interface MVP<C, M extends MVP.Model, V extends MVP.View<C>> {
+
+    /**
+     * the data model
+     * 
+     * @author ralfseger
+     * 
+     */
+    public interface Model {
+    }
+
+    public interface View<C> {
+
+	void disable();
+
+	void enable();
+
+	void show();
+
+	void hide();
 
 	/**
-	 * the data model
-	 * @author ralfseger
-	 *
+	 * get the container for the target platform, either rich client like
+	 * "swing", "awt" etc or web based.
+	 * 
+	 * @return
 	 */
-	public interface Model {
-	}
-	
-	public interface View<C>{
+	C getViewContainer();
 
-		void disable();
-		
-		void enable();
-		
-		void show();
-		
-		void hide();
-		
-		/**
-		 * get the container for the target platform, either rich client like "swing", "awt" etc or web based.
-		 * @return
-		 */
-		C getContainer();
-		
-	}
-	
-	interface Presenter<M extends MVP.Model, V extends MVP.View> {
-		/**
-		 * binds model and view
-		 */
-		void bind(final M model, final V view, final MessageBus mb);
-		/**
-		 * unbinds the components
-		 */
-		void unbind(final M model, final V view, final MessageBus mb);
-	}
-	
-	
+    }
+
+    public interface Presenter<M, V> {
+	/**
+	 * binds model and view
+	 */
+	void bind(final M model, final V view, final MessageBus mb);
+
+	/**
+	 * unbinds the components
+	 */
+	void unbind(final M model, final V view, final MessageBus mb);
+    }
+
 }

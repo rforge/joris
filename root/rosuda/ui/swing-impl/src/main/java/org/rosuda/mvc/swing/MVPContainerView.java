@@ -48,7 +48,7 @@ public class MVPContainerView<T extends Container> implements MVP.View<T>{
 	}
 
 	@Override
-	public T getContainer() {
+	public T getViewContainer() {
 		return container;
 	}
 

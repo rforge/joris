@@ -3,11 +3,11 @@
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-        <parent>
-       	  <groupId>org.rosuda</groupId>
-          <artifactId>root</artifactId>
-	        <version>${joris.version}</version>
-        </parent>
+	<parent>
+		<groupId>org.rosuda</groupId>
+		<artifactId>root</artifactId>
+		<version>${joris.version}</version>
+	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.rosuda</groupId>
@@ -16,8 +16,9 @@
 	<packaging>pom</packaging>
 
 	<modules>
- 	        <module>commons-messagebus</module>
- 	        <module>swing-impl</module>
+		<module>commons-messagebus</module>
+		<module>commons-messagebus-testutil</module>
+		<module>swing-impl</module>
 		<module>generic-type-visualizer</module>
 		<module>mmi-tool</module>
 	</modules>

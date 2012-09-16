@@ -1,45 +1,48 @@
 package org.rosuda.ui.mmi;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.ResourceBundle;
 
 import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
-import org.rosuda.irconnect.IREXP;
 import org.rosuda.type.Node;
 import org.rosuda.ui.context.UIContext;
 import org.rosuda.ui.core.mvc.MessageBus;
 import org.rosuda.ui.dialog.RootNodeWrapper;
+import org.rosuda.visualizer.Localized;
 import org.rosuda.visualizer.NodeTreeModel;
 
-public class IRMMISpreadSheet extends JDialog {
+public class IRMMISpreadSheet<T> extends JDialog {
 
-    private final List<String> paths = new ArrayList<String>();
-
+    private static final long serialVersionUID = -7528925723342644500L;
+    
     public class JDialogImpl {
 
-	private final MMIToolPresenter presenter;
-	private final MMIToolModel model;
-	private final MMIToolViewDialogImpl view;
+	//TODO remove dependency from presenter *JDialog* to View
+	private final MMIToolPresenter<T, JDialog> presenter;
+	private final MMIToolModel<T> model;
+	private final MMIToolViewDialogImpl<T> view;
 
-	public JDialogImpl(UIContext context, final Collection<Node<IREXP>> data) throws Exception {
-	    this.presenter = new MMIToolPresenter();
-	    this.model = new MMIToolModel();
-	    this.model.setUniqueStructure(new NodeTreeModel<IREXP>(new RootNodeWrapper(null, data)));
-	    // TODO: push panel, input and SwingEngine .. to viewImpl!
-	    this.view = new MMIToolViewDialogImpl(context);
+	public JDialogImpl(UIContext context, final Collection<Node<T>> data) throws Exception {
+	    this.presenter = new MMIToolPresenter<T, JDialog>();
+	    this.model = new MMIToolModel<T>();
+	    this.model.setUniqueStructure(new NodeTreeModel<T>(new RootNodeWrapper<T>(null, data)));
+	    this.model.setTableModel(new MMIDynamicTableModel<T>(data));
+	    this.view = new MMIToolViewDialogImpl<T>(context);
 	    presenter.bind(model, view, context.getAppContext().getBean(MessageBus.class));
 	}
 
     }
 
-    public IRMMISpreadSheet(final UIContext context, final Collection<Node<IREXP>> data) throws Exception {
+    public IRMMISpreadSheet(final UIContext context, final Collection<Node<T>> data) throws Exception {
 	super(context.getUIFrame(), ModalityType.MODELESS);
+	final ResourceBundle localization = ResourceBundle.getBundle(IRMMISpreadSheet.class.getName());
+	final Localized localized = new Localized.ResourceBundleImpl(localization);
 	if (data.isEmpty()) {
-	    // TODO show empty warning dialog
+	    JOptionPane.showConfirmDialog(context.getUIFrame(), localized.get("NO_RESULT"), localized.get("ALERT"), JOptionPane.OK_OPTION);
 	} else {
-	    final JDialogImpl jDialogImpl = new JDialogImpl(context, data);
+	    new JDialogImpl(context, data);
 	}
     }
 }

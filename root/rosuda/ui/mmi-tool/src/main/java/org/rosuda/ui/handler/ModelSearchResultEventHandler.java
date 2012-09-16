@@ -2,6 +2,7 @@ package org.rosuda.ui.handler;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rosuda.irconnect.IREXP;
 import org.rosuda.ui.context.Aware;
 import org.rosuda.ui.context.UIContext;
 import org.rosuda.ui.core.mvc.MessageBus;
@@ -19,7 +20,8 @@ public class ModelSearchResultEventHandler extends
     @Override
     public void onEvent(ModelSearchResultEvent event) {
 	try {
-	    new IRMMISpreadSheet(uiContext, event.getResult());
+	    //TODO <T>
+	    new IRMMISpreadSheet<IREXP>(uiContext, event.getResult());
 	} catch (Exception e) {
 	    LOG.error("could not create spreadsheet", e);
 	}

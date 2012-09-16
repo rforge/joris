@@ -32,7 +32,7 @@ import org.rosuda.visualizer.VisualizerFrame;
 import org.rosuda.visualizer.VisualizerFrame.NodeEvent;
 import org.rosuda.visualizer.VisualizerFrame.Step;
 
-public class LabelledMultiSelectionStep implements MVP<LabelledMultiSelectionStep.Model, LabelledMultiSelectionStep.View> {
+public class LabelledMultiSelectionStep implements MVP<JPanel, LabelledMultiSelectionStep.Model, LabelledMultiSelectionStep.View> {
 	
 
 	public static class JPanelImpl {
@@ -117,9 +117,9 @@ public class LabelledMultiSelectionStep implements MVP<LabelledMultiSelectionSte
 			this.choseButton = new JButtonHasClickable(jchoseButton);
 			this.labelledField = new JListHasValue(nodePathField);
 			
-			getContainer().add(jlabel, BorderLayout.WEST);
-			getContainer().add(new JScrollPane(nodePathField, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS), BorderLayout.CENTER);
-			getContainer().add(jchoseButton, BorderLayout.EAST);
+			getViewContainer().add(jlabel, BorderLayout.WEST);
+			getViewContainer().add(new JScrollPane(nodePathField, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS), BorderLayout.CENTER);
+			getViewContainer().add(jchoseButton, BorderLayout.EAST);
 		}
 		
 		public HasValue<String> getLabel() {

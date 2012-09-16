@@ -14,13 +14,13 @@ import org.rosuda.mvc.swing.MVPContainerView;
 import org.rosuda.ui.core.mvc.HasKeyEvent;
 import org.rosuda.ui.core.mvc.HasValue;
 
-public class MainViewContainerImpl extends MVPContainerView<Container> implements MainView<Container> {
+public class MainViewContainerImpl<C extends Container> extends MVPContainerView<C> implements MainView<C> {
 
 	private final HasValue<String> inputValue;
 	private final HasKeyEvent<String> input;
 	private final HasValue<HTMLDocument> protocol;
 	
-	public MainViewContainerImpl(final Container container, final JTextComponent textComponent, final JEditorPane protocolComponent) throws Exception {
+	public MainViewContainerImpl(final C container, final JTextComponent textComponent, final JEditorPane protocolComponent) throws Exception {
 		super(container);
 		this.input = new JTextComponentHasKeyEvent<String>(textComponent, new DocumentValueAdapter.String(textComponent.getDocument()));
 		this.inputValue = new DocumentHasValue<String>(textComponent.getDocument(), new DocumentValueAdapter.String(textComponent.getDocument()));

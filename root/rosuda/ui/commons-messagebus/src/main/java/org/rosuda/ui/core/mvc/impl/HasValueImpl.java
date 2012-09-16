@@ -1,14 +1,8 @@
 package org.rosuda.ui.core.mvc.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.rosuda.ui.core.mvc.HasValue;
-
-public class HasValueImpl<T> implements HasValue<T> {
+public class HasValueImpl<T> extends AbstractHasValue<T> {
 
     private T value;
-    private List<HasValue.ValueChangeListener<T>> listeners = new ArrayList<HasValue.ValueChangeListener<T>>();
 
     public HasValueImpl() {
 	this(null);
@@ -18,30 +12,13 @@ public class HasValueImpl<T> implements HasValue<T> {
 	this.value = value;
     }
 
-    public T getValue() {
+    public final T getValue() {
 	return value;
     }
 
-    public void setValue(T value) {
-	final boolean valueChanged = this.value != value;
-	this.value = value;
-	if (valueChanged) {
-	    fireChangeEvent(value);
-	}
-    }
-
-    private void fireChangeEvent(final T newValue) {
-	for (final HasValue.ValueChangeListener<T> listener : new ArrayList<HasValue.ValueChangeListener<T>>(listeners)) {
-	    listener.onValueChange(newValue);
-	}
-    }
-
-    public void addChangeListener(final HasValue.ValueChangeListener<T> listener) {
-	this.listeners.add(listener);
-    }
-
-    public void removeChangeListener(final HasValue.ValueChangeListener<T> listener) {
-	this.listeners.remove(listener);
+    @Override
+    protected void onValueChange(T newValue) {
+	value = newValue;
     }
 
 }

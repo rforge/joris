@@ -1,5 +1,7 @@
 package org.rosuda.ui.handler;
 
+import javax.swing.JDialog;
+
 import org.rosuda.ui.context.Aware;
 import org.rosuda.ui.context.UIContext;
 import org.rosuda.ui.core.mvc.MessageBus;
@@ -18,7 +20,8 @@ public class SearchDataEventHandler extends MessageBus.EventListener<SearchDataE
     @Override
     public void onEvent(final SearchDataEvent event) {
 	try {
-	    new IRModelSearchDialog(context);
+	    //TODO T
+	    new IRModelSearchDialog<JDialog>(context);
 	} catch (final Exception e) {
 	    throw new RuntimeException(e);
 	}

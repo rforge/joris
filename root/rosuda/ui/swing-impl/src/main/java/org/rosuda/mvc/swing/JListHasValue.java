@@ -11,89 +11,81 @@ import javax.swing.AbstractListModel;
 import javax.swing.JList;
 
 import org.rosuda.ui.core.mvc.HasValue;
+import org.rosuda.ui.core.mvc.impl.AbstractHasValue;
 
-public class JListHasValue implements HasValue<List<String>> {
+public class JListHasValue extends AbstractHasValue<List<String>> {
 
-	private final List<String> elements = new ArrayList<String>();
-	
-	private class StringListModel extends AbstractListModel {
+    private final List<String> elements = new ArrayList<String>();
 
-		/**
+    private class StringListModel extends AbstractListModel {
+
+	/**
 		 * 
 		 */
-		private static final long serialVersionUID = -5355106399227165442L;
+	private static final long serialVersionUID = -5355106399227165442L;
 
-		@Override
-		public int getSize() {
-			return elements.size();
-		}
-
-		@Override
-		public String getElementAt(final int index) {
-			return elements.get(index);
-		}
-		
-	}
-	
-	private final JList field;
-	private final List<HasValue.ValueChangeListener<List<String>>> listeners = new ArrayList<HasValue.ValueChangeListener<List<String>>>();
-	
-	public JListHasValue() {
-		 this(new JList());
-	}
-	
-	public JListHasValue(final JList field) {
-		this.field = field;
-		field.setModel(new StringListModel());
-		this.field.addVetoableChangeListener(new VetoableChangeListener() {
-			
-			@Override
-			public void vetoableChange(final PropertyChangeEvent evt)
-					throws PropertyVetoException {
-				fireChangeEvent();
-			}
-		});
-	}
-	
-	public List<String> getValue() {
-		return elements;
+	@Override
+	public int getSize() {
+	    return elements.size();
 	}
 
-	private void fireChangeEvent() {
-		final List<String> newValue = Collections.unmodifiableList(getValue());
-		for (final HasValue.ValueChangeListener<List<String>> listener: listeners) {
-			listener.onValueChange(newValue);
-		}
+	@Override
+	public String getElementAt(final int index) {
+	    return elements.get(index);
 	}
-	
-	public void setValue(final List<String> value) {
-		elements.clear();
-		elements.addAll(value);
+
+    }
+
+    private final JList field;
+    private final List<HasValue.ValueChangeListener<List<String>>> listeners = new ArrayList<HasValue.ValueChangeListener<List<String>>>();
+
+    public JListHasValue() {
+	this(new JList());
+    }
+
+    public JListHasValue(final JList field) {
+	this.field = field;
+	field.setModel(new StringListModel());
+	this.field.addVetoableChangeListener(new VetoableChangeListener() {
+
+	    @Override
+	    public void vetoableChange(final PropertyChangeEvent evt) throws PropertyVetoException {
 		fireChangeEvent();
-	}
+	    }
+	});
+    }
 
-	public void addValue(final String value) {
-		this.elements.add(value);
-	}
-	
-	public void removeValue(final String value) {
-		this.elements.remove(value);
-	}
-	
-	public void removeValueAt(final int index) {
-		this.elements.remove(index);
-	}
-	
-	public void addChangeListener(final HasValue.ValueChangeListener<List<String>> listener) {
-		listeners.add(listener);
-	}
+    public List<String> getValue() {
+	return elements;
+    }
 
-	public void removeChangeListener(final HasValue.ValueChangeListener<List<String>> listener) {
-		listeners.remove(listener);
+    private void fireChangeEvent() {
+	final List<String> newValue = Collections.unmodifiableList(getValue());
+	for (final HasValue.ValueChangeListener<List<String>> listener : listeners) {
+	    listener.onValueChange(newValue);
 	}
-	
-	public JList getJTextField() {
-		return field;
-	}
+    }
+
+    @Override
+    protected void onValueChange(List<String> newValue) {
+	elements.clear();
+	elements.addAll(newValue);
+    }
+
+    public void addValue(final String value) {
+	this.elements.add(value);
+    }
+
+    public void removeValue(final String value) {
+	this.elements.remove(value);
+    }
+
+    public void removeValueAt(final int index) {
+	this.elements.remove(index);
+    }
+
+    public JList getJTextField() {
+	return field;
+    }
 
 }

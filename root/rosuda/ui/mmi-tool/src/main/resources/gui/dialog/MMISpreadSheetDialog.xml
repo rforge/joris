@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dialog size="640,480">
-	<!-- <menubar>
-		<menu text="DataBase">
-			<menuitem text="Search" accelerator="meta S" id="search" />
-			<separator />
-			<menuitem text="Close" accelerator="meta C" id="close" />
+	<menubar>
+		<menu text="Options">
+			<menuitem text="Show Detail Table" accelerator="meta T" id="synchronizeTreeToTable" />
 		</menu>
-	</menubar> -->
+	</menubar>
 
 	<panel layout="BorderLayout">
 		<splitpane orientation="JSplitPane.HORIZONTAL_SPLIT"
@@ -19,9 +17,8 @@
 			<scrollpane  width="490" height="480" PreferredSize="490,480"
 				HorizontalScrollBarPolicy="JScrollPane.HORIZONTAL_SCROLLBAR_NEVER"
 				VerticalScrollBarPolicy="JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED">
-				<table id="valuetable"/>
-			</scrollpane>
-			
+				<jxtable id="valuetable"/>
+			</scrollpane>			
 		</splitpane>
 	</panel>
 </dialog>

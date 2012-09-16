@@ -179,7 +179,7 @@ public class VisualizerFrame extends JFrame {
 	}
 	
 	private void updateFrameWithNextView(final LabelledView view) {
-		westPanel.add(view.getContainer());
+		westPanel.add(view.getViewContainer());
 		description.setText(view.getDescription().getValue());
 		stepLabel.setText(view.getStepDescription().getValue());
 		this.step = view.getStep();

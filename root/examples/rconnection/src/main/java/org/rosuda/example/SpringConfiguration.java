@@ -23,7 +23,7 @@ import org.springframework.context.annotation.ImportResource;
 public class SpringConfiguration {
 
     @Bean
-    public IRConnection managedIRConnection(IRConnectionConfig configuration, @Qualifier("rStarterProcess") ProcessService rStarterService) {
+    public IRConnection managedIRConnection(IRConnectionConfig configuration, @Qualifier("rStarterProcess") ProcessService<IRConnection> rStarterService) {
 	final IRConnectionMgrImpl irConnectionMgrImpl = new IRConnectionMgrImpl();
 	irConnectionMgrImpl.setService(rStarterService);
 	irConnectionMgrImpl.setFactory(new REngineConnectionFactory());

@@ -13,7 +13,7 @@ import org.rosuda.ui.core.mvc.HasClickable;
 import org.rosuda.ui.core.mvc.HasValue;
 import org.rosuda.ui.core.mvc.Screen;
 
-public class SearchDialogViewJDialogImpl extends JDialog implements SearchDialogView<JDialog> {
+public class SearchDialogViewJDialogImpl<C extends JDialog> extends JDialog implements SearchDialogView<C> {
 
     /**
      * 
@@ -80,10 +80,6 @@ public class SearchDialogViewJDialogImpl extends JDialog implements SearchDialog
 	return searchTreeInterface;
     }
 
-    public JDialog getContainer() { 
-	return this;
-    }
-
     void render() {
 	int screenWith = uiContext.getAppContext().getBean(Screen.class).getWidth();
 	
@@ -96,4 +92,10 @@ public class SearchDialogViewJDialogImpl extends JDialog implements SearchDialog
 	pack();
 	setVisible(true);
     }
+
+    @Override
+    public C getViewContainer() {
+	return (C) this;
+    }
+
 }

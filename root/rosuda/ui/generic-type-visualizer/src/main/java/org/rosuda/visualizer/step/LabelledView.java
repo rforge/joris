@@ -7,7 +7,7 @@ import org.rosuda.visualizer.VisualizerFrame.Step;
 
 public interface LabelledView {
 
-	Component getContainer();
+	Component getViewContainer();
 	HasValue<String> getDescription();
 	HasValue<String> getStepDescription();
 	Step getStep();

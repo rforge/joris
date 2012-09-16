@@ -32,7 +32,7 @@ import org.rosuda.visualizer.VisualizerFrame;
 import org.rosuda.visualizer.VisualizerFrame.NodeEvent;
 import org.rosuda.visualizer.VisualizerFrame.Step;
 
-public class LabelledSelectionStep implements MVP<LabelledSelectionStep.Model, LabelledSelectionStep.View> {
+public class LabelledSelectionStep implements MVP<JPanel, LabelledSelectionStep.Model, LabelledSelectionStep.View> {
 	
 	public static class JPanelImpl {
 		
@@ -118,9 +118,9 @@ public class LabelledSelectionStep implements MVP<LabelledSelectionStep.Model, L
 			final Document document = nodePathField.getDocument();
 			this.labelledField = new DocumentHasValue<String>(document, new DocumentValueAdapter.String(document));
 			
-			getContainer().add(jlabel, BorderLayout.WEST);
-			getContainer().add(nodePathField, BorderLayout.CENTER);
-			getContainer().add(jchoseButton, BorderLayout.EAST);
+			getViewContainer().add(jlabel, BorderLayout.WEST);
+			getViewContainer().add(nodePathField, BorderLayout.CENTER);
+			getViewContainer().add(jchoseButton, BorderLayout.EAST);
 		}
 		
 		public HasValue<String> getLabel() {
