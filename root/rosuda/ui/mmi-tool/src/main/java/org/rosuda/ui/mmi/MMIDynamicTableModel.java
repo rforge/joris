@@ -1,17 +1,16 @@
 package org.rosuda.ui.mmi;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.rosuda.type.Value;
 import org.rosuda.type.Node;
 import org.rosuda.type.NodeFinder;
-import org.rosuda.type.NodeFinderImpl;
 import org.rosuda.type.NodePath;
+import org.rosuda.type.PostfixNodeFinderImpl;
+import org.rosuda.type.Value;
 import org.rosuda.util.nodelistcalc.ListCalculationUtil;
 import org.rosuda.visualizer.NodeTreeSelection;
 
@@ -24,7 +23,7 @@ public class MMIDynamicTableModel<T> extends AbstractTableModel {
     private final List<Node<T>> nodes;
     private NodeTreeSelection currentSelection;
     private final ListCalculationUtil<T> calculationUtil;
-    private final NodeFinder<T> nodeFinder = new NodeFinderImpl<T>();
+    private final NodeFinder<T> nodeFinder = new PostfixNodeFinderImpl<T>();
 
     public MMIDynamicTableModel(final Collection<Node<T>> data) {
 	this.nodes = new ArrayList<Node<T>>(data);
@@ -36,17 +35,14 @@ public class MMIDynamicTableModel<T> extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-	System.out.println("rows = " + nodes.size());
 	return nodes.size();
     }
 
     @Override
     public int getColumnCount() {
-	System.out.println("? columnCount .. " + currentSelection);
 	if (currentSelection == null) {
 	    return 0;
 	}
-	System.out.println("currentSelection.getSelectedPaths() = " + currentSelection.getSelectedPaths());
 	return currentSelection.getSelectedPaths().size();
     }
 
@@ -63,16 +59,12 @@ public class MMIDynamicTableModel<T> extends AbstractTableModel {
 	if (valueSelector == null)
 	    return null;
 	final Node<T> root = nodes.get(row);
-	System.out.println("root = "+root.getName()); //selector valueSelector must match path
 	final Node<T> value = nodeFinder.findNode(root, valueSelector);
 
-	System.out.println(value);
-	System.out.println(valueSelector);
-	//TODO NodeRenderer for Node/Value
 	if (value == null) {
 	    return "-null-("+valueSelector+")";
 	}
-	final Value v = value.getValue();
+	final Value v = value.getChildCount() == 1 ? value.childAt(0).getValue() : value.getValue();
 	if (v != null) {
 	    switch (v.getType()) {
 	    case BOOL:

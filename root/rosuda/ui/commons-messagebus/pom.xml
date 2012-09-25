@@ -14,8 +14,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
+			<artifactId>junit-dep</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>commons-logging</groupId>

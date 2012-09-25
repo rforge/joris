@@ -1,10 +1,10 @@
 package org.rosuda.ui.dialog;
 
-import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
+import java.util.WeakHashMap;
 
 import org.rosuda.type.Node;
 import org.rosuda.type.Value;
@@ -13,7 +13,8 @@ public class RootNodeWrapper<T> implements Node<T> {
 
     private final Node<T> delegate;
     private final List<Node<T>> uniqueChildren = new ArrayList<Node<T>>();
-    private volatile SoftReference<Map<String, RootNodeWrapper<T>>> uniqueChildMapping = new SoftReference<Map<String, RootNodeWrapper<T>>>(new TreeMap<String, RootNodeWrapper<T>>());
+    private volatile WeakReference<Map<String, RootNodeWrapper<T>>> uniqueChildMapping = new WeakReference<Map<String, RootNodeWrapper<T>>>(
+	    new WeakHashMap<String, RootNodeWrapper<T>>());
 
     public RootNodeWrapper(final Node<T> parent, final Iterable<Node<T>> data) {
 	this.delegate = parent;
@@ -23,23 +24,21 @@ public class RootNodeWrapper<T> implements Node<T> {
 	} else {
 	    buildUniqueChildren(data);
 	}
-	uniqueChildMapping.get().clear();
     }
 
     private void buildUniqueChildren(final Iterable<Node<T>> data) {
 	for (Node<T> child : data) {
-	    if (child.getValue() == null) {
-		final String uniqueName = child.getName();
-		if (!uniqueChildMapping.get().containsKey(uniqueName)) {
-		    final RootNodeWrapper<T> wrapper = new RootNodeWrapper<T>(child, child.getChildren());
-		    uniqueChildren.add(wrapper);
-		    uniqueChildMapping.get().put(uniqueName, wrapper);
-		} else {
-		    // den knoten gibt es schon, also nur kinder zufügen
-		    final RootNodeWrapper<T> existingChild = uniqueChildMapping.get().get(uniqueName);
-		    existingChild.buildUniqueChildren(child.getChildren());
-		}
+	    final String uniqueName = child.getName();
+	    if (!uniqueChildMapping.get().containsKey(uniqueName)) {
+		final RootNodeWrapper<T> wrapper = new RootNodeWrapper<T>(child, child.getChildren());
+		uniqueChildren.add(wrapper);
+		uniqueChildMapping.get().put(uniqueName, wrapper);
+	    } else {
+		// den knoten gibt es schon, also nur kinder zufügen
+		final RootNodeWrapper<T> existingChild = uniqueChildMapping.get().get(uniqueName);
+		existingChild.buildUniqueChildren(child.getChildren());
 	    }
+
 	}
     }
 

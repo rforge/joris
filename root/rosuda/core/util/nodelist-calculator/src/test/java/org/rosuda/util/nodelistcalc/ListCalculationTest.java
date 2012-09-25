@@ -1,7 +1,11 @@
 package org.rosuda.util.nodelistcalc;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.not;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
@@ -12,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.rosuda.irconnect.IREXP;
 import org.rosuda.type.Node;
+import org.rosuda.type.PostfixNodeFinderImpl;
 
 public class ListCalculationTest {
 
@@ -100,6 +105,31 @@ public class ListCalculationTest {
 	for (int i=0;i<aics.size();i++) {
 	    assertThat("calculation of AIC is not same at index "+i, aics.get(i), equalTo(rootAICs.get(i)));
 	}
-	
+    }
+    
+    @Test
+    public void fullPathEvaluationWorks(){
+	final ListCalculationUtil<IREXP> util = new ListCalculationUtil<IREXP>();
+	util.setContent(data);
+	//data.get(0).childAt(3).childAt(0).childAt(1).childAt(0).getValue()
+	final List<Number> tempEstimates = util.calculate("${/root/coefficients/matrix/Temp/Estimate}");
+	assertThat(tempEstimates, hasItem(notNullValue(Number.class)));
+    }
+    
+    @Test
+    public void defaultFinderDoesNotSupportsPostfixMatches() {
+	final ListCalculationUtil<IREXP> util = new ListCalculationUtil<IREXP>();
+	util.setContent(data);
+	final List<Number> tempEstimates = util.calculate("${//Temp/Estimate}");
+	assertThat(tempEstimates, not(hasItem(notNullValue(Number.class))));
+    }
+    
+    @Test
+    public void postfixFinderSupportsPostfixMatches() {
+	final ListCalculationUtil<IREXP> util = new ListCalculationUtil<IREXP>();
+	util.setNodeFinder(new PostfixNodeFinderImpl<IREXP>());
+	util.setContent(data);
+	final List<Number> tempEstimates = util.calculate("${//Temp/Estimate}");
+	assertThat(tempEstimates, hasItem(notNullValue(Number.class)));
     }
 }

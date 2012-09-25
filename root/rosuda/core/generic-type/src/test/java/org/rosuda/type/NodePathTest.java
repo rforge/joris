@@ -22,6 +22,20 @@ public class NodePathTest {
 	final NodePath path = NodePath.Impl.parse(treepath);
 	assertNodePathOfRootNext(path);
     }
+    
+    @Test
+    public void nodePathFromTreeCannotContainEmptyString() {
+	final TreePath treepath = new TreePath(new Object[] { "", "root", "tmp" });
+	final NodePath path = NodePath.Impl.parse(treepath);
+	assertNodePathOfRootNext(path);
+    }
+    
+    @Test
+    public void nodePathFromTreeCannotContainNull() {
+	final TreePath treepath = new TreePath(new Object[] { null, "root", "tmp" });
+	final NodePath path = NodePath.Impl.parse(treepath);
+	assertNodePathOfRootNext(path);
+    }
 
     @Test
     public void nodePathCanParsePathFromString() {

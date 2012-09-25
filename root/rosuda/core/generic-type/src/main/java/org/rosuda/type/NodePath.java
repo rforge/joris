@@ -1,6 +1,7 @@
 package org.rosuda.type;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -112,9 +113,12 @@ public interface NodePath {
 	    final List<String> names = new ArrayList<String>();
 	    final List<Integer> numbers = new ArrayList<Integer>();
 
-	    final Object[] parts = treePath.getPath();
-	    for (int i = 0; i < parts.length; i++) {
-		final String name = parts[i].toString();
+	    final List<Object> parts = Arrays.asList(treePath.getPath());
+	    for (int i = 0; i < parts.size(); i++) {
+		final Object ithPart = parts.get(i);
+		if (ithPart == null || ithPart.toString().trim().length() < 1) 
+		    continue;
+		final String name = ithPart.toString();
 		names.add(name);
 		numbers.add(0);
 	    }
