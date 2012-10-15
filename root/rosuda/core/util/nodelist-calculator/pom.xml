@@ -3,13 +3,13 @@
 	<parent>
 		<groupId>org.rosuda</groupId>
 		<artifactId>util</artifactId>
-		<version>${joris.version}</version>
+		<version>1.0.2-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>util-nodelist-calculator</artifactId>
 	<packaging>jar</packaging>
-	<name>rosuda-${parent.artifactId}-${project.artifactId}</name>
+	<name>rosuda-${project.parent.artifactId}-${project.artifactId}</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
@@ -27,17 +27,17 @@
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>generic-type</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>util-calculator</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>test-data</artifactId>
-			<version>${parent.version}</version>
+			<version>${project.parent.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

@@ -1,10 +1,10 @@
 package org.rosuda.ui.dialog;
 
-import java.lang.ref.WeakReference;
+import java.lang.ref.SoftReference;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.TreeMap;
 
 import org.rosuda.type.Node;
 import org.rosuda.type.Value;
@@ -13,8 +13,8 @@ public class RootNodeWrapper<T> implements Node<T> {
 
     private final Node<T> delegate;
     private final List<Node<T>> uniqueChildren = new ArrayList<Node<T>>();
-    private volatile WeakReference<Map<String, RootNodeWrapper<T>>> uniqueChildMapping = new WeakReference<Map<String, RootNodeWrapper<T>>>(
-	    new WeakHashMap<String, RootNodeWrapper<T>>());
+    private volatile SoftReference<Map<String, RootNodeWrapper<T>>> uniqueChildMapping = new SoftReference<Map<String, RootNodeWrapper<T>>>(
+	    new TreeMap<String, RootNodeWrapper<T>>());
 
     public RootNodeWrapper(final Node<T> parent, final Iterable<Node<T>> data) {
 	this.delegate = parent;

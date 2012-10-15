@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
@@ -116,10 +117,19 @@ public class MMIToolTest {
     }
 
     @Test
-    public void expectedLeafValuesAreSelectableAndNotNull() {
+    public void expectedNodeValuesAreSelectableAndNotNull() {
 	final TreeNode root = getAssertedTreeNodeRoot();
 	assertThat(findChildByPath(root, Arrays.asList("coefficients", "matrix", "(Intercept)", "Estimate")), notNullValue());
 
+    }
+    
+    @Test
+    public void expectedLeafValuesAreSelectableAndNotNull() {
+	final TreeNode root = getAssertedTreeNodeRoot();
+	assertThat(findChildByPath(root, Arrays.asList("coefficients", "matrix", "(Intercept)", "Estimate", "Double")), nullValue());
+	assertThat(findChildByPath(root, Arrays.asList("coefficients", "matrix", "(Intercept)", "Estimate")), instanceOf(TreeNode.class));
+	final TreeNode leaf = (TreeNode) findChildByPath(root, Arrays.asList("coefficients", "matrix", "(Intercept)", "Estimate"));
+	assertThat(leaf.getChildCount(), equalTo(0));
     }
 
     @Test

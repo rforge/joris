@@ -4,10 +4,10 @@
 	<parent>
 		<artifactId>dao</artifactId>
 		<groupId>org.rosuda</groupId>
-		<version>${joris.version}</version>
+		<version>1.0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>hibernate-dao-impl</artifactId>
-  <name>rosuda-${parent.artifactId}-${project.artifactId}</name>
+  <name>rosuda-${project.parent.artifactId}-${project.artifactId}</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.rosuda</groupId>

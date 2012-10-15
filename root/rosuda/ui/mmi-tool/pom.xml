@@ -3,14 +3,14 @@
 	<parent>
 		<groupId>org.rosuda</groupId>
 		<artifactId>ui</artifactId>
-		<version>${joris.version}</version>
+		<version>1.0.2-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.rosuda.ui</groupId>
 	<artifactId>mmi-tool</artifactId>
 	<packaging>jar</packaging>
-	<name>rosuda-${parent.artifactId}-${project.artifactId}</name>
+	<name>rosuda-${project.parent.artifactId}-${project.artifactId}</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
@@ -20,49 +20,49 @@
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>jr-connect</artifactId>
-			<version>${joris.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<!-- reference impl -->
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>jr-connect-rengine-impl</artifactId>
-			<version>${joris.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>irexp-mapper</artifactId>
-			<version>${joris.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>generic-type-mapper-filter</artifactId>
-			<version>${joris.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>generic-type-restructure</artifactId>
-			<version>${joris.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda.ui</groupId>
 			<artifactId>generic-type-visualizer</artifactId>
-			<version>${joris.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>util-nodelist-calculator</artifactId>
-			<version>${joris.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>commons-messagebus</artifactId>
-			<version>${joris.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<!-- one implementatino of generic-service: -->
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>hibernate-service-impl</artifactId>
-			<version>${joris.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<!-- database libraries -->
 		<dependency>
@@ -80,29 +80,29 @@
 		<dependency>
 			<groupId>org.rosuda.ui</groupId>
 			<artifactId>swing-impl</artifactId>
-			<version>${joris.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>jr-connection-mgr</artifactId>
-			<version>${joris.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>infrastructure-db</artifactId>
-			<version>${joris.version}</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>commons-messagebus-testutil</artifactId>
-			<version>${joris.version}</version>
 			<scope>test</scope>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.rosuda</groupId>
 			<artifactId>test-data</artifactId>
-			<version>${parent.version}</version>
 			<scope>test</scope>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.swixml</groupId>

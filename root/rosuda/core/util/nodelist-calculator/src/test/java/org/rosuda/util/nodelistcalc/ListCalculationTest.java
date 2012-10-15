@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hamcrest.Matcher;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -113,7 +114,7 @@ public class ListCalculationTest {
 	util.setContent(data);
 	//data.get(0).childAt(3).childAt(0).childAt(1).childAt(0).getValue()
 	final List<Number> tempEstimates = util.calculate("${/root/coefficients/matrix/Temp/Estimate}");
-	assertThat(tempEstimates, hasItem(notNullValue(Number.class)));
+	assertThat(tempEstimates, notNullNumberInList());
     }
     
     @Test
@@ -121,7 +122,7 @@ public class ListCalculationTest {
 	final ListCalculationUtil<IREXP> util = new ListCalculationUtil<IREXP>();
 	util.setContent(data);
 	final List<Number> tempEstimates = util.calculate("${//Temp/Estimate}");
-	assertThat(tempEstimates, not(hasItem(notNullValue(Number.class))));
+	assertThat(tempEstimates, not(notNullNumberInList()));
     }
     
     @Test
@@ -130,6 +131,14 @@ public class ListCalculationTest {
 	util.setNodeFinder(new PostfixNodeFinderImpl<IREXP>());
 	util.setContent(data);
 	final List<Number> tempEstimates = util.calculate("${//Temp/Estimate}");
-	assertThat(tempEstimates, hasItem(notNullValue(Number.class)));
+	assertThat(tempEstimates, notNullNumberInList());
+    }
+    
+    private Matcher<Iterable<? super Number>> notNullNumberInList() {
+	return hasItem(notNullNumber());
+    }
+    
+    private Matcher<Number> notNullNumber() {
+	return notNullValue(Number.class);
     }
 }

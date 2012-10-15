@@ -96,24 +96,26 @@ public class NodeTreeModel<T> extends DefaultTreeModel {
 	private final Node<T> node;
 	private final Map<Integer, TreeNode> lazyChildren = new TreeMap<Integer, TreeNode>();
 	private final TreeNode parent;
-	final boolean hasValue;
-	final int childCount;
-
-	NodeToTreeNodeWrapper(final Node<T> node) {
-	    this(node, null);
+	private final boolean hasValue;
+	private final int childCount;
+	private final boolean displayValue;
+	
+	NodeToTreeNodeWrapper(final Node<T> node, final boolean displayValue) {
+	    this(node, null, displayValue);
 	}
 
-	private NodeToTreeNodeWrapper(final Node<T> node, final TreeNode parent) {
+	private NodeToTreeNodeWrapper(final Node<T> node, final TreeNode parent, final boolean displayValue) {
 	    this.node = node;
 	    this.parent = parent;
 	    hasValue = node.getValue() != null;
+	    this.displayValue = displayValue;
 	    childCount = node.getChildCount();
 	}
 
 	public int getChildCount() {
 	    if (childCount > 0)
 		return childCount;
-	    else if (hasValue)
+	    else if (hasValue  && displayValue)
 		return 1;
 	    else
 		return 0;
@@ -122,7 +124,7 @@ public class NodeTreeModel<T> extends DefaultTreeModel {
 	public TreeNode getChildAt(final int index) {
 	    if (!lazyChildren.containsKey(index)) {
 		if (childCount > 0 && index < node.getChildCount()) {
-		    final NodeToTreeNodeWrapper<T> lazyChild = new NodeToTreeNodeWrapper<T>(this.node.childAt(index), this);
+		    final NodeToTreeNodeWrapper<T> lazyChild = new NodeToTreeNodeWrapper<T>(this.node.childAt(index), this, this.displayValue);
 		    lazyChildren.put(index, lazyChild);
 		    return lazyChild;
 		} else if (hasValue) {
@@ -140,9 +142,14 @@ public class NodeTreeModel<T> extends DefaultTreeModel {
 	}
 
 	public int getIndex(final TreeNode node) {
-	    System.out.println("getIdx called on " + node);
 	    if (lazyChildren.containsValue(node)) {
-		// TODO
+		int index = Integer.MIN_VALUE;
+		for (Map.Entry<Integer, TreeNode> entry: lazyChildren.entrySet()) {
+		    if (entry.getValue() == node) {
+			index = entry.getKey();
+		    }
+		}
+		return index;
 	    }
 	    return -1;
 	}
@@ -179,7 +186,11 @@ public class NodeTreeModel<T> extends DefaultTreeModel {
 	}
     }
 
+    public NodeTreeModel(final Node<T> node, final boolean displayValue) {
+	super(new NodeToTreeNodeWrapper<T>(node, displayValue));
+    }
+    
     public NodeTreeModel(final Node<T> node) {
-	super(new NodeToTreeNodeWrapper<T>(node));
+	this(node, false);
     }
 }
