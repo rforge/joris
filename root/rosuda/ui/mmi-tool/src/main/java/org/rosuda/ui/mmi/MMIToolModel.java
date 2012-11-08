@@ -16,11 +16,11 @@ public class MMIToolModel<T> implements MVP.Model {
 	this.uniqueStructure = uniqueStructure;
     }
 
-    public MMIDynamicTableModel<T> getTableModel() {
+    MMIDynamicTableModel<T> getTableModel() {
 	return tableModel;
     }
 
-    public void setTableModel(MMIDynamicTableModel<T> tableModel) {
+    void setTableModel(MMIDynamicTableModel<T> tableModel) {
 	this.tableModel = tableModel;
     }
 

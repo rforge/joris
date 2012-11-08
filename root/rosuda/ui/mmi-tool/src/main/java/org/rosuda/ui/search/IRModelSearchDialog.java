@@ -16,6 +16,7 @@ public class IRModelSearchDialog<C extends JDialog> {
 	public JDialogImpl(UIContext context) throws Exception {
 	    this.presenter = new SearchDialogPresenter<C>();
 	    this.model = new SearchDialogModel();
+	    this.model.setSearchTreeModel(new SearchTreeModel());
 	    // TODO: push panel, input and SwingEngine .. to viewImpl!
 	    this.view = new SearchDialogViewJDialogImpl<C>(context);
 	    presenter.bind(model, view, context.getAppContext().getBean(MessageBus.class));

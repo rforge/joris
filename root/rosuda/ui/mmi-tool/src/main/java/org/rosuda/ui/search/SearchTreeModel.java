@@ -33,12 +33,13 @@ public class SearchTreeModel extends AbstractTreeTableModel implements Serializa
     }
 
     private SearchDataNode root;
-    private Localized localized;
+    private final Localized localized;
 
     public SearchTreeModel() {
 	final ResourceBundle localization = ResourceBundle.getBundle(SearchTreeModel.class.getName());
 	this.localized = new Localized.ResourceBundleImpl(localization);
-	root = new SearchDataNode(localization.getString("root"), ConstraintType.Name);
+	final SearchDataNode rootNode = new SearchDataNode(localization.getString("root"), ConstraintType.Name);
+	this.setRoot(rootNode);
 	final SearchDataNode coefficients = new SearchDataNode("coefficients", ConstraintType.Name);
 	root.addChild(coefficients);
 	final SearchDataNode matrix = new SearchDataNode("matrix", ConstraintType.Name);
@@ -51,9 +52,6 @@ public class SearchTreeModel extends AbstractTreeTableModel implements Serializa
 	distNode.addChild(new SearchDataNode("Estimate", ConstraintType.Name).addChild(new SearchDataNode(null, ConstraintType.Number).setTypeValue(Relation.LT).setNumber(new BigDecimal(10, precion2))));
 
 	distNode.addChild(new SearchDataNode("Pr(>|t|)", ConstraintType.Name).addChild(new SearchDataNode(null, ConstraintType.Number).setTypeValue(Relation.LT).setNumber(new BigDecimal(0.15, precion2))));
-
-	
-	super.root = root;
     }
 
     public Object getChild(Object parent, int index) {
@@ -147,11 +145,10 @@ public class SearchTreeModel extends AbstractTreeTableModel implements Serializa
 	}
 	super.setValueAt(value, node, column);
     }
-    /*
-     * public boolean isCellEditable(Object node, int column) { return true; //
-     * Important to activate TreeExpandListener }
-     * 
-     * public void setValueAt(Object aValue, Object node, int column) { }
-     */
+
+    public void setRoot(SearchDataNode node) {
+	this.root = node;
+	super.root = node;
+    }
 
 }

@@ -2,6 +2,9 @@
 <dialog width="640" height="480">
 	<menubar>
 		<menu text="DataBase">
+		<menuitem text="Add" accelerator="meta +" id="add" />
+		<menuitem text="Remove" accelerator="meta -" id="remove" />
+		<separator />
 			<menuitem text="Close" accelerator="meta C" id="close" />
 		</menu>
 	</menubar>
@@ -15,6 +18,8 @@
 			</scrollpane>
 		</panel>
 		<panel constraints="BorderLayout.SOUTH">
+			<label id="nodeNameLabel" text="node name" />
+			<textfield columns="20" id="nodeNameInput" />
 			<button id="searchbutton" text="search" />
 		</panel>
 	</panel>
