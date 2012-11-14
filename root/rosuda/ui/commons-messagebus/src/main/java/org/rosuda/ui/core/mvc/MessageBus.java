@@ -111,5 +111,12 @@ public interface MessageBus {
 	    }
 	}
 
+	@Override
+	public void shutdown() {
+	    this.eventListeners.clear();
+	}
+
     }
+
+    public void shutdown();
 }

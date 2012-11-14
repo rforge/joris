@@ -26,7 +26,7 @@ public class DatabaseStarter implements ProcessStarter<DataSource>{
 			//try to get connection - if this works the service has already been started. Else start service
 			if (!context.canCreateConnection()) {
 				final Process process = context.processStartScript();
-				final DataSource dataSource = new RetryStarter().create(process, runStateHolder, true);
+				final DataSource dataSource = new RetryStarter().create(process, DatabaseStarter.class.getName(), runStateHolder, true);
 				if (dataSource == null) {
 					throw new IllegalStateException("could not start DerbyDB, please check your environment and user rights!");
 				}

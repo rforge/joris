@@ -32,11 +32,13 @@ public class RConnectionProxy implements InvocationHandler{
     private static Method hashCodeMethod;
     private static Method equalsMethod;
     private static Method toStringMethod;
+    private static Method closeMethod;
     static {
         try {
             hashCodeMethod = Object.class.getMethod("hashCode");
             equalsMethod = Object.class.getMethod("equals", new Class[] { Object.class });
             toStringMethod = Object.class.getMethod("toString");
+            closeMethod = IRConnection.class.getMethod("close");
         } catch (NoSuchMethodException e) {
             throw new NoSuchMethodError(e.getMessage());
         }
@@ -98,6 +100,13 @@ public class RConnectionProxy implements InvocationHandler{
 		    "unexpected Object method dispatched: " + m);
 	    }
 	} else {
+	    if (closeMethod.equals(m)) {
+		for (Object delegate: delegates) {
+		    if (delegate instanceof ARConnection) {
+			((ARConnection) delegate).notifyListeners(new IRConnectionEvent.Event(IRConnectionEvent.Type.CLOSE, null, delegate));
+		    }
+		}
+	    }
         if (evalMethods.contains(m)||setMethods.contains(m)) {
             for (int i = 0; i < delegates.length; i++) {
                 if (delegates[i] instanceof ARConnection) {

@@ -9,32 +9,28 @@ import org.rosuda.util.process.RUNSTATE;
 import org.rosuda.util.process.RunStateHolder;
 import org.rosuda.util.process.RunstateAware;
 
-class DefaultRStopper extends RunstateAware<IRConnection> implements
-		ProcessStopper<IRConnection> {
+class DefaultRStopper extends RunstateAware<IRConnection> implements ProcessStopper<IRConnection> {
 
-	private final RStartContext setup;
-	private final static Log log = LogFactory.getLog(DefaultRStopper.class);
+    private final RStartContext context;
+    private final static Log log = LogFactory.getLog(DefaultRStopper.class);
 
-	DefaultRStopper(final RunStateHolder<IRConnection> runStateHolder,
-			final RStartContext setup) {
-		super(runStateHolder);
-		this.setup = setup;
+    DefaultRStopper(final RunStateHolder<IRConnection> runStateHolder, final RStartContext setup) {
+	super(runStateHolder);
+	this.context = setup;
+    }
+
+    @Override
+    public void stop() {
+	try {
+	    log.info("shutting down R-ConnectionFactory");
+	    context.connectionFactory.shutdown();
+	    log.info("R-ConnectionFactory has been shut down.");
+	} catch (final RServerException rse) {
+	    log.error("rserve shutdown failed", rse);
+	} finally {
+	    context.stop();
+	    runStateHolder.setRunState(RUNSTATE.TERMINATED);
 	}
-
-	@Override
-	public void stop() {
-
-		try {
-			final IRConnection rcon = setup.createConnection();
-			if (rcon != null) {
-				rcon.shutdown();
-			}
-		} catch (final RServerException rse) {
-			log.error("rserve shutdown failed", rse);
-		} finally {
-			setup.stop();
-			runStateHolder.setRunState(RUNSTATE.TERMINATED);
-		}
-	}
+    }
 
 }
