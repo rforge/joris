@@ -18,9 +18,12 @@
 			</scrollpane>
 		</panel>
 		<panel constraints="BorderLayout.SOUTH">
-			<label id="nodeNameLabel" text="node name" />
-			<textfield columns="20" id="nodeNameInput" />
-			<button id="searchbutton" text="search" />
+			<panel layout="FlowLayout">
+				<label id="nodeNameLabel" text="node name" />
+				<textfield columns="20" id="nodeNameInput" />
+				<combobox id="nodeConstraintList" />
+				<button id="searchbutton" text="search" />
+			</panel>
 		</panel>
 	</panel>
 </dialog>

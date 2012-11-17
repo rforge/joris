@@ -31,7 +31,7 @@
 		<org.jasypt.jasypt>1.7</org.jasypt.jasypt>
 		<org.reflections.reflections>0.9.8</org.reflections.reflections>
 		<org.swixml.swixml>2.6.20111005</org.swixml.swixml>
-		<org.swinglabs.swingx.swingx-all>1.6.3</org.swinglabs.swingx.swingx-all>
+		<org.swinglabs.swingx.swingx-all>1.6.4</org.swinglabs.swingx.swingx-all>
 		<javax.validation.validation-api>1.0.0.GA</javax.validation.validation-api>
 		<javax.transaction.jta>1.1</javax.transaction.jta>
 		<log4jdbc4.version>1.2</log4jdbc4.version>

@@ -2,6 +2,8 @@
 
 import java.awt.Container;
 import java.awt.Window;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -17,6 +19,7 @@ import org.rosuda.irconnect.IREXP;
 import org.rosuda.ui.context.UIContext;
 import org.rosuda.ui.core.mvc.MessageBus;
 import org.rosuda.ui.core.mvc.MessageBus.EventListener;
+import org.rosuda.ui.event.QuitEvent;
 import org.rosuda.ui.main.CRTKeyEvent;
 import org.rosuda.ui.main.IREXPResponseEvent;
 import org.rosuda.ui.main.MainModel;
@@ -83,6 +86,13 @@ public class MainFrame extends JFrame implements UIContext{
 		final JFrame frame = new SwingEngine<JFrame>(this).render(reader);
 		reader.close();
 		final MessageBus bus = context.getBean(MessageBus.class);
+		frame.addWindowListener(new WindowAdapter() {
+		    @Override
+		    public void windowClosing(WindowEvent e) {
+			bus.fireEvent(new QuitEvent());
+			super.windowClosing(e);
+		    }
+		});
 		// l8n ?
 		// read text
 		final BufferedReader htmlStream = new BufferedReader(

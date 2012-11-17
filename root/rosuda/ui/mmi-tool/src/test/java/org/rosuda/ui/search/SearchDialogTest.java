@@ -9,6 +9,8 @@ import static org.junit.Assert.assertThat;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,6 +24,8 @@ import javax.swing.tree.TreeSelectionModel;
 import org.jdesktop.swingx.treetable.TreeTableModel;
 import org.junit.Before;
 import org.junit.Test;
+import org.rosuda.graph.service.search.Relation;
+import org.rosuda.type.NodePath;
 import org.rosuda.ui.core.mvc.DefaultHasClickable;
 import org.rosuda.ui.core.mvc.DefaultHasValue;
 import org.rosuda.ui.core.mvc.DefaultTestView;
@@ -49,6 +53,7 @@ public class SearchDialogTest {
 	private final HasValue<TreeSelectionModel> treeSelectionModel = new HasValue<TreeSelectionModel>() {
 
 	    final TreeSelectionModel model = new DefaultTreeSelectionModel();
+
 	    @Override
 	    public TreeSelectionModel getValue() {
 		return model;
@@ -66,10 +71,10 @@ public class SearchDialogTest {
 	    @Override
 	    public void removeChangeListener(org.rosuda.ui.core.mvc.HasValue.ValueChangeListener<TreeSelectionModel> listener) {
 	    }
-	    
+
 	};
 	private final HasValue<ConstraintType> constraint = new DefaultHasValue<ConstraintType>();
-	
+
 	@Override
 	public HasClickable getCloseButton() {
 	    return closeButton;
@@ -102,7 +107,7 @@ public class SearchDialogTest {
 
 	@Override
 	public HasValue<TreeTableModel> getTreeTableModel() {
-	   return treeTableModel;
+	    return treeTableModel;
 	}
 
 	@Override
@@ -119,6 +124,21 @@ public class SearchDialogTest {
 	model = new SearchDialogModel();
 
 	final SearchTreeModel searchTreeModel = new SearchTreeModel();
+	final SearchDataNode rootNode = new SearchDataNode("Root", ConstraintType.Name);
+	searchTreeModel.setRoot(rootNode);
+	final SearchDataNode coefficients = new SearchDataNode("coefficients", ConstraintType.Name);
+	rootNode.addChild(coefficients);
+	final SearchDataNode matrix = new SearchDataNode("matrix", ConstraintType.Name);
+	coefficients.addChild(matrix);
+	final SearchDataNode distNode = new SearchDataNode("dist", ConstraintType.Name);
+	matrix.addChild(distNode);
+
+	final MathContext precion2 = new MathContext(2, RoundingMode.HALF_UP);
+	distNode.addChild(new SearchDataNode("Estimate", ConstraintType.Name).addChild(new SearchDataNode(null, ConstraintType.Number).setTypeValue(Relation.GT).setNumber(BigDecimal.ZERO)));
+	distNode.addChild(new SearchDataNode("Estimate", ConstraintType.Name).addChild(new SearchDataNode(null, ConstraintType.Number).setTypeValue(Relation.LT).setNumber(new BigDecimal(10, precion2))));
+
+	distNode.addChild(new SearchDataNode("Pr(>|t|)", ConstraintType.Name).addChild(new SearchDataNode(null, ConstraintType.Number).setTypeValue(Relation.LT).setNumber(new BigDecimal(0.15, precion2))));
+	//TODO set model content
 	model.setSearchTreeModel(searchTreeModel);
 	view = new SearchDialogObjectView();
 	presenter.bind(model, view, mb);
@@ -199,13 +219,13 @@ public class SearchDialogTest {
     public void whenISetANameAndConstraintAndClickInsertIntoAnEmptyTreeIGetANewRoot() {
 	model.getSearchTreeModel().setRoot(null);
 	view.getTreeSelectionModel().getValue().setSelectionPath(null);
-	
+
 	view.getNodeNameInput().setValue("nodeName");
 	view.getNodeConstraintType().setValue(ConstraintType.Name);
 	clickAddToTreeButton();
 
 	assertThat(model.getSearchTreeModel().getRoot(), notNullValue());
-	assertThat(((SearchDataNode)model.getSearchTreeModel().getRoot()).getName(), equalTo("nodeName"));
+	assertThat(((SearchDataNode) model.getSearchTreeModel().getRoot()).getName(), equalTo("nodeName"));
 
     }
 
@@ -213,7 +233,7 @@ public class SearchDialogTest {
     public void whenISetANameAndConstraintAndClickInsertThereIsANewNodeAsLastChild() {
 	final SearchDataNode node = prepareChildNode();
 	view.getTreeSelectionModel().getValue().setSelectionPath(toTreePath(node));
-	
+
 	final int currentChildCount = node.getChildren().size();
 	view.getNodeNameInput().setValue("nodeName");
 	view.getNodeConstraintType().setValue(ConstraintType.Name);
@@ -223,8 +243,73 @@ public class SearchDialogTest {
 
     }
 
+    @Test
+    public void whenISelectASingleNodeInATreePathICanRemoveTheSelectedChildFromTheModel() {
+	final SearchDataNode node = prepareChildNode();
+	final SearchDataNode parentNode = node.getParent();
+	view.getTreeSelectionModel().getValue().setSelectionPath(toTreePath(node));
+
+	final int currentChildCount = parentNode.getChildren().size();
+	clickRemoveFromTreeButton();
+
+	assertThat(parentNode.getChildren().size() - currentChildCount, equalTo(-1));
+    }
+
+    @Test
+    public void whenIUseTheTableViewColumn3ToUpdateANodeInTheModelTheModelIsChanged() {
+	final SearchDataNode affectedNode = prepareAffectedNode();
+	assertThat(affectedNode.getNumber().intValue(), equalTo(0));
+	view.getTreeTableModel().getValue().setValueAt(new BigDecimal(13), affectedNode, 3);
+	assertThat(affectedNode.getNumber().intValue(), equalTo(13));
+    }
+
+    @Test
+    public void whenIUseTheTableViewColumn2ToUpdateANodeInTheModelTheModelIsChanged() {
+	final SearchDataNode affectedNode = prepareAffectedNode();
+	assertThat((Relation)affectedNode.getTypeValue(), equalTo(Relation.GT));
+	view.getTreeTableModel().getValue().setValueAt(Relation.EQ, affectedNode, 2);
+	assertThat((Relation)affectedNode.getTypeValue(), equalTo(Relation.EQ));
+    }
+    
+    @Test
+    public void whenIUseTheTableViewColumn1ToUpdateANodeInTheModelTheModelIsChanged() {
+	final SearchDataNode affectedNode = prepareAffectedNode();
+	assertThat(affectedNode.getType(), equalTo(ConstraintType.Number));
+	view.getTreeTableModel().getValue().setValueAt(ConstraintType.String, affectedNode, 1);
+	assertThat(affectedNode.getType(), equalTo(ConstraintType.String));
+    }
+    
+    //TODO later implement drop and drag
+    
     // -- helper
 
+    private SearchDataNode prepareAffectedNode() {
+   	SearchDataNode affectedParentNode = getNode(NodePath.Impl.parse("coefficients/matrix/dist/Estimate"));
+   	final SearchDataNode affectedNode = affectedParentNode.getChildren().get(0);
+   	return affectedNode;
+       }
+    
+    private SearchDataNode getNode(final NodePath path) {
+	return getNode((SearchDataNode) model.getSearchTreeModel().getRoot(), path);
+    }
+    
+    private SearchDataNode getNode(final SearchDataNode parent, final NodePath path) {
+   	if (path == null) {
+   	    return parent;
+   	}
+   	final String requiredNodeName = path.getId().getName();
+   	for (final SearchDataNode child: parent.getChildren()) {
+   	    if (requiredNodeName.equals(child.getName())) {
+   		if (path.hasNext()) {
+   		    return getNode(child, path.next());
+   		} else {
+   		    return child;
+   		}
+   	    }
+   	}
+   	return null;
+      }
+    
     private TreePath toTreePath(SearchDataNode node) {
 	final List<SearchDataNode> elements = new ArrayList<SearchDataNode>();
 	elements.add(node);
@@ -238,7 +323,17 @@ public class SearchDialogTest {
     }
 
     private void clickAddToTreeButton() {
-	((DefaultHasClickable) view.getAddToTree()).click(new ClickEvent() {
+	DefaultHasClickable clickable = (DefaultHasClickable) view.getAddToTree();
+	simulateLeftClick(clickable);
+    }
+
+    private void clickRemoveFromTreeButton() {
+	DefaultHasClickable clickable = (DefaultHasClickable) view.getRemoveFromTree();
+	simulateLeftClick(clickable);
+    }
+
+    private void simulateLeftClick(DefaultHasClickable clickable) {
+	clickable.click(new ClickEvent() {
 
 	    @Override
 	    public Set<Modifier> getModifiers() {

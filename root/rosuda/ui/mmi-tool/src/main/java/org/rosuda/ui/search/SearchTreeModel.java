@@ -8,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
+import javax.swing.tree.TreePath;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
@@ -16,7 +20,7 @@ import org.rosuda.graph.service.search.VertexConstraint;
 import org.rosuda.ui.search.SearchDataNode.ConstraintType;
 import org.rosuda.visualizer.Localized;
 
-public class SearchTreeModel extends AbstractTreeTableModel implements Serializable {
+public class SearchTreeModel extends AbstractTreeTableModel implements Serializable, TableModel {
 
     private static final long serialVersionUID = 6527804524956955313L;
     private static final Log LOGGER = LogFactory.getLog(SearchTreeModel.class);
@@ -114,10 +118,10 @@ public class SearchTreeModel extends AbstractTreeTableModel implements Serializa
     public Object getRoot() {
 	return root;
     }
-
+    
     @Override
     public boolean isCellEditable(Object object, int column) {
-	return true;
+	return column > 0;
     }
 
     @Override
@@ -128,7 +132,11 @@ public class SearchTreeModel extends AbstractTreeTableModel implements Serializa
 	    node.setName((String) value);
 	    break;
 	case TYPE:
+	    node.setType((ConstraintType) value);
+	    break;
 	case TYPEVALUE:
+	    node.setTypeValue((Enum<?>) value);
+	    break;
 	case VALUE:
 	    switch (node.getType()) {
 	    case Number:
@@ -150,5 +158,53 @@ public class SearchTreeModel extends AbstractTreeTableModel implements Serializa
 	this.root = node;
 	super.root = node;
     }
+    
+    public void removedChild(final TreePath path, final int index, final Object child) {
+	super.modelSupport.fireChildRemoved(path, index, child);
+    }
+    
+    public void addedChild(final TreePath path, final int index, final Object child) {
+	if (path == null) {
+	    super.modelSupport.fireNewRoot();
+	} else {
+	    super.modelSupport.fireChildAdded(path, index, child);
+	}
+    }
 
+   
+    @Override
+    public int getRowCount() {
+	//TODO set
+	//have flat SeachtDataList
+	return 5;
+    }
+
+    @Override
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+	return columnIndex > 1;
+    }
+
+    @Override
+    public Object getValueAt(int rowIndex, int columnIndex) {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+	// TODO Auto-generated method stub
+	
+    }
+
+    @Override
+    public void addTableModelListener(TableModelListener l) {
+	// TODO Auto-generated method stub
+	
+    }
+
+    @Override
+    public void removeTableModelListener(TableModelListener l) {
+	// TODO Auto-generated method stub
+	
+    }
 }

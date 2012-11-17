@@ -17,6 +17,7 @@ public class SearchDialogPresenter<C> implements MVP.Presenter<SearchDialogModel
 
     private ClickListener searchListener;
     private ClickListener addListener;
+    private ClickListener removeListener;
     private TreeSelectionListener selectedNodeListener;
 
     @Override
@@ -32,32 +33,48 @@ public class SearchDialogPresenter<C> implements MVP.Presenter<SearchDialogModel
 		messageBus.fireEvent(new ModelSearchEvent(model.getSearchTreeModel().getConstraints()));
 	    }
 	};
-
-	addListener = new ClickListener() {
+	addListener = new SearchNodeTreeClickListener<C>(view, new SearchDataNodeTemplate() {
 	    @Override
-	    public void onClick(ClickEvent event) {
-		// wie merkts mein model ?
-		final TreePath[] pathToParent = view.getTreeSelectionModel().getValue().getSelectionPaths();
-		// TODO get selected path and add here ...
-		// model.getSearchTreeModel()
-		final String nodeName = view.getNodeNameInput().getValue();
-		final ConstraintType constraintType = view.getNodeConstraintType().getValue();
-		final SearchDataNode node = new SearchDataNode(nodeName, constraintType);
+	    public void doWithNode(TreePath[] pathToParent, String nodeName, ConstraintType constraintType) {
 		if (pathToParent == null) {
 		    if (model.getSearchTreeModel().getRoot() == null) {
-			model.getSearchTreeModel().setRoot(node);
+			final SearchDataNode aNewChild = new SearchDataNode(nodeName, constraintType);
+			model.getSearchTreeModel().setRoot(aNewChild);
+			model.getSearchTreeModel().addedChild(null, 0, aNewChild);
 		    }
-		    // create root
 		} else {
 		    for (final TreePath path : pathToParent) {
 			SearchDataNode parentDataNode = (SearchDataNode) path.getLastPathComponent();
-			parentDataNode.addChild(node);
+			final SearchDataNode aNewChild = new SearchDataNode(nodeName, constraintType);
+			int childIndex = parentDataNode.getChildren().size();
+			parentDataNode.addChild(aNewChild);
+			model.getSearchTreeModel().addedChild(path, childIndex, aNewChild);
 		    }
 		}
 	    }
-	};
+	});
+	
+	removeListener = new SearchNodeTreeClickListener<C>(view, new SearchDataNodeTemplate() {
+	    
+	    @Override
+	    public void doWithNode(TreePath[] pathToParent, String nodeName, ConstraintType constraintType) {
+		if (pathToParent != null) {
+		    for (final TreePath path : pathToParent) {
+			final SearchDataNode dataNodeToRemove = (SearchDataNode) path.getLastPathComponent();
+			final TreePath parentPath = path.getParentPath();
+			final SearchDataNode parentNode = parentPath != null ? (SearchDataNode) parentPath.getLastPathComponent() : null;
+			if (parentNode != null) {	
+			    final int childIndex = model.getSearchTreeModel().getIndexOfChild(parentNode, dataNodeToRemove);
+			    parentNode.removeChild(dataNodeToRemove);
+			    model.getSearchTreeModel().removedChild(parentPath, childIndex, dataNodeToRemove);
+			}
+		    }
+		}
+	    }
+	});
 	view.getSearchButton().addClickListener(searchListener);
 	view.getAddToTree().addClickListener(addListener);
+	view.getRemoveFromTree().addClickListener(removeListener);
     }
 
     @Override
@@ -65,6 +82,32 @@ public class SearchDialogPresenter<C> implements MVP.Presenter<SearchDialogModel
 	if (searchListener != null) {
 	    view.getSearchButton().removeClickListener(searchListener);
 	}
+    }
+
+    private static class SearchNodeTreeClickListener<C> implements ClickListener {
+
+	private final SearchDialogView<C> view;
+	private final SearchDataNodeTemplate processSelectedTreePath;
+
+	private SearchNodeTreeClickListener(final SearchDialogView<C> view, final SearchDataNodeTemplate processSelectedTreePath) {
+	    this.view = view;
+	    this.processSelectedTreePath = processSelectedTreePath;
+	}
+
+	@Override
+	public void onClick(ClickEvent event) {
+	    // TODO Auto-generated method stub
+
+	    final TreePath[] pathToParent = view.getTreeSelectionModel().getValue().getSelectionPaths();
+	    processSelectedTreePath.doWithNode(pathToParent, view.getNodeNameInput().getValue(), view.getNodeConstraintType().getValue());
+
+	}
+    }
+
+    private static interface SearchDataNodeTemplate {
+
+	void doWithNode(final TreePath[] pathToParent, final String nodeName, final ConstraintType constraintType);
+
     }
 
 }

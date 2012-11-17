@@ -119,6 +119,9 @@ public class SearchDataNode {
 
     @Override
     public String toString() {
+	if (name == null) {
+	    return null;
+	}
 	return new StringBuilder(name).toString();
     }
 
