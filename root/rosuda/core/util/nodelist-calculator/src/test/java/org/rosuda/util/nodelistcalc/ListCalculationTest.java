@@ -96,6 +96,28 @@ public class ListCalculationTest {
 
     }
     
+    @Test
+    public void testNamedValuesCanBeCalculated() {
+	Assert.assertNotNull(data);
+	Assert.assertEquals(8, data.size());
+	final ListCalculationUtil<IREXP> util = new ListCalculationUtil<IREXP>();
+	util.setContent(data);
+	// get all AICs:
+	final List<Number> aics = util.calculate("AIC");
+	Assert.assertEquals(8, aics.size());
+	for (final Number aic : aics) {
+	    Assert.assertNotNull(aic);
+	}
+	final List<Number> aicDiffs = util.calculate("${AIC}-cmin(${AIC}");
+	final List<Number> aicDiffsAssigned = util.calculate("@AICdiff := ${AIC}-cmin(${AIC}");
+	for (int i=0;i<8;i++) {
+	    assertThat(aicDiffs.get(i), equalTo(aicDiffsAssigned.get(i)));
+	}
+	final List<Number> atts = util.calculate("@AICdiff");
+	for (final Number att : atts) {
+	    Assert.assertNotNull(att);
+	}
+    }
     @Test 
     public void pathCanAutocompleteRootPrefixButPrefixIsNotRequired() {
 	final ListCalculationUtil<IREXP> util = new ListCalculationUtil<IREXP>();

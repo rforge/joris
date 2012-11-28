@@ -9,7 +9,6 @@ import java.util.Map;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
@@ -20,14 +19,10 @@ import org.slf4j.LoggerFactory;
 class TypesafeTableCellEditor extends AbstractTableCellEditor {
 
     private static final Logger logger = LoggerFactory.getLogger(TypesafeTableCellEditor.class);
-    @SuppressWarnings("unused")
     private final JTextField stringInput;
-    @SuppressWarnings("unused")
     private final JCheckBox booleanInput;
-    @SuppressWarnings("unused")
     private final JTextField numberInput;
-    @SuppressWarnings("unused")
-    private final JLabel nameInput;
+    private final JTextField nameInput;
     private final Map<ConstraintType, JComponent> dynamicEditor;
     private ConstraintType constraintType;
 
@@ -35,7 +30,7 @@ class TypesafeTableCellEditor extends AbstractTableCellEditor {
 	this.stringInput = new JTextField(30);
 	this.booleanInput = new JCheckBox();
 	this.numberInput = new JTextField();
-	this.nameInput = new JLabel();
+	this.nameInput = new JTextField();
 	final Map<ConstraintType, JComponent> map = new HashMap<SearchDataNode.ConstraintType, JComponent>();
 	try {
 	    for (SearchDataNode.ConstraintType type : ConstraintType.values()) {
@@ -57,14 +52,13 @@ class TypesafeTableCellEditor extends AbstractTableCellEditor {
 	    booleanInput.setSelected((Boolean) value);
 	    break;
 	case String:
-	    stringInput.setText((String) value);
+	    setTextfieldValue(stringInput, value);
 	    break;
-	case Number:
-	    if (value != null) {
-		numberInput.setText(value.toString());
-	    } else {
-		numberInput.setText("");
-	    }
+	case Number: 
+	    setTextfieldValue(numberInput, value);
+	    break;
+	case Name:
+	    setTextfieldValue(nameInput, table.getValueAt(row, 0));
 	    break;
 	default:
 	    return null;
@@ -80,13 +74,31 @@ class TypesafeTableCellEditor extends AbstractTableCellEditor {
 	case String:
 	    return stringInput.getText();
 	case Number:
+	    final String inputStringValue = numberInput.getText().trim();
 	    try {
-		return new BigDecimal(numberInput.getText().trim());
+		return new BigDecimal(inputStringValue);
 	    } catch (final NumberFormatException numf) {
-		logger.error(TypesafeTableCellEditor.class.getSimpleName() + "-1", numf);
+		logger.error(TypesafeTableCellEditor.class.getSimpleName() + "-"+NumberFormatException.class.getSimpleName() +" : \"" + inputStringValue+"\"");
+		super.cancelCellEditing();
 	    }
+	case Name : 
+	    return nameInput.getText();
 	default:
 	    return null;
+	}
+    }
+
+    // --helper
+    private void setTextfieldValue(final JTextField input, final Object value) {
+	if (value != null) {
+	    if (value instanceof String) {
+		input.setText((String)value);
+	    } else {
+		input.setText(value.toString());
+	    }
+	    
+	} else {
+	    input.setText("");
 	}
     }
 

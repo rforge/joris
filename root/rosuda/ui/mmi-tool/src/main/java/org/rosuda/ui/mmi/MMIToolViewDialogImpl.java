@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.swing.AbstractButton;
 import javax.swing.JDialog;
+import javax.swing.JList;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.TableModel;
@@ -14,6 +17,9 @@ import javax.swing.tree.TreePath;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTree;
 import org.rosuda.mvc.swing.JButtonHasClickable;
+import org.rosuda.mvc.swing.JListHasSelectionModel;
+import org.rosuda.mvc.swing.JListHasValue;
+import org.rosuda.mvc.swing.TypedDynamicListModel;
 import org.rosuda.type.NodePath;
 import org.rosuda.ui.SwingLayoutProcessor;
 import org.rosuda.ui.context.UIContext;
@@ -29,11 +35,20 @@ public class MMIToolViewDialogImpl<T> extends JDialog implements MMIToolView<T, 
     public AbstractButton synchronizeTreeToTable;
     public JXTree multiselector;
     public JXTable valuetable;
+    public JTextField expressionField;
+    public JList expressionList;
+    public AbstractButton createExpressionFieldButton;
     private final UniqueStructureTree uniqueStructureTree;
     private final MMITable mmiTable;
     private final HasClickable synchronizeClickable;
     private SelectionModel selectionModel;
-
+    private TypedDynamicListModel<String> expressionListModel;
+    private HasValue<String> expressionFieldModel;
+    private HasClickable createExpressionFieldClickable;
+    private HasValue<List<String>> expressionListValues;
+    private HasValue<TypedDynamicListModel<String>> expressionListModelHasValue;
+    private HasValue<ListSelectionModel> expressionListSelectionModel;
+    
     private class UniqueStructureTree extends AbstractHasValue<NodeTreeModel<T>> {	
 	@SuppressWarnings("unchecked")
 	@Override
@@ -86,7 +101,16 @@ public class MMIToolViewDialogImpl<T> extends JDialog implements MMIToolView<T, 
 	}
 
     }
+    
+    private class ExpressionFieldModel extends AbstractHasValue<String> {
 
+	@Override
+	public String getValue() {
+	    return expressionField.getText();
+	}
+	
+    }
+    
     public MMIToolViewDialogImpl(UIContext context) throws Exception {
 	super(context.getUIFrame(), ModalityType.MODELESS);
 	SwingLayoutProcessor.processLayout(this, "/gui/dialog/MMISpreadSheetDialog.xml");
@@ -94,6 +118,37 @@ public class MMIToolViewDialogImpl<T> extends JDialog implements MMIToolView<T, 
 	this.mmiTable = new MMITable();
 	this.synchronizeClickable = new JButtonHasClickable(synchronizeTreeToTable);
 	this.selectionModel = new SelectionModel();
+	this.expressionFieldModel = new ExpressionFieldModel();
+	this.createExpressionFieldClickable = new JButtonHasClickable(createExpressionFieldButton);
+	final JListHasValue listModel = new JListHasValue(expressionList);
+	this.expressionListValues = listModel;
+	this.expressionListSelectionModel = new JListHasSelectionModel(expressionList);
+	this.expressionListModelHasValue = new HasValue<TypedDynamicListModel<String>>() {
+
+	    @Override
+	    public TypedDynamicListModel<String> getValue() {
+		return (TypedDynamicListModel<String>) expressionList.getModel();
+	    }
+
+	    @Override
+	    public void setValue(TypedDynamicListModel<String> value) {
+		expressionList.setModel(value);
+	    }
+
+	    @Override
+	    public void addChangeListener(org.rosuda.ui.core.mvc.HasValue.ValueChangeListener<TypedDynamicListModel<String>> listener) {
+		// TODO Auto-generated method stub
+		
+	    }
+
+	    @Override
+	    public void removeChangeListener(org.rosuda.ui.core.mvc.HasValue.ValueChangeListener<TypedDynamicListModel<String>> listener) {
+		// TODO Auto-generated method stub
+		
+	    }
+	    
+	};
+	expressionList.setModel(listModel);
     }
 
     @Override
@@ -121,4 +176,27 @@ public class MMIToolViewDialogImpl<T> extends JDialog implements MMIToolView<T, 
 	return this;
     }
 
+    @Override
+    public HasValue<String> getExpressionField() {
+        return expressionFieldModel;
+    }
+    
+    @Override
+    public HasClickable getCreateExpressionButton() {
+        return createExpressionFieldClickable;
+    }
+
+    @Override
+    public HasValue<List<String>> getExpressionList() {
+	return expressionListValues;
+    }
+
+    @Override
+    public HasValue<TypedDynamicListModel<String>> getExpressionListModel() {
+        return expressionListModelHasValue;
+    }
+    @Override
+    public HasValue<ListSelectionModel> getExpressionListSelection() {
+	return expressionListSelectionModel;
+    }
 }

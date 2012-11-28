@@ -145,6 +145,12 @@ public class SearchTreeModel extends AbstractTreeTableModel implements Serializa
 	    case Boolean:
 		node.setBool((Boolean) value);
 		break;
+	    case String:
+		node.setString((String) value);
+		break;
+	    case Name: 
+		node.setName((String) value);
+		break;
 	    default:
 		LOGGER.warn("unknown type " + node.getType());
 	    }

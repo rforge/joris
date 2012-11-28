@@ -5,7 +5,10 @@ import java.util.ResourceBundle;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListDataListener;
 
+import org.rosuda.mvc.swing.TypedDynamicListModel;
+import org.rosuda.mvc.swing.model.SelectionListModelAdapter;
 import org.rosuda.type.Node;
 import org.rosuda.ui.context.UIContext;
 import org.rosuda.ui.core.mvc.MessageBus;
@@ -29,6 +32,8 @@ public class IRMMISpreadSheet<T> extends JDialog {
 	    this.model = new MMIToolModel<T>();
 	    this.model.setUniqueStructure(new NodeTreeModel<T>(new RootNodeWrapper<T>(null, data)));
 	    this.model.setTableModel(new MMIDynamicTableModel<T>(data));
+	    this.model.setExpressionListSelectionModel(new SelectionListModelAdapter<String>());
+	    this.model.setExpressionListModel(new TypedDynamicListModel.Impl<String>());
 	    this.view = new MMIToolViewDialogImpl<T>(context);
 	    presenter.bind(model, view, context.getAppContext().getBean(MessageBus.class));
 	}

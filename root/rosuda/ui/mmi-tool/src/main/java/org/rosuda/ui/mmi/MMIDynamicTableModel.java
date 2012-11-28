@@ -13,6 +13,7 @@ import org.rosuda.type.PostfixNodeFinderImpl;
 import org.rosuda.type.Value;
 import org.rosuda.util.nodelistcalc.ListCalculationUtil;
 import org.rosuda.visualizer.NodeTreeSelection;
+import org.slf4j.LoggerFactory;
 
 public class MMIDynamicTableModel<T> extends AbstractTableModel {
 
@@ -54,11 +55,14 @@ public class MMIDynamicTableModel<T> extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int row, int column) {
-
 	final NodePath valueSelector = currentSelection.getSelectedPaths().get(column);//replace "//" -> "/"
 	if (valueSelector == null)
 	    return null;
 	final Node<T> root = nodes.get(row);
+	final String expression = toExpression(valueSelector);
+	if (expression != null) {
+	    return calculationUtil.calculate(expression).get(row);
+	}
 	final Node<T> value = nodeFinder.findNode(root, valueSelector);
 
 	if (value == null) {
@@ -89,6 +93,14 @@ public class MMIDynamicTableModel<T> extends AbstractTableModel {
 	// return x.getMessage();
 	//
 	// }
+    }
+
+    private String toExpression(final NodePath valueSelector) {
+	final String expr = valueSelector.getId().getName();
+	if (expr.contains("@") || expr.contains("$")) {
+	    return expr;
+	}
+	return null;
     }
 
     public void updateSelection(NodeTreeSelection newValue) {

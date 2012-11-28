@@ -8,11 +8,15 @@
 
 	<panel layout="BorderLayout">
 		<splitpane orientation="JSplitPane.HORIZONTAL_SPLIT"
-			dividerLocation="150" dividerSize="10">
+			dividerLocation="150" dividerSize="10" constraints="BorderLayout.CENTER">
 			<scrollpane width="150" height="480" PreferredSize="150,480"
 				HorizontalScrollBarPolicy="JScrollPane.HORIZONTAL_SCROLLBAR_NEVER"
 				VerticalScrollBarPolicy="JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED">
-				<jxtree id="multiselector"/>
+				<splitpane orientation="JSplitPane.VERTICAL_SPLIT"
+						dividerLocation="300" dividerSize="5">
+					<jxtree id="multiselector"/>
+					<list id="expressionList"/>
+				</splitpane>
 			</scrollpane>
 			<scrollpane  width="490" height="480" PreferredSize="490,480"
 				HorizontalScrollBarPolicy="JScrollPane.HORIZONTAL_SCROLLBAR_NEVER"
@@ -20,5 +24,10 @@
 				<jxtable id="valuetable"/>
 			</scrollpane>			
 		</splitpane>
+		<panel layout="FlowLayout" constraints="BorderLayout.SOUTH">
+			<label id="expressionFieldLabel" text="additional Expression" />
+			<textfield columns="20" id="expressionField" />
+			<button id="createExpressionFieldButton" text="+" />
+		</panel>
 	</panel>
 </dialog>

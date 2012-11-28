@@ -21,6 +21,7 @@ import org.rosuda.util.calculator.parser.TreeNode;
 
 public class ListCalculationUtil<T> {
 
+    public static final String ASSIGNMENT_OPERATOR = ":=";
     private static final Log log = LogFactory.getLog(ListCalculationUtil.class);
     private NodeFinder<T> finder = new NodeFinderImpl<T>();
     private final List<Node<T>> nodeList = new ArrayList<Node<T>>();
@@ -34,6 +35,12 @@ public class ListCalculationUtil<T> {
     }
 
     public List<Number> calculate(final String string) {
+	final int assignmentIdx = string.indexOf(ASSIGNMENT_OPERATOR);
+	if (assignmentIdx > 0) {
+	    final String as = string.substring(0, assignmentIdx).replaceAll("@", "").trim();
+	    final String eval = string.substring(ASSIGNMENT_OPERATOR.length() + assignmentIdx).trim();
+	    return calculateAs(eval, as);
+	}
 	return calculateAs(string, null);
     }
 
@@ -160,9 +167,6 @@ public class ListCalculationUtil<T> {
 
     private Number getNodeValue(final Node<T> root, final NodePath path) {
 	final Node<T> numberValueNode = finder.findNode(root, path);
-	if (log.isDebugEnabled()) {
-	    log.debug("evaluate for root.name :"+root.getName()+" path:"+path+" numberValueNode found = "+numberValueNode);
-	}
 	if (numberValueNode == null) {
 	    return null;
 	} else if (numberValueNode.getValue() != null) {

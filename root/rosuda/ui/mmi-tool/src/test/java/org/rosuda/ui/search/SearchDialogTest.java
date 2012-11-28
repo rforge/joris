@@ -33,6 +33,7 @@ import org.rosuda.ui.core.mvc.HasClickable;
 import org.rosuda.ui.core.mvc.HasClickable.ClickEvent;
 import org.rosuda.ui.core.mvc.HasValue;
 import org.rosuda.ui.core.mvc.MessageBus;
+import org.rosuda.ui.core.mvc.TestUtil;
 import org.rosuda.ui.search.SearchDataNode.ConstraintType;
 
 public class SearchDialogTest {
@@ -324,32 +325,12 @@ public class SearchDialogTest {
 
     private void clickAddToTreeButton() {
 	DefaultHasClickable clickable = (DefaultHasClickable) view.getAddToTree();
-	simulateLeftClick(clickable);
+	TestUtil.simulateLeftClick(clickable);
     }
 
     private void clickRemoveFromTreeButton() {
 	DefaultHasClickable clickable = (DefaultHasClickable) view.getRemoveFromTree();
-	simulateLeftClick(clickable);
-    }
-
-    private void simulateLeftClick(DefaultHasClickable clickable) {
-	clickable.click(new ClickEvent() {
-
-	    @Override
-	    public Set<Modifier> getModifiers() {
-		return Collections.emptySet();
-	    }
-
-	    @Override
-	    public int getClickCount() {
-		return 1;
-	    }
-
-	    @Override
-	    public int getButton() {
-		return MouseEvent.BUTTON1;
-	    }
-	});
+	TestUtil.simulateLeftClick(clickable);
     }
 
     private String getChildNameFromTreeNodeWrapper(final SearchDataNode child) {
