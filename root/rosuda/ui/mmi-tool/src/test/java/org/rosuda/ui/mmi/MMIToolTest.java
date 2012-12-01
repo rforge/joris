@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListDataListener;
 import javax.swing.table.TableModel;
@@ -27,7 +28,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.rosuda.irconnect.IREXP;
 import org.rosuda.mvc.swing.TypedDynamicListModel;
-import org.rosuda.mvc.swing.model.SelectionListModelAdapter;
 import org.rosuda.type.Node;
 import org.rosuda.type.NodeFinder;
 import org.rosuda.type.NodeFinderImpl;
@@ -169,7 +169,7 @@ public class MMIToolTest {
 	model.setTableModel(tableModel);
 	model.setUniqueStructure(new NodeTreeModel<IREXP>(new RootNodeWrapper<IREXP>(null, data)));
 	model.setExpressionListModel(listModel);
-	model.setExpressionListSelectionModel(new SelectionListModelAdapter<String>());
+	model.setExpressionListSelectionModel(new DefaultListSelectionModel());
 
 	view = new MMIToolTestObjectView();
 	
