@@ -45,7 +45,6 @@ public class MMIToolViewDialogImpl<T> extends JDialog implements MMIToolView<T, 
     private TypedDynamicListModel<String> expressionListModel;
     private HasValue<String> expressionFieldModel;
     private HasClickable createExpressionFieldClickable;
-    private HasValue<List<String>> expressionListValues;
     private HasValue<TypedDynamicListModel<String>> expressionListModelHasValue;
     private HasValue<ListSelectionModel> expressionListSelectionModel;
     
@@ -102,6 +101,26 @@ public class MMIToolViewDialogImpl<T> extends JDialog implements MMIToolView<T, 
 
     }
     
+    private static class TypedDynamicListModelHasValue<T> extends AbstractHasValue<TypedDynamicListModel<T>> {
+
+	private final JList expressionList;
+
+	public TypedDynamicListModelHasValue(JList expressionList) {
+	    this.expressionList = expressionList;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public TypedDynamicListModel<T> getValue() {
+	    return ((TypedDynamicListModel<T>) expressionList.getModel());
+	}
+	
+	@Override
+	protected void onValueChange(TypedDynamicListModel<T> newValue) {
+	    expressionList.setModel(newValue);
+	}
+    }
+    
     private class ExpressionFieldModel extends AbstractHasValue<String> {
 
 	@Override
@@ -120,35 +139,10 @@ public class MMIToolViewDialogImpl<T> extends JDialog implements MMIToolView<T, 
 	this.selectionModel = new SelectionModel();
 	this.expressionFieldModel = new ExpressionFieldModel();
 	this.createExpressionFieldClickable = new JButtonHasClickable(createExpressionFieldButton);
-	final JListHasValue listModel = new JListHasValue(expressionList);
-	this.expressionListValues = listModel;
-	this.expressionListSelectionModel = new JListHasSelectionModel(expressionList);
-	this.expressionListModelHasValue = new HasValue<TypedDynamicListModel<String>>() {
-
-	    @Override
-	    public TypedDynamicListModel<String> getValue() {
-		return (TypedDynamicListModel<String>) expressionList.getModel();
-	    }
-
-	    @Override
-	    public void setValue(TypedDynamicListModel<String> value) {
-		expressionList.setModel(value);
-	    }
-
-	    @Override
-	    public void addChangeListener(org.rosuda.ui.core.mvc.HasValue.ValueChangeListener<TypedDynamicListModel<String>> listener) {
-		// TODO Auto-generated method stub
-		
-	    }
-
-	    @Override
-	    public void removeChangeListener(org.rosuda.ui.core.mvc.HasValue.ValueChangeListener<TypedDynamicListModel<String>> listener) {
-		// TODO Auto-generated method stub
-		
-	    }
-	    
-	};
+	final JListHasValue<String> listModel = new JListHasValue<String>(expressionList);
+	this.expressionListModelHasValue = new TypedDynamicListModelHasValue<String>(expressionList);
 	expressionList.setModel(listModel);
+	this.expressionListSelectionModel = new JListHasSelectionModel(expressionList);
     }
 
     @Override
@@ -187,14 +181,10 @@ public class MMIToolViewDialogImpl<T> extends JDialog implements MMIToolView<T, 
     }
 
     @Override
-    public HasValue<List<String>> getExpressionList() {
-	return expressionListValues;
-    }
-
-    @Override
     public HasValue<TypedDynamicListModel<String>> getExpressionListModel() {
         return expressionListModelHasValue;
     }
+
     @Override
     public HasValue<ListSelectionModel> getExpressionListSelection() {
 	return expressionListSelectionModel;

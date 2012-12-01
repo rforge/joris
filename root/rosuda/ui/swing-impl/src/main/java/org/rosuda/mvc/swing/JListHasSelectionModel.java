@@ -14,14 +14,19 @@ public class JListHasSelectionModel extends AbstractHasValue<ListSelectionModel>
      */
     private static final long serialVersionUID = 7798935210387295230L;
 
-    private final ListSelectionModel delegate;
+    private final JList delegate;
    
     public JListHasSelectionModel(final JList list) {
-	this.delegate = list.getSelectionModel();
+	this.delegate = list;
     }
 
     @Override
     public ListSelectionModel getValue() {
-	return delegate;
+	return delegate.getSelectionModel();
+    }
+    
+    @Override
+    protected void onValueChange(final ListSelectionModel newValue) {
+       delegate.setSelectionModel(newValue);
     }
 }

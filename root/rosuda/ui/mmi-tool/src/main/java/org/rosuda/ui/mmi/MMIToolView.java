@@ -1,7 +1,5 @@
 package org.rosuda.ui.mmi;
 
-import java.util.List;
-
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableModel;
 
@@ -22,9 +20,6 @@ public interface MMIToolView<T, C> extends MVP.View<C> {
     
     HasClickable getSynchronizeTreeToTable();
     
-    @Deprecated
-    HasValue<List<String>> getExpressionList();
-
     HasValue<String> getExpressionField();
 
     HasClickable getCreateExpressionButton();

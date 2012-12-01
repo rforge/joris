@@ -2,7 +2,6 @@ package org.rosuda.ui.mmi;
 
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
@@ -62,8 +61,6 @@ public class MMIToolTest {
 	private final HasClickable synchronizeTreeToTable = new DefaultHasClickable();
 	private HasValue<String> expressionField = new DefaultHasValue<String>();
 	private HasClickable expressionButton = new DefaultHasClickable();
-	//TODO try to remove
-	private HasValue<List<String>> expressionList = new DefaultHasValue<List<String>>();
 	private HasValue<ListSelectionModel> expressionListSelection = new DefaultHasValue<ListSelectionModel>();
 	private HasValue<TypedDynamicListModel<String>> expressionListModel = new DefaultHasValue<TypedDynamicListModel<String>>();
 
@@ -98,11 +95,6 @@ public class MMIToolTest {
 	}
 
 	@Override
-	public HasValue<List<String>> getExpressionList() {
-	    return expressionList;
-	}
-
-	@Override
 	public HasValue<ListSelectionModel> getExpressionListSelection() {
 	    return expressionListSelection;
 	}
@@ -127,7 +119,6 @@ public class MMIToolTest {
 	presenter = new MMIToolPresenter<IREXP, Object>();
 	model = new MMIToolModel<IREXP>();
 
-	//TODO check with upper model
 	final ArrayList<String> valueList = new ArrayList<String>();
 		
 	final MMIDynamicTableModel<IREXP> tableModel = new MMIDynamicTableModel<IREXP>(data);
@@ -182,7 +173,6 @@ public class MMIToolTest {
 
 	view = new MMIToolTestObjectView();
 	
-	view.getExpressionList().setValue(valueList);
 	presenter.bind(model, view, mb);
     }
 
@@ -260,8 +250,7 @@ public class MMIToolTest {
 	addAdditionalExpressionValue("AIClikelihood := exp(-0.5*${@AICdiff})");
 	addAdditionalExpressionValue("AICratio := ${@AIClikelihood}/csum(${@AIClikelihood})");
 	//addAdditionalExpressionValue("AICratio2 := exp(-0.5*${@AICdiff})/csum(exp(-0.5*${@AICdiff}))");
-	//TODO get value from $AIC from the model
-	view.getExpressionListSelection().getValue().setSelectionInterval(0, 4);
+	view.getExpressionListSelection().getValue().setSelectionInterval(0, 3);
 	double aicMin = Double.MAX_VALUE;
 	for (int row = 0; row < view.getMMITable().getValue().getRowCount(); row ++) {
 	    final double AIC = getDataValue(data.get(row),"AIC");
@@ -329,7 +318,7 @@ public class MMIToolTest {
     private void addAdditionalExpressionValue() {
 	addAdditionalExpressionValue("2*${AIC}");
 	final int rootChildrenBefore = view.getMMITable().getValue().getColumnCount();
-	view.getExpressionListSelection().getValue().setSelectionInterval(0, 1);
+	view.getExpressionListSelection().getValue().setSelectionInterval(0, 0);
 	assertThat(view.getMMITable().getValue().getColumnCount(), equalTo(rootChildrenBefore + 1));
     }
 

@@ -5,7 +5,6 @@ import java.util.ResourceBundle;
 
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
-import javax.swing.event.ListDataListener;
 
 import org.rosuda.mvc.swing.TypedDynamicListModel;
 import org.rosuda.mvc.swing.model.SelectionListModelAdapter;

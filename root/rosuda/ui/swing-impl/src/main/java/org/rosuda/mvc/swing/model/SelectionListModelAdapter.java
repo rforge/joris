@@ -12,6 +12,10 @@ import javax.swing.event.ListSelectionListener;
 
 public class SelectionListModelAdapter<T> implements ListSelectionModel{
 
+    /**
+     * 
+     */
+    private static final long serialVersionUID = 1414609451596672612L;
     private final List<ListSelectionListener> listSelectionListeners;
     private static final int NOT_SELECTED_INDEX = 0;
     private final List<T> valueList;
@@ -21,7 +25,6 @@ public class SelectionListModelAdapter<T> implements ListSelectionModel{
     private int leadSelectionIndex = NOT_SELECTED_INDEX;
     private boolean valueIsAdjusting =false;
     
-    //TODO refactor -> adaption seems unnecessary
     public SelectionListModelAdapter() {
 	this.valueList = new ArrayList<T>();
 	selectedIndices = new TreeSet<Integer>();
@@ -51,7 +54,7 @@ public class SelectionListModelAdapter<T> implements ListSelectionModel{
 
     @Override
     public void addSelectionInterval(final int from, final int to) {
-	for (int i=from; i<to;i++) {
+	for (int i=from; i<=to;i++) {
 	    selectedIndices.add(i);
 	}
 	fireSelectionModelChange(from, to);
@@ -78,7 +81,7 @@ public class SelectionListModelAdapter<T> implements ListSelectionModel{
 	if (selectedIndices.isEmpty()) {
 	    return NOT_SELECTED_INDEX;
 	}
-	return 0;
+	return selectedIndices.toArray(new Integer[selectedIndices.size()])[selectedIndices.size()-1];
     }
 
     @Override

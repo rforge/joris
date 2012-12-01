@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -32,9 +33,6 @@ public class MMIToolPresenter<T, C> implements MVP.Presenter<MMIToolModel<T>, MM
 	view.getMMITable().setValue(model.getTableModel());
 	view.getExpressionListSelection().setValue(model.getExpressionListSelectionModel());
 	view.getExpressionListModel().setValue(model.getExpressionListModel());
-	// TODO keep in synch (see below)
-	view.getExpressionList().setValue(model.getExpressionListSelectionModel().getValues());
-	
 	view.getUniqueStructureSelection().addChangeListener(uniqueStructureListener);
 	view.getCreateExpressionButton().addClickListener(createExpressionListener);
 	view.getExpressionListSelection().getValue().addListSelectionListener(expressionListSelectionListener);
@@ -42,7 +40,7 @@ public class MMIToolPresenter<T, C> implements MVP.Presenter<MMIToolModel<T>, MM
 
     }
 
-    protected NodeTreeSelection mergeSelection(NodeTreeSelection nodeTreeSelection, List<String> expressions) {
+    private NodeTreeSelection mergeSelection(NodeTreeSelection nodeTreeSelection, List<String> expressions) {
 	final List<NodePath> paths = new ArrayList<NodePath>();
 	if (nodeTreeSelection != null) {
 	    paths.addAll(nodeTreeSelection.getSelectedPaths());
@@ -62,6 +60,17 @@ public class MMIToolPresenter<T, C> implements MVP.Presenter<MMIToolModel<T>, MM
 	}
 	return new NodeTreeSelection.Impl(paths);
     }
+    
+    private List<String> getSelectedExpressionsFromList(final MMIToolModel<T> model) {
+	final List<String> expressions = new ArrayList<String>();
+	final ListSelectionModel selectionModel = model.getExpressionListSelectionModel();
+	for (int i=selectionModel.getMinSelectionIndex();i<=selectionModel.getMaxSelectionIndex();i++) {
+	    if (selectionModel.isSelectedIndex(i)) {
+		expressions.add(model.getExpressionListModel().at(i));
+	    }
+	}
+	return expressions;
+    }
 
     @Override
     public void unbind(MMIToolModel<T> model, MMIToolView<T, C> view, MessageBus mb) {
@@ -75,9 +84,11 @@ public class MMIToolPresenter<T, C> implements MVP.Presenter<MMIToolModel<T>, MM
 	uniqueStructureListener = new ValueChangeListener<NodeTreeSelection>() {
 	    @Override
 	    public void onValueChange(NodeTreeSelection newValue) {
-		final List<String> expressions = model.getExpressionListSelectionModel().getValues();
+		final List<String> expressions = MMIToolPresenter.this.getSelectedExpressionsFromList(model);
 		model.getTableModel().updateSelection(MMIToolPresenter.this.mergeSelection(newValue, expressions));
 	    }
+
+	   
 	};
 	createExpressionListener = new ClickListener() {
 	    @Override
@@ -87,26 +98,14 @@ public class MMIToolPresenter<T, C> implements MVP.Presenter<MMIToolModel<T>, MM
 		    return;
 		}
 		model.getExpressionListModel().add(expression);
-		// model.getExpressionListSelectionModel().addValue(expression);
-		// TODO synch model in another way (only SwingUI, test does not
-		// work that way)
-		// view.getExpressionList().getValue().add(expression);
 	    }
 	};
 	expressionListSelectionListener = new ListSelectionListener() {
 
 	    @Override
 	    public void valueChanged(ListSelectionEvent e) {
-		NodeTreeSelection nodeTreeSelection = view.getUniqueStructureSelection().getValue();
-		//TODO wrong model is updated here - there is a selection from x..y .. i can get this values from the model
-		//final List<String> expressions = model.getExpressionListSelectionModel().getValues();
-		final List<String> expressions = new ArrayList<String>();
-		for (int i=e.getFirstIndex(); i<e.getLastIndex(); i++) {
-		    final String expression = model.getExpressionListModel().at(i);
-		    if (expression != null) {
-			expressions.add(expression);
-		    }
-		}
+		final List<String> expressions = MMIToolPresenter.this.getSelectedExpressionsFromList(model);
+		final NodeTreeSelection nodeTreeSelection = view.getUniqueStructureSelection().getValue();
 		model.getTableModel().updateSelection(MMIToolPresenter.this.mergeSelection(nodeTreeSelection, expressions));
 	    }
 
