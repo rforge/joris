@@ -36,11 +36,12 @@
 		<javax.transaction.jta>1.1</javax.transaction.jta>
 		<log4jdbc4.version>1.2</log4jdbc4.version>
 		<net.sf.jasperreports.jasperreports>4.6.0</net.sf.jasperreports.jasperreports>
-		<spring.version>3.1.0.RELEASE</spring.version>
+		<spring.version>3.2.0.RELEASE</spring.version>
 		<derby.version>10.9.1.0</derby.version>
 		<rserve.version>0.68</rserve.version>
 		<org.hibernate.hibernate-validator>4.3.0.Final</org.hibernate.hibernate-validator>
 		<org.hibernate.hibernate-core>4.1.7.Final</org.hibernate.hibernate-core>
+		<org.jfree.jfreechart>1.0.14</org.jfree.jfreechart>
 	</properties>
 
 	<packaging>pom</packaging>
@@ -381,7 +382,13 @@
 				<artifactId>jdom</artifactId>
 				<version>1.1</version>
 			</dependency>
-
+			<!-- interactive graphics -->
+			<dependency>
+				<groupId>org.jfree</groupId>
+				<artifactId>jfreechart</artifactId>
+				<version>${org.jfree.jfreechart}</version>
+			</dependency>
+			
 			<!-- R -->
 			<dependency>
 				<groupId>org.rosuda</groupId>
