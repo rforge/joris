@@ -80,7 +80,7 @@ public class MainFrame extends JFrame implements UIContext{
 		rConnection = context.getBean("managedConnection", IRConnection.class);
 		
 		//TODO load this file Localized
-		final InputStream rsc = MainFrame.class.getResourceAsStream("/gui/Main.xml");
+		final InputStream rsc = MainFrame.class.getResourceAsStream("/gui/main.xml");
 		final BufferedReader reader = new BufferedReader(new InputStreamReader(
 				rsc));
 		final JFrame frame = new SwingEngine<JFrame>(this).render(reader);
