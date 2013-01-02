@@ -10,7 +10,6 @@ import static org.hamcrest.Matchers.sameInstance;
 import static org.junit.Assert.assertThat;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -18,164 +17,35 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.swing.DefaultListSelectionModel;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListDataListener;
 import javax.swing.table.TableModel;
 import javax.swing.tree.TreeNode;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.rosuda.irconnect.IREXP;
-import org.rosuda.mvc.swing.TypedDynamicListModel;
 import org.rosuda.type.Node;
 import org.rosuda.type.NodeFinder;
 import org.rosuda.type.NodeFinderImpl;
 import org.rosuda.type.NodePath;
 import org.rosuda.ui.core.mvc.DefaultHasClickable;
-import org.rosuda.ui.core.mvc.DefaultHasValue;
-import org.rosuda.ui.core.mvc.DefaultTestView;
-import org.rosuda.ui.core.mvc.HasClickable;
-import org.rosuda.ui.core.mvc.HasValue;
-import org.rosuda.ui.core.mvc.MessageBus;
 import org.rosuda.ui.core.mvc.TestUtil;
-import org.rosuda.ui.dialog.RootNodeWrapper;
+import org.rosuda.ui.test.MVPTest;
 import org.rosuda.visualizer.NodeTreeModel;
 import org.rosuda.visualizer.NodeTreeSelection;
 
-public class MMIToolTest {
-
+public class MMIToolTest extends MVPTest<MMIToolModel<IREXP>, MMIToolView<IREXP, Object>, MMIToolPresenter<IREXP, Object>, MMIToolTestModelData> {
+ 
     private NodeFinder<IREXP> nodeFinder;
     
-    private MMIToolModel<IREXP> model;
-    private MMIToolView<IREXP, Object> view;
-    private MMIToolPresenter<IREXP, Object> presenter;
-    private MessageBus mb;
-    private List<Node<IREXP>> data;
-
-    private static class MMIToolTestObjectView extends DefaultTestView implements MMIToolView<IREXP, Object> {
-
-	private HasValue<NodeTreeModel<IREXP>> uniqueStructureTree = new DefaultHasValue<NodeTreeModel<IREXP>>();
-	private HasValue<NodeTreeSelection> uniqueStructureSelection = new DefaultHasValue<NodeTreeSelection>();
-	private HasValue<TableModel> mmiTable = new DefaultHasValue<TableModel>();
-	private final HasClickable synchronizeTreeToTable = new DefaultHasClickable();
-	private HasValue<String> expressionField = new DefaultHasValue<String>();
-	private HasClickable expressionButton = new DefaultHasClickable();
-	private HasValue<ListSelectionModel> expressionListSelection = new DefaultHasValue<ListSelectionModel>();
-	private HasValue<TypedDynamicListModel<String>> expressionListModel = new DefaultHasValue<TypedDynamicListModel<String>>();
-
-	@Override
-	public HasValue<NodeTreeModel<IREXP>> getUniqueStructureTree() {
-	    return uniqueStructureTree;
-	}
-
-	@Override
-	public HasValue<NodeTreeSelection> getUniqueStructureSelection() {
-	    return uniqueStructureSelection;
-	}
-
-	@Override
-	public HasValue<TableModel> getMMITable() {
-	    return mmiTable;
-	}
-
-	@Override
-	public HasClickable getSynchronizeTreeToTable() {
-	    return synchronizeTreeToTable;
-	}
-
-	@Override
-	public HasValue<String> getExpressionField() {
-	    return expressionField;
-	}
-
-	@Override
-	public HasClickable getCreateExpressionButton() {
-	    return expressionButton;
-	}
-
-	@Override
-	public HasValue<ListSelectionModel> getExpressionListSelection() {
-	    return expressionListSelection;
-	}
-
-	@Override
-	public HasValue<TypedDynamicListModel<String>> getExpressionListModel() {
-	    return expressionListModel;
-	}
-    }
-
     @Before
     public void setUp() throws IOException, ClassNotFoundException {
 	nodeFinder = new NodeFinderImpl<IREXP>();
-	
-	data = new ArrayList<Node<IREXP>>();
-	for (int i = 1; i <= 8; i++) {
-	    final String rscName = "/models/airquality-" + i + ".rObj";
-	    data.add(loadResource(rscName));
-	}
-
-	mb = new MessageBus.Impl();
-	presenter = new MMIToolPresenter<IREXP, Object>();
-	model = new MMIToolModel<IREXP>();
-
-	final ArrayList<String> valueList = new ArrayList<String>();
-		
-	final MMIDynamicTableModel<IREXP> tableModel = new MMIDynamicTableModel<IREXP>(data);
-	final TypedDynamicListModel<String> listModel = new TypedDynamicListModel<String>() {
-
-	    @Override
-	    public int getSize() {
-		return valueList.size();
-	    }
-
-	    @Override
-	    public Object getElementAt(int index) {
-		return valueList.get(index);
-	    }
-	    
-	    @Override
-	    public void add(String value) {
-		valueList.add(value);
-	    }
-
-	    @Override
-	    public String remove(String value) {
-		if (valueList.remove(value)) {
-		    return value;
-		}
-		return null;
-	    }
-
-	    @Override
-	    public void addListDataListener(ListDataListener l) {
-		// TODO Auto-generated method stub
-		
-	    }
-
-	    @Override
-	    public void removeListDataListener(ListDataListener l) {
-		// TODO Auto-generated method stub
-		
-	    }
-
-	    @Override
-	    public String at(int index) {
-		return valueList.get(index);
-	    }
-
-	   
-	};
-	model.setTableModel(tableModel);
-	model.setUniqueStructure(new NodeTreeModel<IREXP>(new RootNodeWrapper<IREXP>(null, data)));
-	model.setExpressionListModel(listModel);
-	model.setExpressionListSelectionModel(new DefaultListSelectionModel());
-
-	view = new MMIToolTestObjectView();
-	
-	presenter.bind(model, view, mb);
     }
 
+    protected MMIToolView<IREXP, Object> createTestViewInstance() {
+	return new MMIToolTestObjectView();
+    }
+    
     @Test
     public void aGivenModelNodeSelectionWillShowTheExpectedResultsOnTheTableWhenSynchronizeIsClicked() {
 	assertThat(view.getMMITable().getValue(), sameInstance((TableModel) model.getTableModel()));
@@ -231,48 +101,49 @@ public class MMIToolTest {
 	assertThat(view.getMMITable().getValue().getRowCount(), equalTo(8));
 	assertThat(view.getMMITable().getValue().getColumnCount(), equalTo(1));
     }
-    
+
     @Test
     public void additionalValuesAreCalculatedCorrectly() {
 	addAdditionalExpressionValue();
-	//TODO get value from $AIC from the model
-	for (int row = 0; row < view.getMMITable().getValue().getRowCount(); row ++) {
-	    final double AIC = getDataValue(data.get(row),"AIC");
+	// TODO get value from $AIC from the model
+	for (int row = 0; row < view.getMMITable().getValue().getRowCount(); row++) {
+	    final double AIC = getDataValue(modelInitializer.dataAt(row), "AIC");
 	    assertThat((Double) view.getMMITable().getValue().getValueAt(row, 0), equalTo(2.0 * AIC));
 	}
     }
-    
+
     @Test
     public void weightedValuesAreCalculatedAsExpected() {
 	addAdditionalExpressionValue("${AIC}");
-	//TODO somethink like that, named field ?!
+	// TODO somethink like that, named field ?!
 	addAdditionalExpressionValue("AICdiff := ${AIC}-cmin(${AIC})");
 	addAdditionalExpressionValue("AIClikelihood := exp(-0.5*${@AICdiff})");
 	addAdditionalExpressionValue("AICratio := ${@AIClikelihood}/csum(${@AIClikelihood})");
-	//addAdditionalExpressionValue("AICratio2 := exp(-0.5*${@AICdiff})/csum(exp(-0.5*${@AICdiff}))");
+	// addAdditionalExpressionValue("AICratio2 := exp(-0.5*${@AICdiff})/csum(exp(-0.5*${@AICdiff}))");
 	view.getExpressionListSelection().getValue().setSelectionInterval(0, 3);
 	double aicMin = Double.MAX_VALUE;
-	for (int row = 0; row < view.getMMITable().getValue().getRowCount(); row ++) {
-	    final double AIC = getDataValue(data.get(row),"AIC");
+	for (int row = 0; row < view.getMMITable().getValue().getRowCount(); row++) {
+	    final double AIC = getDataValue(modelInitializer.dataAt(row), "AIC");
 	    aicMin = Math.min(aicMin, AIC);
 	    assertThat((Double) view.getMMITable().getValue().getValueAt(row, 0), equalTo(AIC));
 	}
 	final List<Double> aicLikelihoods = new ArrayList<Double>();
-	for (int row = 0; row < view.getMMITable().getValue().getRowCount(); row ++) {
-	    final double AICdiff = getDataValue(data.get(row),"AIC") - aicMin;
-	    aicLikelihoods.add(Math.exp(-0.5*AICdiff));
-	    assertThat("likelihood failed at index "+row,(Double) view.getMMITable().getValue().getValueAt(row, 1), equalTo(AICdiff));
+	for (int row = 0; row < view.getMMITable().getValue().getRowCount(); row++) {
+	    final double AICdiff = getDataValue(modelInitializer.dataAt(row), "AIC") - aicMin;
+	    aicLikelihoods.add(Math.exp(-0.5 * AICdiff));
+	    assertThat("likelihood failed at index " + row, (Double) view.getMMITable().getValue().getValueAt(row, 1), equalTo(AICdiff));
 	}
 	double aicLikelihoodSum = 0.0;
 	for (final double aicLikelihood : aicLikelihoods) {
 	    aicLikelihoodSum += aicLikelihood;
 	}
-	//TODO: does not work current value: 1.045e-15, expected 9.4e14
-	for (int row = 0; row < view.getMMITable().getValue().getRowCount(); row ++) {
-	    assertThat("weight failed at index "+row, (Double) view.getMMITable().getValue().getValueAt(row, 2), equalTo(aicLikelihoods.get(row)));
+	// TODO: does not work current value: 1.045e-15, expected 9.4e14
+	for (int row = 0; row < view.getMMITable().getValue().getRowCount(); row++) {
+	    assertThat("weight failed at index " + row, (Double) view.getMMITable().getValue().getValueAt(row, 2), equalTo(aicLikelihoods.get(row)));
 	}
-	for (int row = 0; row < view.getMMITable().getValue().getRowCount(); row ++) {
-	    assertThat("ratio failed at index "+row, (Double) view.getMMITable().getValue().getValueAt(row, 3), equalTo(aicLikelihoods.get(row)/aicLikelihoodSum));
+	for (int row = 0; row < view.getMMITable().getValue().getRowCount(); row++) {
+	    assertThat("ratio failed at index " + row, (Double) view.getMMITable().getValue().getValueAt(row, 3), equalTo(aicLikelihoods.get(row)
+		    / aicLikelihoodSum));
 	}
     }
 
@@ -280,20 +151,13 @@ public class MMIToolTest {
     public void listAndTreeSelectionMixIntoTheTable() {
 	aGivenModelNodeSelectionWillShowTheExpectedResultsOnTheTableWhenSynchronizeIsClicked();
 	addAdditionalExpressionValue();
-	
+
 	assertThat(view.getMMITable().getValue().getRowCount(), equalTo(8));
 	assertThat(view.getMMITable().getValue().getColumnCount(), equalTo(4));
     }
 
     // -- helper
-    @SuppressWarnings("unchecked")
-    private static Node<IREXP> loadResource(final String resourceName) throws IOException, ClassNotFoundException {
-	final ObjectInputStream ois = new ObjectInputStream(MMIToolTest.class.getResourceAsStream(resourceName));
-	final Object rootNode = ois.readObject();
-	ois.close();
-	return (Node<IREXP>) rootNode;
-    }
-
+   
     private TreeNode getAssertedTreeNodeRoot() {
 	NodeTreeModel<IREXP> uniqueStructureTree = view.getUniqueStructureTree().getValue();
 	assertThat(uniqueStructureTree, notNullValue());
@@ -350,10 +214,10 @@ public class MMIToolTest {
     }
 
     private double getDataValue(Node<IREXP> node, String string) {
-  	final NodePath path = NodePath.Impl.parse(string);
-  	return nodeFinder.findNode(node,  path).getValue().getNumber().doubleValue();
+	final NodePath path = NodePath.Impl.parse(string);
+	return nodeFinder.findNode(node, path).getValue().getNumber().doubleValue();
     }
-    
+
     private Object findChildByPath(final TreeNode parent, List<String> asList) {
 	if (parent == null)
 	    return null;

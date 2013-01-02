@@ -6,145 +6,30 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
-import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
-import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
 
 import org.jdesktop.swingx.treetable.TreeTableModel;
-import org.junit.Before;
 import org.junit.Test;
 import org.rosuda.graph.service.search.Relation;
 import org.rosuda.type.NodePath;
 import org.rosuda.ui.core.mvc.DefaultHasClickable;
-import org.rosuda.ui.core.mvc.DefaultHasValue;
-import org.rosuda.ui.core.mvc.DefaultTestView;
-import org.rosuda.ui.core.mvc.HasClickable;
-import org.rosuda.ui.core.mvc.HasClickable.ClickEvent;
-import org.rosuda.ui.core.mvc.HasValue;
-import org.rosuda.ui.core.mvc.MessageBus;
 import org.rosuda.ui.core.mvc.TestUtil;
 import org.rosuda.ui.search.SearchDataNode.ConstraintType;
+import org.rosuda.ui.test.MVPTest;
 
-public class SearchDialogTest {
+public class SearchDialogTest extends MVPTest<SearchDialogModel, SearchDialogView<Object>, SearchDialogPresenter<Object>, SearchDialogTestModelData>{
 
-    private SearchDialogModel model;
-    private SearchDialogView<Object> view;
-    private SearchDialogPresenter<Object> presenter;
-    private MessageBus mb;
-
-    private static class SearchDialogObjectView extends DefaultTestView implements SearchDialogView<Object> {
-
-	private final HasClickable closeButton = new DefaultHasClickable();
-	private final HasClickable searchButton = new DefaultHasClickable();
-	private final HasClickable add = new DefaultHasClickable();
-	private final HasClickable remove = new DefaultHasClickable();
-	private final HasValue<String> name = new DefaultHasValue<String>();
-	private final HasValue<TreeTableModel> treeTableModel = new DefaultHasValue<TreeTableModel>();
-	private final HasValue<TreeSelectionModel> treeSelectionModel = new HasValue<TreeSelectionModel>() {
-
-	    final TreeSelectionModel model = new DefaultTreeSelectionModel();
-
-	    @Override
-	    public TreeSelectionModel getValue() {
-		return model;
-	    }
-
-	    @Override
-	    public void setValue(TreeSelectionModel value) {
-		throw new UnsupportedOperationException();
-	    }
-
-	    @Override
-	    public void addChangeListener(org.rosuda.ui.core.mvc.HasValue.ValueChangeListener<TreeSelectionModel> listener) {
-	    }
-
-	    @Override
-	    public void removeChangeListener(org.rosuda.ui.core.mvc.HasValue.ValueChangeListener<TreeSelectionModel> listener) {
-	    }
-
-	};
-	private final HasValue<ConstraintType> constraint = new DefaultHasValue<ConstraintType>();
-
-	@Override
-	public HasClickable getCloseButton() {
-	    return closeButton;
-	}
-
-	@Override
-	public HasClickable getSearchButton() {
-	    return searchButton;
-	}
-
-	@Override
-	public HasClickable getAddToTree() {
-	    return add;
-	}
-
-	@Override
-	public HasClickable getRemoveFromTree() {
-	    return remove;
-	}
-
-	@Override
-	public HasValue<String> getNodeNameInput() {
-	    return name;
-	}
-
-	@Override
-	public HasValue<ConstraintType> getNodeConstraintType() {
-	    return constraint;
-	}
-
-	@Override
-	public HasValue<TreeTableModel> getTreeTableModel() {
-	    return treeTableModel;
-	}
-
-	@Override
-	public HasValue<TreeSelectionModel> getTreeSelectionModel() {
-	    return treeSelectionModel;
-	}
-
+    @Override
+    protected SearchDialogView<Object> createTestViewInstance() {
+        return new SearchDialogTestObjectView();
     }
-
-    @Before
-    public void setUp() throws IOException, ClassNotFoundException {
-	mb = new MessageBus.Impl();
-	presenter = new SearchDialogPresenter<Object>();
-	model = new SearchDialogModel();
-
-	final SearchTreeModel searchTreeModel = new SearchTreeModel();
-	final SearchDataNode rootNode = new SearchDataNode("Root", ConstraintType.Name);
-	searchTreeModel.setRoot(rootNode);
-	final SearchDataNode coefficients = new SearchDataNode("coefficients", ConstraintType.Name);
-	rootNode.addChild(coefficients);
-	final SearchDataNode matrix = new SearchDataNode("matrix", ConstraintType.Name);
-	coefficients.addChild(matrix);
-	final SearchDataNode distNode = new SearchDataNode("dist", ConstraintType.Name);
-	matrix.addChild(distNode);
-
-	final MathContext precion2 = new MathContext(2, RoundingMode.HALF_UP);
-	distNode.addChild(new SearchDataNode("Estimate", ConstraintType.Name).addChild(new SearchDataNode(null, ConstraintType.Number).setTypeValue(Relation.GT).setNumber(BigDecimal.ZERO)));
-	distNode.addChild(new SearchDataNode("Estimate", ConstraintType.Name).addChild(new SearchDataNode(null, ConstraintType.Number).setTypeValue(Relation.LT).setNumber(new BigDecimal(10, precion2))));
-
-	distNode.addChild(new SearchDataNode("Pr(>|t|)", ConstraintType.Name).addChild(new SearchDataNode(null, ConstraintType.Number).setTypeValue(Relation.LT).setNumber(new BigDecimal(0.15, precion2))));
-	//TODO set model content
-	model.setSearchTreeModel(searchTreeModel);
-	view = new SearchDialogObjectView();
-	presenter.bind(model, view, mb);
-    }
-
+    
     @Test
     public void bindingCheck() {
 	assertThat(view.getTreeTableModel(), notNullValue());
