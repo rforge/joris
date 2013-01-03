@@ -24,6 +24,18 @@
 				<bean class="org.rosuda.irconnect.cfg.LoadLibraryStep">
 					<property name="library" value="TIMP"/>
 				</bean>
+				<bean class="org.rosuda.irconnect.cfg.LibraryInstallationStep">
+					<property name="library" value="Cairo"/>
+				</bean>
+				<bean class="org.rosuda.irconnect.cfg.LoadLibraryStep">
+					<property name="library" value="Cairo"/>
+				</bean>
+				<bean class="org.rosuda.irconnect.cfg.LibraryInstallationStep">
+					<property name="library" value="Acinonyx"/>
+				</bean>
+				<bean class="org.rosuda.irconnect.cfg.LoadLibraryStep">
+					<property name="library" value="Acinonyx"/>
+				</bean>	
 			</list>
 		</property>
 	</bean>

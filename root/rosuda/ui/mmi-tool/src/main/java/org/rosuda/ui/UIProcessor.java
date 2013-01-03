@@ -50,13 +50,15 @@ public class UIProcessor {
 	    abstractButton.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(final ActionEvent event) {
-		    new Thread(new Runnable() {
+		    final Thread commandThread = new Thread(new Runnable() {
 			@Override
 			public void run() {
 			    LOG.debug("fireEvent:" + messageBusEvent);
 			    messageBus.fireEvent(messageBusEvent);
 			}
-		    }).run();
+		    });
+		    commandThread.setName(UIProcessor.class.getSimpleName()+"-actionButtonCommandThread");
+		    commandThread.run();
 		}
 	    });
 	    return messageBusEvent.getClass();
