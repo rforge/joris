@@ -1,7 +1,7 @@
 package org.rosuda.graph.service.util;
 
 
-public class GENumberNumberSQLValueQueryAppender  extends AbstractNumberSQLValueQueryAppender {
+public class GENumberValueSQLValueQueryAppender  extends AbstractNumberSQLValueQueryAppender {
 
 	@Override
 	String getOperator() {

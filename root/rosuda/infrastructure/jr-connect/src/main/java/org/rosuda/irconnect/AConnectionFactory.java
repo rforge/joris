@@ -87,15 +87,16 @@ public abstract class AConnectionFactory implements IConnectionFactory {
 	    return;
 	}
 	log.info("shutting down " + pool.size() + " RConnections");
-	int remainingConnections = pool.size();
-	try {
+	int shutdownSuccessCount = 0;
 	    for (final IRConnection con : pool) {
-		con.shutdown();
-		remainingConnections --;
+		try {
+		    con.shutdown();
+		    shutdownSuccessCount ++;
+		} catch (final RServerException rse) {
+		    log.warn("r-connection shutdown failed", rse);
+		}
 	    }
-	} catch (final RServerException rse) {
-	}
-	if (remainingConnections > 0) {
+	if (shutdownSuccessCount == 0) {
 	    shutDownWithNewConnection();
 	}
     }
