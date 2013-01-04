@@ -26,16 +26,39 @@ public class MainPresenter<C> implements MVP.Presenter<MainModel, MainView<C>> {
 	view.getInputEvent().addKeyEventListener(new HasKeyEvent.KeyListener() {
 	    @Override
 	    public void onKeyEvent(HasKeyEvent.KeyEvent event) {
-		if (HasKeyEvent.KeyEvent.Type.KEY_UP.equals(event.getType()) && KeyEvent.VK_ENTER == event.getKeyCode()) {
-		    final String currentValue = view.getInputValue().getValue();
-		    appendHTML(model, new StringBuilder("<div class=\"command\">&gt; ").append("<a href=\"").append(StringEscapeUtils.escapeHtml(currentValue))
-			    .append("\">").append(currentValue).append("</a>").append("</div>").toString());
-		    view.getInputValue().setValue("");
-		    messageBus.fireEvent(new CRTKeyEvent(currentValue));
-		} else if (HasKeyEvent.KeyEvent.Type.KEY_UP.equals(event.getType()) && KeyEvent.VK_UP == event.getKeyCode()) {
-		    
+		if (HasKeyEvent.KeyEvent.Type.KEY_UP.equals(event.getType())) {
+		    switch (event.getKeyCode()) {
+		    case KeyEvent.VK_ENTER: {
+			final String currentValue = memorizeActuallyDisplayedCommand(model, view);
+			appendHTML(model, currentValue);
+			view.getInputValue().setValue("");
+			messageBus.fireEvent(new CRTKeyEvent(currentValue));
+		    } break;
+		    case KeyEvent.VK_UP: {
+			memorizeActuallyDisplayedCommand(model, view);
+			final String previousCommand = model.getPreviousCommand();
+			setDisplayedCommand(view, previousCommand);
+		    }break;
+		    case KeyEvent.VK_DOWN: {
+			memorizeActuallyDisplayedCommand(model, view);
+			final String nextCommand = model.getNextCommand();
+			setDisplayedCommand(view, nextCommand);
+		    } break;
+
+		    }
 		}
-		
+	    }
+
+	    private String memorizeActuallyDisplayedCommand(final MainModel model, final MainView<C> view) {
+		final String currentValue = view.getInputValue().getValue();
+		model.addCommand(currentValue);
+		return currentValue;
+	    }
+
+	    private void setDisplayedCommand(final MainView<C> view, final String previousCommand) {
+		if (previousCommand != null) {
+		    view.getInputValue().setValue(previousCommand);
+		}
 	    }
 	});
 	messageBus.registerListener(new EventListener<IREXPResponseEvent>() {
@@ -46,7 +69,9 @@ public class MainPresenter<C> implements MVP.Presenter<MainModel, MainView<C>> {
 	});
     }
 
-    private void appendHTML(final MainModel model, final String htmlText) {
+    private void appendHTML(final MainModel model, final String currentValue) {
+	final String htmlText = new StringBuilder("<div class=\"command\">&gt; ").append("<a href=\"").append(StringEscapeUtils.escapeHtml(currentValue))
+		.append("\">").append(currentValue).append("</a>").append("</div>").toString();
 	final HTMLDocument targetDoc = model.getProtocol();
 	final Element body = targetDoc.getElement("htmlbody");
 	final Element lastChild = body.getElement(body.getElementCount() - 1);

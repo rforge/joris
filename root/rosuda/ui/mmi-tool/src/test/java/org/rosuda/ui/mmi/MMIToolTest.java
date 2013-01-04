@@ -33,7 +33,7 @@ import org.rosuda.ui.test.MVPTest;
 import org.rosuda.visualizer.NodeTreeModel;
 import org.rosuda.visualizer.NodeTreeSelection;
 
-public class MMIToolTest extends MVPTest<MMIToolModel<IREXP>, MMIToolView<IREXP, Object>, MMIToolPresenter<IREXP, Object>, MMIToolTestModelData> {
+public class MMIToolTest extends MVPTest<MMIToolModel<IREXP>, MMIToolView<IREXP, Void>, MMIToolPresenter<IREXP, Void>, MMIToolTestModelData> {
  
     private NodeFinder<IREXP> nodeFinder;
     
@@ -41,11 +41,7 @@ public class MMIToolTest extends MVPTest<MMIToolModel<IREXP>, MMIToolView<IREXP,
     public void setUp() throws IOException, ClassNotFoundException {
 	nodeFinder = new NodeFinderImpl<IREXP>();
     }
-
-    protected MMIToolView<IREXP, Object> createTestViewInstance() {
-	return new MMIToolTestObjectView();
-    }
-    
+  
     @Test
     public void aGivenModelNodeSelectionWillShowTheExpectedResultsOnTheTableWhenSynchronizeIsClicked() {
 	assertThat(view.getMMITable().getValue(), sameInstance((TableModel) model.getTableModel()));

@@ -19,6 +19,7 @@ public class MainModel implements MVP.Model {
 
     private final HTMLDocument protocol;
     private final List<String> commands;
+    private int commandIdx = 0;
 
     public MainModel() throws IOException {
 	commands = new ArrayList<String>();
@@ -45,8 +46,28 @@ public class MainModel implements MVP.Model {
     HTMLDocument getProtocol() {
 	return protocol;
     }
-    
-    public List<String> getCommands() {
-	return Collections.unmodifiableList(commands);
+
+    String getPreviousCommand() {
+	if (commandIdx > 0) {
+	    commandIdx--;
+	}
+	if (commands.size() > commandIdx) {
+	    return commands.get(commandIdx);
+	}
+	return null;
+    }
+
+    String getNextCommand() {
+	if (commandIdx < commands.size()) {
+	    commandIdx ++;
+	}
+	if (commands.size() > commandIdx) {
+	    return commands.get(commandIdx);
+	}
+	return null;
+    }
+
+    public void addCommand(String currentValue) {
+	commands.add(currentValue);
     }
 }

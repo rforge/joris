@@ -23,13 +23,8 @@ import org.rosuda.ui.core.mvc.TestUtil;
 import org.rosuda.ui.search.SearchDataNode.ConstraintType;
 import org.rosuda.ui.test.MVPTest;
 
-public class SearchDialogTest extends MVPTest<SearchDialogModel, SearchDialogView<Object>, SearchDialogPresenter<Object>, SearchDialogTestModelData>{
-
-    @Override
-    protected SearchDialogView<Object> createTestViewInstance() {
-        return new SearchDialogTestObjectView();
-    }
-    
+public class SearchDialogTest extends MVPTest<SearchDialogModel, SearchDialogView<Void>, SearchDialogPresenter<Void>, SearchDialogTestModelData>{
+   
     @Test
     public void bindingCheck() {
 	assertThat(view.getTreeTableModel(), notNullValue());

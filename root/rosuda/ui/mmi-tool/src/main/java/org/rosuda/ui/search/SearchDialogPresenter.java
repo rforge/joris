@@ -23,6 +23,7 @@ public class SearchDialogPresenter<C> implements MVP.Presenter<SearchDialogModel
     @Override
     public void bind(final SearchDialogModel model, final SearchDialogView<C> view, final MessageBus messageBus) {
 	view.getTreeTableModel().setValue(model.getSearchTreeModel());
+	view.getTreeSelectionModel().setValue(model.getTreeSelectionModel());
 	if (view.getViewContainer() instanceof Window) {
 	    final Window container = (Window) view.getViewContainer();
 	    view.getCloseButton().addClickListener(new WindowCloseListener(messageBus, container));
