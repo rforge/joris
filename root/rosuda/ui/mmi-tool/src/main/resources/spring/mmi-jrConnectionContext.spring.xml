@@ -31,10 +31,10 @@
 					<property name="library" value="Cairo"/>
 				</bean>
 				<bean class="org.rosuda.irconnect.cfg.LibraryInstallationStep">
-					<property name="library" value="Acinonyx"/>
+					<property name="library" value="iplots"/>
 				</bean>
 				<bean class="org.rosuda.irconnect.cfg.LoadLibraryStep">
-					<property name="library" value="Acinonyx"/>
+					<property name="library" value="iplots"/>
 				</bean>	
 			</list>
 		</property>

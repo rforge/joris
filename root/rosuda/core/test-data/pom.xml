@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<groupId>org.rosuda</groupId>
+		<groupId>org.r-project.joris</groupId>
 		<artifactId>core</artifactId>
 		<version>1.0.2-SNAPSHOT</version>
 	</parent>
@@ -12,33 +12,33 @@
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>test-data-resources</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>jr-connect</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>irexp-mapper</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>util-combinatorics</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<!-- reference impl -->
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>jr-connect-rengine-impl</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>generic-type-mapper-filter</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>

@@ -4,8 +4,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<parent>
-		<groupId>org.rosuda</groupId>
-		<artifactId>root</artifactId>
+		<groupId>org.r-project.joris</groupId>
+		<artifactId>root-module</artifactId>
 		<version>1.0.2-SNAPSHOT</version>
 	</parent>
 
@@ -16,37 +16,37 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>jr-connect-rengine-impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>r-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>generic-type</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>generic-type-beans</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>hibernate-dao-impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>hibernate-service-impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>generic-service</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -58,13 +58,13 @@
 		</dependency>
 		<!-- TEST dependencies -->
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>generic-type-mapper</artifactId>
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>irexp-mapper</artifactId>
 			<version>${project.version}</version>
 		</dependency>

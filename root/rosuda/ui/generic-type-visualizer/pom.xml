@@ -1,52 +1,51 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<groupId>org.rosuda</groupId>
+		<groupId>org.r-project.joris</groupId>
 		<artifactId>ui</artifactId>
 		<version>1.0.2-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.rosuda.ui</groupId>
-	<artifactId>generic-type-visualizer</artifactId>
+	<artifactId>ui-generic-type-visualizer</artifactId>
 	<packaging>jar</packaging>
 	<name>rosuda-${parent.artifactId}-${project.artifactId}</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>jr-connect</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<!-- reference impl -->
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>jr-connect-rengine-impl</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>irexp-mapper</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>generic-type-mapper-filter</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>generic-type-restructure</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>commons-messagebus</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda.ui</groupId>
-			<artifactId>swing-impl</artifactId>
+			<groupId>org.r-project.joris</groupId>
+			<artifactId>ui-swing-impl</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>

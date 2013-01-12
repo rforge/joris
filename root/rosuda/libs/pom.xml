@@ -4,8 +4,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<parent>
-		<groupId>org.rosuda</groupId>
-		<artifactId>root</artifactId>
+		<groupId>org.r-project.joris</groupId>
+		<artifactId>root-module</artifactId>
 		<version>1.0.2-SNAPSHOT</version>
 	</parent>
 
@@ -31,7 +31,7 @@
 							<goal>install-file</goal>
 						</goals>
 						<configuration>
-							<groupId>org.rosuda</groupId>
+							<groupId>org.r-project.joris</groupId>
 							<artifactId>rengine</artifactId>
 							<version>0.68</version>
 							<packaging>jar</packaging>
@@ -47,7 +47,7 @@
 							<goal>install-file</goal>
 						</goals>
 						<configuration>
-							<groupId>org.rosuda</groupId>
+							<groupId>org.r-project.joris</groupId>
 							<artifactId>rserveengine</artifactId>
 							<version>0.68</version>
 							<packaging>jar</packaging>

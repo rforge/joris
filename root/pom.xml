@@ -9,7 +9,7 @@
 	</organization>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>root</groupId>
+	<groupId>org.r-project.joris</groupId>
 	<artifactId>root</artifactId>
 	<version>1.0.2-SNAPSHOT</version>
 
@@ -391,12 +391,12 @@
 			
 			<!-- R -->
 			<dependency>
-				<groupId>org.rosuda</groupId>
+				<groupId>org.r-project.joris</groupId>
 				<artifactId>rengine</artifactId>
 				<version>${rserve.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.rosuda</groupId>
+				<groupId>org.r-project.joris</groupId>
 				<artifactId>rserveengine</artifactId>
 				<version>${rserve.version}</version>
 			</dependency>

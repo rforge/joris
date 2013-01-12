@@ -3,7 +3,7 @@
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<groupId>org.rosuda</groupId>
+		<groupId>org.r-project.joris</groupId>
 		<artifactId>examples</artifactId>
 		<version>1.0.2-SNAPSHOT</version>
 	</parent>
@@ -27,7 +27,7 @@
 			<artifactId>cglib-nodep</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>jr-connection-mgr</artifactId>
 			<version>${project.version}</version>
 		</dependency>

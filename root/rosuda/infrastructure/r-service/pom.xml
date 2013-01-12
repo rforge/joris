@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<groupId>org.rosuda</groupId>
+		<groupId>org.r-project.joris</groupId>
 		<artifactId>infrastructure</artifactId>
 		<version>1.0.2-SNAPSHOT</version>
 	</parent>
@@ -13,22 +13,22 @@
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>util-logging</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>process</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>jr-connect</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>jr-connect-rengine-impl</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>

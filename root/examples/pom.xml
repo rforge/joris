@@ -3,16 +3,15 @@
 	xmlns="http://maven.apache.org/POM/4.0.0"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-        <parent>
-       	        <groupId>root</groupId>
-               	<artifactId>root</artifactId>
-	        <version>1.0.2-SNAPSHOT</version>
-        </parent>
+	<parent>
+		<groupId>org.r-project.joris</groupId>
+		<artifactId>root</artifactId>
+		<version>1.0.2-SNAPSHOT</version>
+	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.rosuda</groupId>
 	<artifactId>examples</artifactId>
-	
+
 	<name>rosuda-${project.parent.artifactId}-${project.artifactId}</name>
 	<description>J.O.R.I.S example collection</description>
 	<inceptionYear>2010</inceptionYear>

@@ -4,14 +4,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
         <parent>
-       	        <groupId>root</groupId>
+       	        <groupId>org.r-project.joris</groupId>
                	<artifactId>root</artifactId>
 	        <version>1.0.2-SNAPSHOT</version>
         </parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.rosuda</groupId>
-	<artifactId>root</artifactId>
+	<groupId>org.r-project.joris</groupId>
+	<artifactId>root-module</artifactId>
 	
 	<name>rosuda-${project.parent.artifactId}-${project.artifactId}</name>
 	<description>Model Repository - redesign</description>

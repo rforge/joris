@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<groupId>org.rosuda</groupId>
+		<groupId>org.r-project.joris</groupId>
 		<artifactId>infrastructure</artifactId>
 		<version>1.0.2-SNAPSHOT</version>
 	</parent>
@@ -13,57 +13,28 @@
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
+			<artifactId>util-logging</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>jr-connect</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>rengine</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>rserveengine</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit-dep</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-		</dependency>
 	</dependencies>
-<!--
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-install-plugin</artifactId>
-				<version>2.2</version>
-				<configuration>
-					<arguments>
-						<argument>-Dfile=${basedir}/lib/REngine.jar</argument>
-						<argument>-DgroupId=org.rosuda</argument>
-						<argument>-Dversion=0.63</argument>
-						<argument>-Dpackaging=jar</argument>
-					</arguments>
-					 mvn install:install-file -Dfile=lib\REngine.jar
-					-DgroupId=org.rosuda
-					-DartifactId=rengine -Dversion=0.63 -Dpackaging=jar -Dfile=${basedir}/lib/REngine.jar
-					\ -DgroupId=org.rosuda \ -DartifactId=rengine \ -Dversion=0.63 \
-					-Dpackaging=jar
-					mvn install:install-file -Dfile=lib\RserveEngine.jar
-					-DgroupId=org.rosuda
-					-DartifactId=rserveengine -Dversion=0.63 -Dpackaging=jar
-					-Dfile=${basedir}/lib/RserveEngine.jar
-					\ -DgroupId=org.rosuda \ -DartifactId=rengine \ -Dversion=0.63 \
-					-Dpackaging=jar 
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
--->
 	<build>
 		<plugins>
 			<plugin>

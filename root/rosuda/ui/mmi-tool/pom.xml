@@ -1,13 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
-		<groupId>org.rosuda</groupId>
+		<groupId>org.r-project.joris</groupId>
 		<artifactId>ui</artifactId>
 		<version>1.0.2-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.rosuda.ui</groupId>
 	<artifactId>mmi-tool</artifactId>
 	<packaging>jar</packaging>
 	<name>rosuda-${project.parent.artifactId}-${project.artifactId}</name>
@@ -18,49 +17,54 @@
 			<artifactId>hamcrest-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
+			<artifactId>util-logging</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>jr-connect</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- reference impl -->
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>jr-connect-rengine-impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>irexp-mapper</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>generic-type-mapper-filter</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>generic-type-restructure</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda.ui</groupId>
-			<artifactId>generic-type-visualizer</artifactId>
+			<groupId>org.r-project.joris</groupId>
+			<artifactId>ui-generic-type-visualizer</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>util-nodelist-calculator</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>commons-messagebus</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<!-- one implementatino of generic-service: -->
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>hibernate-service-impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -78,28 +82,28 @@
 			<artifactId>derbyclient</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda.ui</groupId>
-			<artifactId>swing-impl</artifactId>
+			<groupId>org.r-project.joris</groupId>
+			<artifactId>ui-swing-impl</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>jr-connection-mgr</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>infrastructure-db</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>commons-messagebus-testutil</artifactId>
 			<scope>test</scope>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.rosuda</groupId>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>test-data</artifactId>
 			<scope>test</scope>
 			<version>${project.version}</version>
@@ -136,18 +140,7 @@
 			<groupId>org.jfree</groupId>
 			<artifactId>jfreechart</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-		</dependency>
 	</dependencies>
-	<!-- <build> <finalName>mmitool</finalName> <plugins> <plugin> <groupId>org.apache.maven.plugins</groupId> 
-		<artifactId>maven-assembly-plugin</artifactId> <executions> <execution> <id>package-jar-with-dependencies</id> 
-		<phase>package</phase> <goals> <goal>single</goal> </goals> <configuration> 
-		<appendAssemblyId>false</appendAssemblyId> <descriptorRefs> <descriptorRef>jar-with-dependencies</descriptorRef> 
-		</descriptorRefs> <archive> <manifest> <mainClass>org.rosuda.ui.MainFrame</mainClass> 
-		</manifest> </archive> </configuration> </execution> </executions> </plugin> 
-		</plugins> </build> -->
 	<build>
 		<finalName>mmitool</finalName>
 		<plugins>
