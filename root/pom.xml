@@ -53,12 +53,6 @@
 
 	<build>
 		<plugins>
-			<!-- <plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>build-helper-maven-plugin</artifactId> 
-				<version>1.7</version> <executions> <execution> <id>attach-artifacts</id> 
-				<phase>validate</phase> <goals> <goal>attach-artifact</goal> </goals> <configuration> 
-				<artifacts> <artifact> <file>maven-artifacts/rengine-0.68</file> <type>jar</type> 
-				</artifact> < <artifact> <file>maven-artifacts/rserveengine-0.68</file> <type>jar</type> 
-				</artifact> </artifacts> </configuration> </execution> </executions> </plugin> -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>2.5.1</version>
@@ -115,6 +109,30 @@
 								<include>**/inttest/**/*Test.java</include>
 							</includes>
 						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>
@@ -388,7 +406,7 @@
 				<artifactId>jfreechart</artifactId>
 				<version>${org.jfree.jfreechart}</version>
 			</dependency>
-			
+
 			<!-- R -->
 			<dependency>
 				<groupId>org.r-project.joris</groupId>
@@ -464,5 +482,25 @@
 		<!--<repository> <id>Apache</id> <name>the Apache repo</name> <url>http://ftp.cica.es/mirrors/maven2/</url> 
 			<layout>default</layout> </repository> -->
 	</repositories>
+
+
+	<distributionManagement>
+		<repository>
+			<id>deployment</id>
+			<name>Internal Releases</name>
+			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+		</repository>
+		<snapshotRepository>
+			<id>deployment</id>
+			<name>Internal Snapshot Releases</name>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<scm>
+		<connection>scm:svn://scm.r-forge.r-project.org/svnroot/joris/root/</connection>
+		<developerConnection>scm:svn+ssh://ralfseger@scm.r-forge.r-project.org/svnroot/joris/root/</developerConnection>
+		<url>https://r-forge.r-project.org/scm/viewvc.php/root/?root=joris</url>
+	</scm>
 
 </project>
