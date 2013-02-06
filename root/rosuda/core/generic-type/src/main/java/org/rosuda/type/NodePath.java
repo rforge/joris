@@ -112,7 +112,6 @@ public interface NodePath {
 	}
 
 	public static NodePath parse(final TreePath treePath) {
-	    LogFactory.getLog(NodePath.Impl.class).warn("parsing TreePath (length="+treePath.getPathCount()+")" + treePath+" @"+Thread.currentThread().getStackTrace()[2]);
 	    final List<String> names = new ArrayList<String>();
 	    final List<Integer> numbers = new ArrayList<Integer>();
 
@@ -134,15 +133,12 @@ public interface NodePath {
 
 	// -- helper
 	private static NodePath generateStack(final List<String> names, final List<Integer> numbers) {
-	    LogFactory.getLog(NodePath.Impl.class).warn("generateStack(" + names + "," + numbers + ") .. startCount = "+ (names.size() - 1));
 	    NodePath path = null;
 	    for (int i = names.size() - 1; i >= 0; i--) {
-		LogFactory.getLog(NodePath.Impl.class).warn("generateStack pushing(" + names.get(i) + "," + numbers.get(i) + "," + path + ") @"+i);
 		final NodePath nextPath = new NodePath.Impl(new Identifier.Impl(names.get(i), numbers.get(i)), path);
 		path = nextPath;
-		LogFactory.getLog(NodePath.Impl.class).warn("generateStack path = "+nextPath);
 	    }
-	    LogFactory.getLog(NodePath.Impl.class).warn("... returning generated path = "+path);
+	    LogFactory.getLog(NodePath.Impl.class).warn("... returning generated path ("+names+","+numbers+",@"+Thread.currentThread().getStackTrace()[3]+") = "+path);
 	    return path;
 	}
     }

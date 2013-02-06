@@ -55,7 +55,7 @@ public class NodePathTest {
     // -- helper
     
     private void assertNodePathOfRootNext(final NodePath path) {
-	assertThat(path, notNullValue());
+	assertThat("path is a nullValue : "+path, path, notNullValue());
 	assertThat(path.hasNext(), equalTo(true));
 	assertThat(path.getId().getName(), equalTo("root"));
 	final NodePath next = path.next();
