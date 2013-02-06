@@ -7,8 +7,6 @@ import java.util.StringTokenizer;
 
 import javax.swing.tree.TreePath;
 
-import org.apache.commons.logging.LogFactory;
-
 public interface NodePath {
 
     public interface Identifier {
@@ -138,7 +136,6 @@ public interface NodePath {
 		final NodePath nextPath = new NodePath.Impl(new Identifier.Impl(names.get(i), numbers.get(i)), path);
 		path = nextPath;
 	    }
-	    LogFactory.getLog(NodePath.Impl.class).warn("... returning generated path ("+names+","+numbers+",@"+Thread.currentThread().getStackTrace()[3]+") = "+path);
 	    return path;
 	}
     }
