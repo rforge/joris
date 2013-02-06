@@ -134,11 +134,13 @@ public interface NodePath {
 
 	// -- helper
 	private static NodePath generateStack(final List<String> names, final List<Integer> numbers) {
-	    LogFactory.getLog(NodePath.Impl.class).warn("generateStack(" + names + "," + numbers + ")");
+	    LogFactory.getLog(NodePath.Impl.class).warn("generateStack(" + names + "," + numbers + ") .. startCount = "+ (names.size() - 1));
 	    NodePath path = null;
 	    for (int i = names.size() - 1; i >= 0; i--) {
+		LogFactory.getLog(NodePath.Impl.class).warn("generateStack pushing(" + names.get(i) + "," + names + "," + path + ") @"+i);
 		final NodePath nextPath = new NodePath.Impl(new Identifier.Impl(names.get(i), numbers.get(i)), path);
 		path = nextPath;
+		LogFactory.getLog(NodePath.Impl.class).warn("generateStack path = "+nextPath);
 	    }
 	    return path;
 	}
