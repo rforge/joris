@@ -112,7 +112,7 @@ public interface NodePath {
 	}
 
 	public static NodePath parse(final TreePath treePath) {
-	    LogFactory.getLog(NodePath.Impl.class).warn("parsing TreePath " + treePath);
+	    LogFactory.getLog(NodePath.Impl.class).warn("parsing TreePath (length="+treePath.getPathCount()+")" + treePath+" @"+Thread.currentThread().getStackTrace()[2]);
 	    final List<String> names = new ArrayList<String>();
 	    final List<Integer> numbers = new ArrayList<Integer>();
 
