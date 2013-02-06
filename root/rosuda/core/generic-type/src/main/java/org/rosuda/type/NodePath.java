@@ -7,6 +7,8 @@ import java.util.StringTokenizer;
 
 import javax.swing.tree.TreePath;
 
+import org.apache.commons.logging.LogFactory;
+
 public interface NodePath {
 
     public interface Identifier {
@@ -96,7 +98,7 @@ public interface NodePath {
 	    NodePath path = this;
 	    do {
 		appendToPathAsString(builder, path);
-		path = path.next();		
+		path = path.next();
 	    } while (path != null);
 	    return builder.toString();
 	}
@@ -105,28 +107,34 @@ public interface NodePath {
 	    final Identifier identifier = path.getId();
 	    builder.append("/").append(identifier.getName());
 	    if (identifier.getIndex() != 0) {
-	        builder.append("[").append(identifier.getIndex()).append("]");
+		builder.append("[").append(identifier.getIndex()).append("]");
 	    }
 	}
 
 	public static NodePath parse(final TreePath treePath) {
+	    LogFactory.getLog(NodePath.Impl.class).warn("parsing TreePath " + treePath);
 	    final List<String> names = new ArrayList<String>();
 	    final List<Integer> numbers = new ArrayList<Integer>();
 
 	    final List<Object> parts = Arrays.asList(treePath.getPath());
 	    for (int i = 0; i < parts.size(); i++) {
 		final Object ithPart = parts.get(i);
-		if (ithPart == null || ithPart.toString().trim().length() < 1) 
-		    continue;
-		final String name = ithPart.toString();
-		names.add(name);
-		numbers.add(0);
+		if (isValid(ithPart)) {
+		    final String name = ithPart.toString();
+		    names.add(name);
+		    numbers.add(0);
+		}
 	    }
 	    return generateStack(names, numbers);
 	}
 
+	private static boolean isValid(Object ithPart) {
+	    return ithPart != null && ithPart.toString().length() > 0;
+	}
+
 	// -- helper
 	private static NodePath generateStack(final List<String> names, final List<Integer> numbers) {
+	    LogFactory.getLog(NodePath.Impl.class).warn("generateStack(" + names + "," + numbers + ")");
 	    NodePath path = null;
 	    for (int i = names.size() - 1; i >= 0; i--) {
 		final NodePath nextPath = new NodePath.Impl(new Identifier.Impl(names.get(i), numbers.get(i)), path);
