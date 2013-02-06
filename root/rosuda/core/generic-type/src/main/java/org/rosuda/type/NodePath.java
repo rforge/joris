@@ -137,7 +137,7 @@ public interface NodePath {
 	    LogFactory.getLog(NodePath.Impl.class).warn("generateStack(" + names + "," + numbers + ") .. startCount = "+ (names.size() - 1));
 	    NodePath path = null;
 	    for (int i = names.size() - 1; i >= 0; i--) {
-		LogFactory.getLog(NodePath.Impl.class).warn("generateStack pushing(" + names.get(i) + "," + names + "," + path + ") @"+i);
+		LogFactory.getLog(NodePath.Impl.class).warn("generateStack pushing(" + names.get(i) + "," + numbers.get(i) + "," + path + ") @"+i);
 		final NodePath nextPath = new NodePath.Impl(new Identifier.Impl(names.get(i), numbers.get(i)), path);
 		path = nextPath;
 		LogFactory.getLog(NodePath.Impl.class).warn("generateStack path = "+nextPath);

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertThat;
 
 import javax.swing.tree.TreePath;
 
+import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 
 public class NodePathTest {
@@ -34,6 +35,7 @@ public class NodePathTest {
     public void nodePathFromTreeCannotContainNull() {
 	final TreePath treepath = new TreePath(new Object[] { null, "root", "tmp" });
 	final NodePath path = NodePath.Impl.parse(treepath);
+	LogFactory.getLog(NodePathTest.class).warn("*** Result of parse was "+path);
 	assertNodePathOfRootNext(path);
     }
 
