@@ -142,6 +142,7 @@ public interface NodePath {
 		path = nextPath;
 		LogFactory.getLog(NodePath.Impl.class).warn("generateStack path = "+nextPath);
 	    }
+	    LogFactory.getLog(NodePath.Impl.class).warn("... returning generated path = "+path);
 	    return path;
 	}
     }
