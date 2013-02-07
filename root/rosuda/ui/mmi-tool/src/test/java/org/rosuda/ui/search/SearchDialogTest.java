@@ -105,9 +105,7 @@ public class SearchDialogTest extends MVPTest<SearchDialogModel, SearchDialogVie
 	view.getNodeConstraintType().setValue(ConstraintType.Name);
 	clickAddToTreeButton();
 
-	assertThat(model.getSearchTreeModel().getRoot(), notNullValue());
 	assertThat(((SearchDataNode) model.getSearchTreeModel().getRoot()).getName(), equalTo("nodeName"));
-
     }
 
     @Test
