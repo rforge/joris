@@ -8,6 +8,9 @@ class MockedViewMethodFactory {
     private static final Log LOG = LogFactory.getLog(MockedViewMethodFactory.class);
 
     static Object createDelegate(final Class<?> methodReturnClass) {
+	if (void.class.isAssignableFrom(methodReturnClass)) {
+	    return null;
+	}
 	final StringBuilder className = new StringBuilder("org.rosuda.ui.test.mock.").append(methodReturnClass.getSimpleName()).append("Mock");
 	try {
 	    final Class<?> mockDelegateClass = Class.forName(className.toString());
