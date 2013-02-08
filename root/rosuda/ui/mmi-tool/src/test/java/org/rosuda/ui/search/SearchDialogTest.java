@@ -12,8 +12,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import javax.swing.event.TreeModelEvent;
 import javax.swing.tree.TreePath;
 
+import org.apache.log4j.lf5.viewer.categoryexplorer.TreeModelAdapter;
 import org.jdesktop.swingx.treetable.TreeTableModel;
 import org.junit.Test;
 import org.rosuda.graph.service.search.Relation;
@@ -99,11 +101,28 @@ public class SearchDialogTest extends MVPTest<SearchDialogModel, SearchDialogVie
     @Test
     public void whenISetANameAndConstraintAndClickInsertIntoAnEmptyTreeIGetANewRoot() {
 	model.getSearchTreeModel().setRoot(null);
-	view.getTreeSelectionModel().getValue().setSelectionPath(null);
-
+	
 	view.getNodeNameInput().setValue("nodeName");
 	view.getNodeConstraintType().setValue(ConstraintType.Name);
+
+	final List<TreeModelEvent> events = new ArrayList<TreeModelEvent>();
+	model.getSearchTreeModel().addTreeModelListener(new TreeModelAdapter(){
+	    @Override
+	    public void treeNodesInserted(TreeModelEvent e) {
+	        org.slf4j.LoggerFactory.getLogger(SearchDialogTest.class).warn("*** INSERT EVENT");
+	        events.add(e);
+	        super.treeNodesInserted(e);
+	    }
+	    @Override
+	    public void treeStructureChanged(TreeModelEvent e) {
+		events.add(e);
+		org.slf4j.LoggerFactory.getLogger(SearchDialogTest.class).warn("*** STRUCTURE CHANGE");
+	        super.treeStructureChanged(e);
+	    }
+	});
 	clickAddToTreeButton();
+	
+	org.slf4j.LoggerFactory.getLogger(SearchDialogTest.class).warn(">>> recorded Events: "+events);
 
 	assertThat(((SearchDataNode) model.getSearchTreeModel().getRoot()).getName(), equalTo("nodeName"));
     }
