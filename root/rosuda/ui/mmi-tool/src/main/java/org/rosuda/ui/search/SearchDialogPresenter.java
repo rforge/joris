@@ -97,11 +97,12 @@ public class SearchDialogPresenter<C> implements MVP.Presenter<SearchDialogModel
 
 	@Override
 	public void onClick(ClickEvent event) {
-	    // TODO Auto-generated method stub
-
-	    final TreePath[] pathToParent = view.getTreeSelectionModel().getValue().getSelectionPaths();
-	    processSelectedTreePath.doWithNode(pathToParent, view.getNodeNameInput().getValue(), view.getNodeConstraintType().getValue());
-
+	    if (view.getTreeSelectionModel().getValue().isSelectionEmpty()) {
+		processSelectedTreePath.doWithNode(null, view.getNodeNameInput().getValue(), view.getNodeConstraintType().getValue());
+	    } else {
+		final TreePath[] pathToParent = view.getTreeSelectionModel().getValue().getSelectionPaths();
+		processSelectedTreePath.doWithNode(pathToParent, view.getNodeNameInput().getValue(), view.getNodeConstraintType().getValue());
+	    }
 	}
     }
 
