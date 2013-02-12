@@ -55,7 +55,8 @@ public class DerbyContext extends ProcessContext {
 
     Process processStartScript() throws IOException {
 	final String classPath = System.getProperty("java.class.path");
-	final String startScript = MessageFormat.format(derbyStarterProcess, classPath, dataSourceConfiguration.getPort());
+	final String derbyOpts = System.getProperty("DERBY_OPTS");
+	final String startScript = MessageFormat.format(derbyStarterProcess, classPath, dataSourceConfiguration.getPort(), derbyOpts);
 	log.info("starting database by command:\r\n>" + startScript);
 	final Process process = createProcessForArg(startScript);
 	processStartedByContext = process != null;
@@ -69,7 +70,8 @@ public class DerbyContext extends ProcessContext {
 
     void processStopScript() throws IOException {
 	final String classPath = System.getProperty("java.class.path");
-	final String startScript = MessageFormat.format(derbyStopperProcess, classPath, dataSourceConfiguration.getPort());
+	final String derbyOpts = System.getProperty("DERBY_OPTS");
+	final String startScript = MessageFormat.format(derbyStopperProcess, classPath, dataSourceConfiguration.getPort(), derbyOpts);
 	log.info("starting database by command:\r\n>" + startScript);
 	createProcessForArg(startScript);
     }

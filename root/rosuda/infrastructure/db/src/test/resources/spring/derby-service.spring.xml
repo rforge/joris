@@ -28,12 +28,12 @@
 
 	<bean id="derbyStartCommand" class="java.lang.String">
 		<constructor-arg
-			value="java -cp {0} org.apache.derby.drda.NetworkServerControl start -noSecurityManager -p {1}" />
+			value="java -cp {0} org.apache.derby.drda.NetworkServerControl start -noSecurityManager -p {1} {2}" />
 	</bean>
 
 	<bean id="derbyStopCommand" class="java.lang.String">
 		<constructor-arg
-			value="java -cp {0} org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager -p {1}" />
+			value="java -cp {0} org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager -p {1} {2}" />
 	</bean>
 
 	<bean name="derbyContext" class="org.rosuda.util.db.DerbyContext" />
