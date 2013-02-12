@@ -28,12 +28,12 @@
 
 	<bean id="derbyStartCommand" class="java.lang.String">
 		<constructor-arg
-			value="java -cp {0} org.apache.derby.drda.NetworkServerControl start -noSecurityManager -p 1600" />
+			value="java -cp {0} org.apache.derby.drda.NetworkServerControl start -noSecurityManager -p {1}" />
 	</bean>
 
 	<bean id="derbyStopCommand" class="java.lang.String">
 		<constructor-arg
-			value="java -cp {0} org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager -p 1600" />
+			value="java -cp {0} org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager -p {1}" />
 	</bean>
 
 	<bean name="derbyContext" class="org.rosuda.util.db.DerbyContext" />
@@ -54,6 +54,7 @@
 		<property name="url" value="${datasource.url}" />
 		<property name="username" value="${datasource.username}" />
 		<property name="password" value="${datasource.password}" />
+		<property name="port" value="${datasource.port}" />
 	</bean>
 	
 	<bean id="dataSource" factory-bean="databaseMgr-derby"

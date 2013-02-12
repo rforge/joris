@@ -13,6 +13,7 @@ import javax.sql.DataSource;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.rosuda.util.db.DataSourceConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
 import org.springframework.test.context.ContextConfiguration;
@@ -25,13 +26,16 @@ public class DatabaseSetupTest {
 
 	@Autowired
 	private DataSource dataSource;
+	
+	@Autowired
+	private DataSourceConfiguration config;
 
 	@Test(timeout = 30000)
 	public void testUserDatasourceAvailable() {
 		assertNotNull("no user data source could be created", dataSource);
 		boolean bound = false;
 		try {
-			final ServerSocket socket = new ServerSocket(portFromDataSourceConfigurationFile(3529));
+			final ServerSocket socket = new ServerSocket(Integer.parseInt(config.getPort()));
 			assertFalse(socket.isClosed());
 			assertTrue(socket.isBound());
 			bound = socket.isBound();
@@ -41,9 +45,5 @@ public class DatabaseSetupTest {
 			fail("db port is not open");
 		}
 		assertTrue("erwarteter Socket ist nicht belegt", bound);
-	}
-
-	private int portFromDataSourceConfigurationFile(int port) {
-	    return port;
 	}
 }
