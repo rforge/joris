@@ -31,7 +31,7 @@ public class DatabaseSetupTest {
 		assertNotNull("no user data source could be created", dataSource);
 		boolean bound = false;
 		try {
-			final ServerSocket socket = new ServerSocket(1600);
+			final ServerSocket socket = new ServerSocket(portFromDataSourceConfigurationFile(3306));
 			assertFalse(socket.isClosed());
 			assertTrue(socket.isBound());
 			bound = socket.isBound();
@@ -41,5 +41,9 @@ public class DatabaseSetupTest {
 			fail("db port is not open");
 		}
 		assertTrue("erwarteter Socket ist nicht belegt", bound);
+	}
+
+	private int portFromDataSourceConfigurationFile(int port) {
+	    return port;
 	}
 }
