@@ -11,6 +11,7 @@ import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.rosuda.util.process.ProcessContext;
+import org.rosuda.util.process.ShellContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Required;
@@ -19,16 +20,25 @@ public class DerbyContext extends ProcessContext {
 
     private static final Log log = LogFactory.getLog(DerbyContext.class);
 
+    public static final String DERBY_OPTS = "DERBY_OPTS";
+
     private boolean processStartedByContext = false;
     private DataSource dataSource;
     private String derbyStarterProcess;
     private String derbyStopperProcess;
     private DataSourceConfiguration dataSourceConfiguration;
-
+    private ShellContext shellContext;
+    
     void setDataSource(final DataSource dataSource) {
 	this.dataSource = dataSource;
     }
 
+    @Autowired
+    @Required
+    public void setShellContext(ShellContext shellContext) {
+	this.shellContext = shellContext;
+    }
+    
     @Autowired
     @Required
     public void setDataSourceConfiguration(final DataSourceConfiguration config) {
@@ -54,9 +64,7 @@ public class DerbyContext extends ProcessContext {
     }
 
     Process processStartScript() throws IOException {
-	final String classPath = System.getProperty("java.class.path");
-	final String derbyOpts = System.getProperty("DERBY_OPTS");
-	final String startScript = MessageFormat.format(derbyStarterProcess, classPath, dataSourceConfiguration.getPort(), derbyOpts);
+	final String startScript = createShellCall(derbyStarterProcess);
 	log.info("starting database by command:\r\n>" + startScript);
 	final Process process = createProcessForArg(startScript);
 	processStartedByContext = process != null;
@@ -69,13 +77,18 @@ public class DerbyContext extends ProcessContext {
     }
 
     void processStopScript() throws IOException {
-	final String classPath = System.getProperty("java.class.path");
-	final String derbyOpts = System.getProperty("DERBY_OPTS");
-	final String startScript = MessageFormat.format(derbyStopperProcess, classPath, dataSourceConfiguration.getPort(), derbyOpts);
+	final String startScript = createShellCall(derbyStopperProcess);
 	log.info("starting database by command:\r\n>" + startScript);
 	createProcessForArg(startScript);
     }
 
+    protected String createShellCall(final String templateString) {
+	String derbyOpts = shellContext.getProperty(DERBY_OPTS);
+	if (derbyOpts == null)
+	    derbyOpts = "";
+	return MessageFormat.format(templateString, shellContext.getClasspath(), dataSourceConfiguration.getPort(), derbyOpts);
+    }
+    
     private DataSource fromConfig(DataSourceConfiguration userProperties) {
 	BasicDataSource basicDataSource = new BasicDataSource();
 	userProperties.getPort();

@@ -66,6 +66,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.12</version>
 				<configuration>
+					<forkMode>never</forkMode>
 					<!-- Skip the default running of this plug-in (or everything is run 
 						twice...see below) -->
 					<skip>true</skip>
@@ -168,12 +169,6 @@
 				<groupId>org.mockito</groupId>
 				<artifactId>mockito-core</artifactId>
 				<version>1.9.0</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>com.googlecode.jmockit</groupId>
-				<artifactId>jmockit</artifactId>
-				<version>0.999.16</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>

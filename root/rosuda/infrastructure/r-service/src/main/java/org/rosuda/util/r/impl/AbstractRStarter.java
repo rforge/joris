@@ -8,9 +8,9 @@ import java.util.List;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.rosuda.irconnect.IConnectionFactory;
 import org.rosuda.irconnect.IRConnection;
 import org.rosuda.irconnect.proxy.RConnectionProxy;
-import org.rosuda.rengine.REngineConnectionFactory;
 import org.rosuda.util.process.AbstractMaxTimeoutProcessProvider;
 import org.rosuda.util.process.ProcessStarter;
 import org.rosuda.util.process.RUNSTATE;
@@ -63,7 +63,7 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
 
 		process = setup.createProcessForArgs(runtimeArgs);
 		// append loggers
-		final IRConnection rcon = new RetryStarter().create(process, this.getClass().getSimpleName(), runStateHolder, isBlocking());
+		final IRConnection rcon = new RetryStarter(setup.connectionFactory).create(process, this.getClass().getSimpleName(), runStateHolder, isBlocking());
 		if (rcon != null) {
 		    rcon.close();
 		    runStateHolder.setRunState(RUNSTATE.RUNNING);
@@ -82,9 +82,15 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
 
     private static final class RetryStarter extends AbstractMaxTimeoutProcessProvider<IRConnection> {
 
+	private final IConnectionFactory factory;
+	
+	private RetryStarter(final IConnectionFactory factory) {
+	    this.factory = factory;
+	}
+	
 	@Override
 	protected IRConnection createResultInstance() {
-	    return RConnectionProxy.createProxy(REngineConnectionFactory.getInstance().createRConnection(null), null);
+	    return RConnectionProxy.createProxy(factory.createRConnection(null), null);
 	}
 
     }

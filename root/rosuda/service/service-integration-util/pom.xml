@@ -13,11 +13,6 @@
 	<url>http://maven.apache.org</url>
 	<dependencies>
 		<dependency>
-			<groupId>com.googlecode.jmockit</groupId>
-			<artifactId>jmockit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>test-data-resources</artifactId>
 			<version>${project.parent.version}</version>

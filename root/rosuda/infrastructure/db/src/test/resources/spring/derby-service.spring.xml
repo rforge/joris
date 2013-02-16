@@ -26,6 +26,8 @@
 			ONLY" /> -->
 	</bean>
 
+	<bean id="derbyShellContext" class="org.rosuda.util.process.ShellContext"/>
+	
 	<bean id="derbyStartCommand" class="java.lang.String">
 		<constructor-arg
 			value="java -cp {0} org.apache.derby.drda.NetworkServerControl start -noSecurityManager -p {1} {2}" />
@@ -36,7 +38,9 @@
 			value="java -cp {0} org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager -p {1} {2}" />
 	</bean>
 
-	<bean name="derbyContext" class="org.rosuda.util.db.DerbyContext" />
+	<bean name="derbyContext" class="org.rosuda.util.db.DerbyContext">
+		<property name="shellContext" ref="derbyShellContext"/>
+	</bean>
 
 	<bean name="derbyConnectionFactory" class="org.rosuda.util.db.DatabaseStarterFactory">
 		<property name="context" ref="derbyContext" />
