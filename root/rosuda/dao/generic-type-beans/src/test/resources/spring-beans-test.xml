@@ -16,7 +16,7 @@
 	<context:property-placeholder location="classpath:spring/jdbc.properties" />
 
 	<!-- org.springframework.jdbc.datasource.DriverManagerDataSource -->
-<context:property-placeholder location="classpath:/spring/jdbc.properties" />
+	<context:property-placeholder location="classpath:/spring/jdbc.properties" />
 
 	<!-- org.springframework.jdbc.datasource.DriverManagerDataSource -->
 	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
@@ -34,7 +34,7 @@
 		<property name="packagesToScan" value="org.rosuda.graph.domain" />
 		<property name="hibernateProperties">
 			<props>
-				<prop key="hibernate.dialect">org.hibernate.dialect.DerbyDialect</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
 				<prop key="hibernate.show_sql">true</prop>
 				<prop key="hibernate.format.sql">true</prop>
 				<prop key="hibernate.hbm2ddl.auto">create-drop</prop>

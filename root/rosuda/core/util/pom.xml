@@ -15,10 +15,11 @@
 	<packaging>pom</packaging>
 
 	<modules>
+		<module>logging</module>
+		<module>java</module>
 		<module>calculator</module>
 		<module>combinatorics</module>
 		<module>nodelist-calculator</module>
-		<module>logging</module>
 		<module>spring</module>
 	</modules>
 </project>

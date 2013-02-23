@@ -2,21 +2,16 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<parent>
 		<groupId>org.r-project.joris</groupId>
-		<artifactId>infrastructure</artifactId>
+		<artifactId>util</artifactId>
 		<version>1.0.2-SNAPSHOT</version>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>process</artifactId>
+	<artifactId>util-java</artifactId>
 	<packaging>jar</packaging>
 	<name>rosuda-${parent.artifactId}-${project.artifactId}</name>
 	<url>http://maven.apache.org</url>
 	<dependencies>
-		<dependency>
-			<groupId>org.r-project.joris</groupId>
-			<artifactId>util-java</artifactId>
-			<version>${project.parent.version}</version>
-		</dependency>
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>util-logging</artifactId>
@@ -27,27 +22,4 @@
 			<artifactId>junit-dep</artifactId>
 		</dependency>
 	</dependencies>
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-				<executions>
-					<execution>
-						<id>surefire-it</id>
-						<phase>integration-test</phase>
-						<goals>
-							<goal>test</goal>
-						</goals>
-						<configuration>
-							<skip>false</skip>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
 </project>

@@ -2,7 +2,9 @@ package org.rosuda.util.db;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
-
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.*;
 
 import org.hamcrest.core.CombinableMatcher;
@@ -12,81 +14,71 @@ import org.rosuda.util.process.ShellContext;
 
 public class DerbyContextTest {
 
-    public class TestDataSourceConfiguration extends DataSourceConfiguration {
-	private String port;
-	
-	@Override
-	public String getPort() {
-	    return port;
-	}
-    }
-
-    private class TestShellContext extends ShellContext {
-	
-	private String property = null;
-	private String classpath = "classpath";
-	
-	@Override
-	public String getClasspath() {
-	    return classpath;
-	}
-	
-	@Override
-	public String getProperty(String propertyName) {
-	    return property;
-	}
-    }
-
     private DerbyContext derbyContext;
-    private TestShellContext environmentStub;
-    private TestDataSourceConfiguration datasourceConfigurationStub;
+    private ShellContext environmentStub;
+    private DataSourceConfiguration datasourceConfigurationStub;
     
     @Before
     public void setUp() {
 	derbyContext = new DerbyContext();
-	environmentStub = new TestShellContext();
+	environmentStub = mock(ShellContext.class);
 	derbyContext.setShellContext(environmentStub);
-	datasourceConfigurationStub = new TestDataSourceConfiguration();
+	datasourceConfigurationStub = new DataSourceConfiguration();
+	datasourceConfigurationStub.setUrl(DataSourceConfigurationTest.A_DERBY_URL);
 	derbyContext.setDataSourceConfiguration(datasourceConfigurationStub );
     }
     
     @Test
     public void theTemplateStringCreatesAnEnvironmentSpecificShellCall() {
-	datasourceConfigurationStub.port = "1600";
-	environmentStub.property = "DERBY_PROPERTY";
-
-	assertEquals("arg1 classpath arg2 1600 arg3 DERBY_PROPERTY",derbyContext.createShellCall("arg1 {0} arg2 {1} arg3 {2}"));
+	when(environmentStub.getClasspath()).thenReturn("classpath");
+	when(environmentStub.getProperty(eq(DerbyContext.DERBY_PORT))).thenReturn("1600");
+	when(environmentStub.getProperty(eq(DerbyContext.DERBY_HOST))).thenReturn("DERBY_PROPERTY");
+	
+	assertEquals("arg1 classpath arg2 -p 1600 -h DERBY_PROPERTY",derbyContext.createShellCall("arg1 {0} arg2{1}"));
     }
     
     @Test
     public void whenAShellPropertyIsNullTheArgumentIsReplacedByEmptyString() {
-	datasourceConfigurationStub.port = "1600";
-	environmentStub.property = null;
+	when(environmentStub.getClasspath()).thenReturn("classpath");
+	when(environmentStub.getProperty(eq(DerbyContext.DERBY_PORT))).thenReturn("1600");
+	when(environmentStub.getProperty(eq(DerbyContext.DERBY_HOST))).thenReturn(null);
 	
-	assertEquals("arg1 classpath arg2 1600 arg3 ",derbyContext.createShellCall("arg1 {0} arg2 {1} arg3 {2}"));	
+	assertEquals("arg1 classpath arg2 -p 1600",derbyContext.createShellCall("arg1 {0} arg2{1}"));
+    }
+    
+    @Test
+    public void whenNoPortIsSetFromEnvironmentThePortFromTheConfigIsUsed() {
+	when(environmentStub.getClasspath()).thenReturn(System.getProperty("java.class.path"));
+	when(environmentStub.getProperty(eq(DerbyContext.DERBY_PORT))).thenReturn(null);
+	when(environmentStub.getProperty(eq(DerbyContext.DERBY_HOST))).thenReturn(null);
+	
+	assertThat(derbyContext.createShellCall("java -cp {0} org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager{1}"),
+		CombinableMatcher.<String>both(startsWith("java -cp ")).and(endsWith(" org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager -p 3529")));
+		
     }
     
     @Test
     public void theReferenceCommandFormatWorksWithoutEnvironmentVariable() {
-	datasourceConfigurationStub.port = "3529";
-	environmentStub.classpath = System.getProperty("java.class.path");
-	environmentStub.property = null;
+	when(environmentStub.getClasspath()).thenReturn(System.getProperty("java.class.path"));
+	when(environmentStub.getProperty(eq(DerbyContext.DERBY_PORT))).thenReturn("3529");
+	when(environmentStub.getProperty(eq(DerbyContext.DERBY_HOST))).thenReturn(null);
 	
-	assertThat(derbyContext.createShellCall("java -cp {0} org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager -p {1} {2}"),
-		CombinableMatcher.<String>both(startsWith("java -cp ")).and(endsWith(" org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager -p 3529 ")));
+	assertThat(derbyContext.createShellCall("java -cp {0} org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager{1}"),
+		CombinableMatcher.<String>both(startsWith("java -cp ")).and(endsWith(" org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager -p 3529")));
 		
     }
     
     @Test
     public void theReferenceCommandFormatWorksWithEnvironmentVariable() {
 	
-	datasourceConfigurationStub.port = "3529";
-	environmentStub.classpath = System.getProperty("java.class.path");
-	environmentStub.property = "-h $OPENSHIFT_INTERNAL_IP";
+	when(environmentStub.getClasspath()).thenReturn(System.getProperty("java.class.path"));
+	when(environmentStub.getProperty(eq(DerbyContext.DERBY_PORT))).thenReturn("3529");
+	when(environmentStub.getProperty(eq(DerbyContext.DERBY_HOST))).thenReturn("$OPENSHIFT_INTERNAL_IP");
 	
-	assertThat(derbyContext.createShellCall("java -cp {0} org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager -p {1} {2}"),
+	assertThat(derbyContext.createShellCall("java -cp {0} org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager{1}"),
 		CombinableMatcher.<String>both(startsWith("java -cp ")).and(
 			endsWith(" org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager -p 3529 -h $OPENSHIFT_INTERNAL_IP")));
 	
     }
+    
 }

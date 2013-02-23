@@ -20,8 +20,9 @@ public class DerbyContext extends ProcessContext {
 
     private static final Log log = LogFactory.getLog(DerbyContext.class);
 
-    public static final String DERBY_OPTS = "DERBY_OPTS";
-
+    public static final String DERBY_HOST = "DERBY_HOST";
+    public static final String DERBY_PORT = "DERBY_PORT";
+    
     private boolean processStartedByContext = false;
     private DataSource dataSource;
     private String derbyStarterProcess;
@@ -37,12 +38,14 @@ public class DerbyContext extends ProcessContext {
     @Required
     public void setShellContext(ShellContext shellContext) {
 	this.shellContext = shellContext;
+	joinDataSourceConfigWithShellContext();
     }
     
     @Autowired
     @Required
     public void setDataSourceConfiguration(final DataSourceConfiguration config) {
 	this.dataSourceConfiguration = config;
+	joinDataSourceConfigWithShellContext();
     }
 
     @Autowired
@@ -83,15 +86,22 @@ public class DerbyContext extends ProcessContext {
     }
 
     protected String createShellCall(final String templateString) {
-	String derbyOpts = shellContext.getProperty(DERBY_OPTS);
-	if (derbyOpts == null)
-	    derbyOpts = "";
-	return MessageFormat.format(templateString, shellContext.getClasspath(), dataSourceConfiguration.getPort(), derbyOpts);
+	StringBuilder derbyOpts = new StringBuilder();
+	String derbyPort = shellContext.getProperty(DERBY_PORT);
+	String derbyHost = shellContext.getProperty(DERBY_HOST);
+	if (derbyPort != null) {
+	    derbyOpts.append(" -p ").append(derbyPort);
+	} else {
+	    derbyOpts.append(" -p ").append(dataSourceConfiguration.getPort());
+	}
+	if (derbyHost != null) {
+	    derbyOpts.append(" -h ").append(derbyHost);
+	}
+	return MessageFormat.format(templateString, shellContext.getClasspath(), derbyOpts.toString());
     }
     
     private DataSource fromConfig(DataSourceConfiguration userProperties) {
 	BasicDataSource basicDataSource = new BasicDataSource();
-	userProperties.getPort();
 	basicDataSource.setDriverClassName(userProperties.getDriverClassName());
 	basicDataSource.setUrl(userProperties.getUrl());
 	basicDataSource.setUsername(userProperties.getUsername());
@@ -113,6 +123,12 @@ public class DerbyContext extends ProcessContext {
 	return false;
     }
 
+    private void joinDataSourceConfigWithShellContext() {
+	if (shellContext != null && dataSourceConfiguration != null) {
+	   dataSourceConfiguration.processEnvironmentConfiguration(shellContext); 
+	}
+    }
+    
     private boolean canCreateConnectionFromDataSource(final DataSource aDataSource) {
 	Connection con = null;
 	try {

@@ -7,7 +7,7 @@
 		<version>1.0.2-SNAPSHOT</version>
 	</parent>
 	<artifactId>hibernate-dao-impl</artifactId>
-  <name>rosuda-${project.parent.artifactId}-${project.artifactId}</name>
+	<name>rosuda-${project.parent.artifactId}-${project.artifactId}</name>
 	<dependencies>
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
@@ -25,13 +25,8 @@
 			<artifactId>junit-dep</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derby</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.derby</groupId>
-			<artifactId>derbyclient</artifactId>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -70,7 +65,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-		</dependency>	
+		</dependency>
 		<dependency>
 			<groupId>javassist</groupId>
 			<artifactId>javassist</artifactId>

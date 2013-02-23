@@ -11,10 +11,14 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<artifactId>infrastructure-db</artifactId>
-  <name>rosuda-${project.parent.artifactId}-${project.artifactId}</name>
+	<name>rosuda-${project.parent.artifactId}-${project.artifactId}</name>
 	<description>utility package to use the derby database as a service</description>
 	<packaging>jar</packaging>
 	<dependencies>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-core</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>util-logging</artifactId>
