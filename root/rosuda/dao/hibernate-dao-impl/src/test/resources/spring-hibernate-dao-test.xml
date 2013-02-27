@@ -32,10 +32,9 @@
 		<property name="hibernateProperties">
 			<props>
 				<prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect</prop>
-				<prop key="hibernate.show_sql">true</prop>
-				<prop key="hibernate.format.sql">true</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.format.sql">false</prop>
 				<prop key="hibernate.hbm2ddl.auto">update</prop>
-				<prop key="hibernate.hbm2ddl.auto">create-drop</prop>
 			</props>
 		</property>
 	</bean>

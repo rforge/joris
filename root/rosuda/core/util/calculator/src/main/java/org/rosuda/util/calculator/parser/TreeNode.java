@@ -96,12 +96,6 @@ public class TreeNode {
 		for (int i = 0 ; i < children.size() ; i++) {
 			boolean childEquals = children.get(i).equals(node.getChildren().get(i));
 			same = same && childEquals;
-			/** debug
-			if (!childEquals) {
-				System.out.println("difference at node "+this+" child#"+i);
-				System.out.println("this.child = "+children.get(i));
-				System.out.println("node.child = "+node.children.get(i));
-			} **/
 		}
 		return same;
 	}

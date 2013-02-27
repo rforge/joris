@@ -7,17 +7,8 @@
 			<param name="ConversionPattern" value="%5p [%t] (%F:%L) - %m%n" />
 		</layout>
 	</appender>
-	<appender name="R" class="org.apache.log4j.RollingFileAppender">
-		<param name="file" value="target/test-dao.log" />
-		<param name="MaxFileSize" value="100KB" />
-		<!-- Keep one backup file -->
-		<param name="MaxBackupIndex" value="1" />
-		<layout class="org.apache.log4j.PatternLayout">
-			<param name="ConversionPattern" value="%p %t %c - %m%n" />
-		</layout>
-	</appender>
-	<appender name="HIBERNATE" class="org.apache.log4j.RollingFileAppender">
-		<param name="file" value="target/hibernate.log" />
+	<appender name="LOGFILE" class="org.apache.log4j.RollingFileAppender">
+		<param name="file" value="joris.log" />
 		<param name="MaxFileSize" value="100KB" />
 		<!-- Keep one backup file -->
 		<param name="MaxBackupIndex" value="1" />
@@ -26,12 +17,12 @@
 		</layout>
 	</appender>
 	<logger name="org.hibernate">
-		<level value="ALL,TRACE,DEBUG,INFO" />
-		<appender-ref ref="HIBERNATE" />
+		<level value="WARN" />
+		<appender-ref ref="LOGFILE" />
 	</logger>
 	<root>
-		<priority value="debug" />
+		<priority value="ERROR" />
 		<appender-ref ref="stdout" />
-		<appender-ref ref="R" />
+		<appender-ref ref="LOGFILE" />
 	</root>
 </log4j:configuration>

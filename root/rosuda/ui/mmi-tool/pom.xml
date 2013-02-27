@@ -19,59 +19,60 @@
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>util-logging</artifactId>
-			<version>${project.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>jr-connect</artifactId>
-			<version>${project.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<!-- reference impl -->
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>jr-connect-rengine-impl</artifactId>
-			<version>${project.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>irexp-mapper</artifactId>
-			<version>${project.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>generic-type-mapper-filter</artifactId>
-			<version>${project.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>generic-type-restructure</artifactId>
-			<version>${project.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>ui-generic-type-visualizer</artifactId>
-			<version>${project.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>util-nodelist-calculator</artifactId>
-			<version>${project.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>commons-messagebus</artifactId>
-			<version>${project.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<!-- one implementatino of generic-service: -->
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>hibernate-service-impl</artifactId>
-			<version>${project.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<!-- database libraries -->
 		<dependency>
 			<groupId>com.google.code</groupId>
 			<artifactId>log4jdbc4</artifactId>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.derby</groupId>
@@ -84,29 +85,29 @@
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>ui-swing-impl</artifactId>
-			<version>${project.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>jr-connection-mgr</artifactId>
-			<version>${project.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>infrastructure-db</artifactId>
-			<version>${project.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>commons-messagebus-testutil</artifactId>
 			<scope>test</scope>
-			<version>${project.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>test-data</artifactId>
 			<scope>test</scope>
-			<version>${project.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.swixml</groupId>
@@ -169,7 +170,7 @@
 									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 									<manifestEntries>
 										<Main-Class>org.rosuda.ui.MainFrame</Main-Class>
-										<Build-Number>${project.version}</Build-Number>
+										<Build-Number>${project.parent.version}</Build-Number>
 									</manifestEntries>
 								</transformer>
 								<transformer

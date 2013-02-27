@@ -46,6 +46,7 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
 
     @Override
     public final void start() {
+	log.warn("****" + this.getClass() + "****AbstractRStarter.start() with fileLocations " + fileLocations);
 	for (final File startFile : fileLocations) {
 	    if (!startFile.exists()) {
 		log.info("skipping configured but not present r start file \"" + startFile.getAbsolutePath() + "\"");
@@ -60,10 +61,12 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
 		    sb.append(" ");
 		}
 		log.info(sb.toString());
-
+		log.warn("****" + this.getClass() + "**** create process for Args " + runtimeArgs);
 		process = setup.createProcessForArgs(runtimeArgs);
 		// append loggers
-		final IRConnection rcon = new RetryStarter(setup.connectionFactory).create(process, this.getClass().getSimpleName(), runStateHolder, isBlocking());
+		final IRConnection rcon = new RetryStarter(setup.connectionFactory).create(process, this.getClass().getSimpleName(), runStateHolder,
+			isBlocking());
+		log.warn("****" + this.getClass() + "**** created process for Args " + runtimeArgs + " -> rcon = " + rcon);
 		if (rcon != null) {
 		    rcon.close();
 		    runStateHolder.setRunState(RUNSTATE.RUNNING);
@@ -83,11 +86,11 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
     private static final class RetryStarter extends AbstractMaxTimeoutProcessProvider<IRConnection> {
 
 	private final IConnectionFactory factory;
-	
+
 	private RetryStarter(final IConnectionFactory factory) {
 	    this.factory = factory;
 	}
-	
+
 	@Override
 	protected IRConnection createResultInstance() {
 	    return RConnectionProxy.createProxy(factory.createRConnection(null), null);

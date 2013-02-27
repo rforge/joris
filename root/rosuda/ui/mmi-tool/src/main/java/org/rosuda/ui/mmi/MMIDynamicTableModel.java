@@ -83,16 +83,6 @@ public class MMIDynamicTableModel<T> extends AbstractTableModel {
 	} else {
 	    return value.getName() + "/[0.." + value.getChildCount() + "]";
 	}
-
-	// try {
-	// final String evalExpr = "${"+valueSelector.toString()+"}";
-	// System.out.println("**getValueAt("+row+","+column+"), expr ="+evalExpr+" valueSelector="+valueSelector.toString());
-	// return calculationUtil.calculate(evalExpr).get(row);
-	// } catch (final Exception x) {
-	// x.printStackTrace();
-	// return x.getMessage();
-	//
-	// }
     }
 
     private String toExpression(final NodePath valueSelector) {

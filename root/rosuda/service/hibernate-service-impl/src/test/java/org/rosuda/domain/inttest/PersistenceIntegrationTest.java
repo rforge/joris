@@ -118,7 +118,6 @@ public class PersistenceIntegrationTest {
 		final long graphCount = jdbcTemplate
 				.queryForLong("SELECT COUNT(*) FROM GRAPH");
 		Assert.assertEquals(2, graphCount);
-		DebugUtil.debugSchema(dataSource);
 	}
 
 	@Test

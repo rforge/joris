@@ -59,7 +59,6 @@ public class RTypeConversionIntegrationTest extends AbstractRIntegrationTest {
 		final Node.Builder<Object> stringNode = new NodeBuilderFactory<Object>().createRoot();
 		handler.transform(stringREXP, stringNode);
 		Assert.assertNotNull(stringNode);
-		System.out.println(stringNode);
 	}
 	
 	@Test
@@ -70,7 +69,6 @@ public class RTypeConversionIntegrationTest extends AbstractRIntegrationTest {
 		final Node.Builder<Object> doubleNode = new NodeBuilderFactory<Object>().createRoot();
 		handler.transform(doubleREXP, doubleNode);
 		Assert.assertNotNull(doubleNode);
-		System.out.println(doubleNode);
 	}
 	
 	@Test
@@ -81,7 +79,6 @@ public class RTypeConversionIntegrationTest extends AbstractRIntegrationTest {
 		final Node.Builder<Object> intNode = new NodeBuilderFactory<Object>().createRoot();
 		handler.transform(intREXP, intNode);
 		Assert.assertNotNull(intNode);
-		System.out.println(intNode);
 	}
 	
 	@Test
@@ -92,7 +89,6 @@ public class RTypeConversionIntegrationTest extends AbstractRIntegrationTest {
 		final Node.Builder<Object> boolNode = new NodeBuilderFactory<Object>().createRoot();
 		handler.transform(boolREXP, boolNode);
 		Assert.assertNotNull(boolNode);
-		System.out.println(boolNode);
 	}
 	
 	@Test
@@ -103,7 +99,6 @@ public class RTypeConversionIntegrationTest extends AbstractRIntegrationTest {
 		final Node.Builder<Object> factorNode = new NodeBuilderFactory<Object>().createRoot();
 		handler.transform(factorREXP, factorNode);
 		Assert.assertNotNull(factorNode);
-		System.out.println(factorNode);
 	}
 	
 	@Test
@@ -111,12 +106,9 @@ public class RTypeConversionIntegrationTest extends AbstractRIntegrationTest {
 		if (connection == null) { 			logger.severe("Rserve is not running, test cannot work."); 			return; 		}
 		final IREXP lmREXP = connection.eval("lm(speed~dist,data=cars)");
 		Assert.assertEquals(IREXP.XT_MAP, lmREXP.getType());
-		final long tick = System.currentTimeMillis();
 		final Node.Builder<Object> lmNode = new NodeBuilderFactory<Object>().createRoot();
 		handler.transform(lmREXP, lmNode);
-		System.out.println("performance="+(System.currentTimeMillis()-tick)+" ms.");
 		Assert.assertNotNull(lmNode);
-		System.out.println(lmNode);	
 	}
 	
 	@Test
@@ -130,9 +122,7 @@ public class RTypeConversionIntegrationTest extends AbstractRIntegrationTest {
 		final long tick = System.currentTimeMillis();
 		final Node.Builder<Object> lmNode = new NodeBuilderFactory<Object>().createRoot();
 		handler.transform(lmREXP, lmNode);
-		System.out.println("performance="+(System.currentTimeMillis()-tick)+" ms.");
 		Assert.assertNotNull(lmNode);
-		System.out.println(lmNode);	
 	}
 	
 }

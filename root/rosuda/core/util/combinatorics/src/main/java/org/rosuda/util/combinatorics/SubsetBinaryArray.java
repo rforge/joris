@@ -40,7 +40,6 @@ class SubsetBinaryArray<T> implements BinaryArray<T>{
 			max[i]=(short) ((i<=concurrentMax)?1:0);
 		}
 		maxBits=concurrentMax;
-//System.out.println("maxBits"+maxBits);		
 	}
 	
 	
@@ -76,7 +75,6 @@ class SubsetBinaryArray<T> implements BinaryArray<T>{
 			concurrent += array[i];
 		}
 		if (concurrent > maxBits && hasNext()) {
-//System.out.println("skip ("+concurrent+">"+maxBits+")"+this);
 			return next();
 		} else {
 			return this;
@@ -204,38 +202,5 @@ class SubsetBinaryArray<T> implements BinaryArray<T>{
 			builder.append(vars[i]);
 		}
 		return builder.toString();
-	}
-	
-	public static final void main(final String[] args) {
-		final String[] variables = 
-			//new String[]{"a","b","a:b"};
-			new String[]{"a","b","c","a:b","a:c","b:c"};
-			//new String[]{"a","b","c","d","a:b","a:c","a:d","b:c","b:d","c:d"};
-			//new String[]{"a","b","c","d","e","a:b","a:c","a:d","a:e","b:c","b:d","b:e","c:d","c:e","d:e"};
-			//new String[]{"a","b","c","d","e","f","a:b","a:c","a:d","a:e","a:f","b:c","b:d","b:e","b:f","c:d","c:e","c:f","d:e","d:f","e:f"};
-			//new String[]{"a","b","c","d","e","f","g","a:b","a:c","a:d","a:e","a:f","a:g","b:c","b:d","b:e","b:f","b;g","c:d","c:e","c:f","c:g","d:e","d:f","d:g","e:f","e:g","f:g"};
-		
-		
-		BinaryArray<String> loop = new SubsetBinaryArray<String>(variables.length,variables.length);
-		int invalidCount = 0;
-		int validCount = 0;
-		int iter = 0;
-		while (loop.hasNext()) {
-			iter ++; loop.next();
-			final Object[] matchedObjects = loop.matchSubset(variables);
-			String[] matches = new String[matchedObjects.length];
-			for (int i=0;i<matches.length;i++) {
-				matches[i] = (String) matchedObjects[i];
-			}
-			if (isValidSet(matches)) {
-				validCount ++;
-			} else {
-				invalidCount ++;
-			}
-			System.out.println("iter "+(iter)+":"+makeString(matches));
-		}
-		System.out.println("valid "+validCount+" invalid "+invalidCount + 
-				" total = "+(validCount+invalidCount) +  
-				" pct = "+ ( (double) validCount) /  ( (double) (validCount+invalidCount)));
 	}
 }

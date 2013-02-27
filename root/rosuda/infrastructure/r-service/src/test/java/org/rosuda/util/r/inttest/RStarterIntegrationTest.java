@@ -1,5 +1,7 @@
 package org.rosuda.util.r.inttest;
 
+import static org.junit.Assert.assertEquals;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,9 +40,9 @@ public class RStarterIntegrationTest {
     public void testStartStopProcess() {
 	Assert.assertNotNull(service);
 	service.start();
-	Assert.assertEquals(RUNSTATE.RUNNING, service.getRunState());
+	assertEquals(RUNSTATE.RUNNING, service.getRunState());
 	service.stop();
-	Assert.assertEquals(RUNSTATE.TERMINATED, service.getRunState());
+	assertEquals(RUNSTATE.TERMINATED, service.getRunState());
 	try {
 	    REngineConnectionFactory.getInstance().createRConnection(null);
 	    Assert.fail("no error raised, there is a connection available.");

@@ -43,7 +43,7 @@
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>util-logging</artifactId>
-			<version>${project.version}</version>
+			<version>${project.parent.version}</version>
 		</dependency>
 	</dependencies>
 </project>
