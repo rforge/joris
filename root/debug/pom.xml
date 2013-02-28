@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://maven.apache.org/POM/4.0.0"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<organization>
+		<name>root</name>
+		<url>http://www.seger-online.de</url>
+	</organization>
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.r-project.joris</groupId>
+	<artifactId>debug</artifactId>
+	<version>1.0.2-SNAPSHOT</version>
+
+	<name>rdebug</name>
+	<description>ROOT</description>
+	<inceptionYear>2010</inceptionYear>
+	<properties>
+		<rserve.version>0.68</rserve.version>
+	</properties>
+
+	<packaging>jar</packaging>
+
+	<build>
+		<finalName>rcond</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.dstovall</groupId>
+				<artifactId>onejar-maven-plugin</artifactId>
+				<version>1.3.0</version>
+				<executions>
+					<execution>
+						<configuration>
+							<mainClass>rforge.joris.RConnectionDebugger</mainClass>
+						</configuration>
+						<goals>
+							<goal>one-jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<!-- R -->
+		<dependency>
+			<groupId>org.r-project.joris</groupId>
+			<artifactId>rengine</artifactId>
+			<version>${rserve.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.r-project.joris</groupId>
+			<artifactId>rserveengine</artifactId>
+			<version>${rserve.version}</version>
+		</dependency>
+	</dependencies>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>onejar-maven-plugin.googlecode.com</id>
+			<url>http://onejar-maven-plugin.googlecode.com/svn/mavenrepo</url>
+		</pluginRepository>
+	</pluginRepositories>
+</project>
