@@ -1,7 +1,8 @@
 package org.rosuda.util.r;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.*;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.notNull;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -21,6 +22,7 @@ import org.rosuda.irconnect.IRConnection;
 import org.rosuda.irconnect.RServerException;
 import org.rosuda.util.process.ProcessService;
 import org.rosuda.util.process.RUNSTATE;
+import org.rosuda.util.process.ShellContext;
 import org.rosuda.util.r.impl.RStartContext;
 import org.rosuda.util.r.impl.RStarterFactory;
 
@@ -39,10 +41,18 @@ public class RStartProcessTest {
     private IRConnection mockedIRConnection;
 
     private Runtime runtime;
-   
+    
+    private static class EmptyTestShellContext extends ShellContext {
+	@Override
+	public String getProperty(String propertyName) {
+	    return null;
+	}
+    }
+    
     @Before
     public void setUp() throws IOException {
 	rStartContext = new RStartContext();
+	rStartContext.setShellContext(new EmptyTestShellContext());
 	runtime = mock(Runtime.class);
 	final Process process = mock(Process.class);
 	when(process.getErrorStream()).thenReturn(mock(InputStream.class));
