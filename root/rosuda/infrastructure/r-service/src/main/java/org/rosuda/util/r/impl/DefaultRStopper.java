@@ -23,7 +23,7 @@ class DefaultRStopper extends RunstateAware<IRConnection> implements ProcessStop
     public void stop() {
 	try {
 	    log.info("shutting down R-ConnectionFactory");
-	    context.connectionFactory.shutdown();
+	    context.connectionFactory.shutdown(context.getMergedConnectionProperties());
 	    log.info("R-ConnectionFactory has been shut down.");
 	} catch (final RServerException rse) {
 	    log.error("rserve shutdown failed", rse);

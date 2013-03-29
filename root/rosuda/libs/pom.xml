@@ -56,7 +56,7 @@
 							<file>jar/rserveengine-0.68.jar</file>
 						</configuration>
 					</execution>
-          <execution>
+					<execution>
 						<id>install-log4jdbc4</id>
 						<phase>validate</phase>
 						<goals>
@@ -72,41 +72,32 @@
 							<file>jar/log4jdbc4-1.2.jar</file>
 						</configuration>
 					</execution>
-          
-          
-					<!-- <execution>
-						<id>install-swingx-all</id>
+					<execution>
+						<id>install-junitsocket</id>
 						<phase>validate</phase>
 						<goals>
 							<goal>install-file</goal>
 						</goals>
 						<configuration>
-							<groupId>org.swinglabs.swingx</groupId>
-							<artifactId>swingx-all</artifactId>
-							<version>1.6.3</version>
+							<groupId>org.newsclub.net.unix</groupId>
+							<artifactId>junixsocket</artifactId>
+							<version>1.3</version>
 							<packaging>jar</packaging>
 							<createChecksum>true</createChecksum>
 							<generatePom>true</generatePom>
-							<file>jar/swingx-all-1.6.3.jar</file>
+							<file>jar/junixsocket-1.3.jar</file>
 						</configuration>
 					</execution>
-						<execution>
-						<id>install-jnlp</id>
-						<phase>validate</phase>
-						<goals>
-							<goal>install-file</goal>
-						</goals>
-						<configuration>
-							<groupId>javax.jnlp</groupId>
-							<artifactId>jnlp</artifactId>
-							<version>1.6</version>
-							<packaging>jar</packaging>
-							<createChecksum>true</createChecksum>
-							<generatePom>true</generatePom>
-							<file>jar/jnlp-1.6.0_21.jar</file>
-						</configuration>
-					</execution>	
-					 -->			
+
+					<!-- <execution> <id>install-swingx-all</id> <phase>validate</phase> 
+						<goals> <goal>install-file</goal> </goals> <configuration> <groupId>org.swinglabs.swingx</groupId> 
+						<artifactId>swingx-all</artifactId> <version>1.6.3</version> <packaging>jar</packaging> 
+						<createChecksum>true</createChecksum> <generatePom>true</generatePom> <file>jar/swingx-all-1.6.3.jar</file> 
+						</configuration> </execution> <execution> <id>install-jnlp</id> <phase>validate</phase> 
+						<goals> <goal>install-file</goal> </goals> <configuration> <groupId>javax.jnlp</groupId> 
+						<artifactId>jnlp</artifactId> <version>1.6</version> <packaging>jar</packaging> 
+						<createChecksum>true</createChecksum> <generatePom>true</generatePom> <file>jar/jnlp-1.6.0_21.jar</file> 
+						</configuration> </execution> -->
 				</executions>
 			</plugin>
 		</plugins>

@@ -1,7 +1,7 @@
 package org.rosuda.util.r;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.atLeast;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -74,7 +74,7 @@ public class RStartProcessTest {
 	service.start();
 	service.stop();
 	Assert.assertEquals(RUNSTATE.TERMINATED, service.getRunState());
-	verify(connectionFactory, times(1)).shutdown();
+	verify(connectionFactory, times(1)).shutdown(notNull(Properties.class));
     }
 
     // -- helper

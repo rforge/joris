@@ -32,7 +32,7 @@ public abstract class AConnectionFactory implements IConnectionFactory {
     protected AConnectionFactory() {
 	instance = this;
     }
-
+//add shell context
     public IRConnection createRConnection(final Properties configuration) {
 	return createARConnection(configuration);
     }
@@ -44,16 +44,20 @@ public abstract class AConnectionFactory implements IConnectionFactory {
 
     private final IRConnection createARConnection(final Properties configuration) {
 	if (configuration == null)
-	    return handleCreateConnectionProxy(default_host, default_port);
+	    return handleCreateConnectionProxy(default_host, default_port, null);
 	String host = default_host;
 	int port = default_port;
+	String socket = null;
 	if (configuration.containsKey(IConnectionFactory.HOST)) {
 	    host = configuration.getProperty(IConnectionFactory.HOST);
 	}
 	if (configuration.containsKey(IConnectionFactory.PORT)) {
 	    port = Integer.parseInt(configuration.getProperty(IConnectionFactory.PORT));
 	}
-	final ARConnection connection = handleCreateConnectionProxy(host, port);
+	if (configuration.containsKey(IConnectionFactory.SOCKET)) {
+		socket = configuration.getProperty(IConnectionFactory.SOCKET);
+	}
+	final ARConnection connection = handleCreateConnectionProxy(host, port, socket);
 	if (configuration.containsKey(IConnectionFactory.USER) && configuration.containsKey(IConnectionFactory.PASSWORD)) {
 	    final String user = configuration.getProperty(IConnectionFactory.USER);
 	    final String password = configuration.getProperty(IConnectionFactory.PASSWORD);
@@ -62,8 +66,8 @@ public abstract class AConnectionFactory implements IConnectionFactory {
 	return connection;
     }
 
-    private final ARConnection handleCreateConnectionProxy(final String host, final int port) {
-	final ARConnection connection = handleCreateConnection(host, port);
+    private final ARConnection handleCreateConnectionProxy(final String host, final int port, final String socket) {
+	final ARConnection connection = handleCreateConnection(host, port, socket);
 	pool.add(connection);
 	connection.addRConnectionListener(new IRConnectionListener() {
 	    @Override
@@ -76,14 +80,14 @@ public abstract class AConnectionFactory implements IConnectionFactory {
 	return connection;
     }
 
-    protected abstract ARConnection handleCreateConnection(final String host, final int port);
+    protected abstract ARConnection handleCreateConnection(final String host, final int port, final String socket);
 
     protected abstract IJava2RConnection handleCreateTransfer(final IRConnection con);
 
     @Override
-    public final void shutdown() {
+    public final void shutdown(final Properties properties) {
 	if (pool.size() == 0) {
-	    shutDownWithNewConnection();
+	    shutDownWithNewConnection(properties);
 	    return;
 	}
 	log.info("shutting down " + pool.size() + " RConnections");
@@ -97,13 +101,13 @@ public abstract class AConnectionFactory implements IConnectionFactory {
 		}
 	    }
 	if (shutdownSuccessCount == 0) {
-	    shutDownWithNewConnection();
+	    shutDownWithNewConnection(properties);
 	}
     }
 
-    private void shutDownWithNewConnection() {
+    private void shutDownWithNewConnection(final Properties properties) {
 	log.info("acquiring connection for shutdown ..");
-	final IRConnection con = createARConnection(null);
+	final IRConnection con = createARConnection(properties);
 	con.shutdown();
     }
 }

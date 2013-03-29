@@ -16,8 +16,8 @@ public class REngineConnectionFactory extends AConnectionFactory {
 
 	@Override
 	protected ARConnection handleCreateConnection(final String host,
-			final int port) {
-		return new REngineRConnection(host, port);
+			final int port, final String socket) {
+		return new REngineRConnection(host, port, socket);
 	}
 
 	@Override

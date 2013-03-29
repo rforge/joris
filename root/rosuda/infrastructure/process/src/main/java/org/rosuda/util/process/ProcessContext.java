@@ -10,7 +10,7 @@ public abstract class ProcessContext {
     private static final Log log = LogFactory.getLog(ProcessContext.class);
     
     private Runtime runtime = Runtime.getRuntime();
-
+    
     public void setRuntime(final Runtime runtime) {
 	this.runtime = runtime;
     }

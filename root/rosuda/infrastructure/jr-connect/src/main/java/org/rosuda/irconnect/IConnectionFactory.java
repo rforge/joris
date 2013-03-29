@@ -15,6 +15,7 @@ import java.util.Properties;
 public interface IConnectionFactory {
 
     public static final String HOST = "host";
+    public static final String SOCKET = "socket";
     public static final String PORT = "port";
     public static final String USER = "user";
     public static final String PASSWORD = "pass";
@@ -43,5 +44,5 @@ public interface IConnectionFactory {
     /**
      * shuts down RServe
      */
-    public void shutdown();
+    public void shutdown(final Properties properties);
 }

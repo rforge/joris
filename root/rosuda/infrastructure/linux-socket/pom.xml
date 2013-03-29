@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.r-project.joris</groupId>
+		<artifactId>infrastructure</artifactId>
+		<version>1.0.2-SNAPSHOT</version>
+	</parent>
+	<artifactId>linux-socket</artifactId>
+	<name>linux-socket</name>
+	<description>linux domain socket</description>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit-dep</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-library</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.r-project.joris</groupId>
+			<artifactId>util-logging</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.r-project.joris</groupId>
+			<artifactId>process</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.newsclub.net.unix</groupId>
+			<artifactId>junixsocket</artifactId>
+		</dependency>
+	</dependencies>
+</project>

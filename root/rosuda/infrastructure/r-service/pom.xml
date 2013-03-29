@@ -17,6 +17,10 @@
 			<artifactId>mockito-core</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.hamcrest</groupId>
+			<artifactId>hamcrest-library</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>util-logging</artifactId>
 			<version>${project.parent.version}</version>
