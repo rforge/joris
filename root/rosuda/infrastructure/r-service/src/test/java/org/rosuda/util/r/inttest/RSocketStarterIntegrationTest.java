@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.rosuda.irconnect.IRConnection;
 import org.rosuda.rengine.REngineConnectionFactory;
+import org.rosuda.util.process.OS;
 import org.rosuda.util.process.ProcessService;
 import org.rosuda.util.process.RUNSTATE;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,33 +28,17 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @Configurable
 public class RSocketStarterIntegrationTest {
 	
-/*	
-	@BeforeClass
-	public static void initClass() {
-		final URL libnative = RSocketStarterIntegrationTest.class.getResource("/lib-native");
-		File file;
-		try {
-			file = new File(libnative.toURI());
-		} catch (URISyntaxException usi) {
-			file = new File(libnative.getPath());
-		} catch (IllegalArgumentException iae) {
-			try {
-				LOG.error("could not process URI:"+libnative.toURI());
-			} catch (URISyntaxException e) {
-				LOG.error("could not process URL:"+libnative);	
-			}
-			file = new File(libnative.getPath());
-		}
-		LOG.info("resource \""+file.getAbsolutePath()+"\" used for 'org.newsclub.net.unix.library.path'");
-		System.setProperty("org.newsclub.net.unix.library.path", file.getAbsolutePath());
-	}
-*/
+
     @Autowired
     @Qualifier("rStarterProcess")
     private ProcessService<IRConnection> service;
 
-    @Test//(timeout=30000)
+    @Test(timeout=60000)
     public void testStartStopProcess() {
+	if (OS.isWindows()) {
+	    Assert.assertNotNull("windows passes for unsupported op");
+	    return;
+	}
 	Assert.assertNotNull(service);
 	service.start();
 	Assert.assertEquals(RUNSTATE.RUNNING, service.getRunState());

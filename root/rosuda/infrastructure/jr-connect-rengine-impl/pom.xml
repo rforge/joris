@@ -18,6 +18,11 @@
 			<version>${project.parent.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.r-project.joris</groupId>
+			<artifactId>linux-socket</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.newsclub.net.unix</groupId>
 			<artifactId>junixsocket</artifactId>
 		</dependency>

@@ -18,6 +18,7 @@ import org.rosuda.irconnect.IREXP;
 import org.rosuda.irconnect.RServerException;
 import org.rosuda.linux.socket.NativeSocketLibUtil;
 import org.rosuda.linux.socket.TcpTunnel;
+import org.rosuda.util.process.OS;
 
 public class REngineRConnection extends ARConnection implements IRConnection {
 
@@ -36,6 +37,9 @@ public class REngineRConnection extends ARConnection implements IRConnection {
                 if (socketConnections.containsKey(socket)) {
                     this.delegate = socketConnections.get(socket);
                     return;
+                }
+                if (OS.isWindows()) {
+                    throw new UnsupportedOperationException("socket connection is not available for windows");
                 }
                 new NativeSocketLibUtil().enableDomainSockets();
                 logger.info("creating unix domain socket, magic path = "+System.getProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH));                
