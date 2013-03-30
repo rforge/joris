@@ -21,7 +21,7 @@
 		<appender-ref ref="LOGFILE" />
 	</logger>
 	<root>
-		<priority value="ERROR" />
+		<priority value="INFO" />
 		<appender-ref ref="stdout" />
 		<appender-ref ref="LOGFILE" />
 	</root>
