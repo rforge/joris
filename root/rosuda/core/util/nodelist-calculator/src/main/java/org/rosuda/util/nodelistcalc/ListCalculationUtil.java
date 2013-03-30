@@ -6,8 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.rosuda.type.Node;
 import org.rosuda.type.NodeFinder;
 import org.rosuda.type.NodeFinderImpl;
@@ -18,11 +16,13 @@ import org.rosuda.util.calculator.Calculator;
 import org.rosuda.util.calculator.interpreter.Interpreter;
 import org.rosuda.util.calculator.parser.TokenizerException;
 import org.rosuda.util.calculator.parser.TreeNode;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ListCalculationUtil<T> {
 
     public static final String ASSIGNMENT_OPERATOR = ":=";
-    private static final Log log = LogFactory.getLog(ListCalculationUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ListCalculationUtil.class);
     private NodeFinder<T> finder = new NodeFinderImpl<T>();
     private final List<Node<T>> nodeList = new ArrayList<Node<T>>();
 
@@ -70,7 +70,7 @@ public class ListCalculationUtil<T> {
 		    if (cachedResult != null) {
 			props.add(cachedResult.get(i));
 		    } else {
-			log.warn("undefined attribute @" + pathId);
+			LOGGER.warn("undefined attribute @" + pathId);
 		    }
 		} else {
 		    props.add(getNodeValue(string, i));
@@ -126,7 +126,7 @@ public class ListCalculationUtil<T> {
 		    if (cachedResult != null)
 			return cachedResult.get(idx);
 		    else {
-			log.warn("undefined reference @" + pathId);
+			LOGGER.warn("undefined reference @" + pathId);
 			return null;
 		    }
 		}
@@ -144,7 +144,7 @@ public class ListCalculationUtil<T> {
 		    if (cachedResult != null)
 			return cachedResult.get(index++);
 		    else {
-			log.warn("undefined reference @" + pathId);
+			LOGGER.warn("undefined reference @" + pathId);
 			return null;
 		    }
 		}

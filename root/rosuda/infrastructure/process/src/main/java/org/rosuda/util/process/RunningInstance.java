@@ -1,21 +1,20 @@
 package org.rosuda.util.process;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class RunningInstance<T> extends RunstateAware<T> implements ProcessStarter<T> {
 
-	public RunningInstance(final RunStateHolder<T> runStateHolder) {
-		super(runStateHolder);
-		runStateHolder.setRunState(RUNSTATE.RUNNING);
-	}
+    public RunningInstance(final RunStateHolder<T> runStateHolder) {
+        super(runStateHolder);
+        runStateHolder.setRunState(RUNSTATE.RUNNING);
+    }
 
-	private static final Log log = LogFactory.getLog(RunningInstance.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RunningInstance.class);
 
-	
-	@Override
-	public void start() {
-		log.info("reusing running instance.");
-	}
-	
+    @Override
+    public void start() {
+        LOGGER.info("reusing running instance.");
+    }
+
 }

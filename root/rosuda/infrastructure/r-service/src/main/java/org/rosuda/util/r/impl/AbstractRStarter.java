@@ -7,8 +7,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.rosuda.irconnect.IConnectionFactory;
 import org.rosuda.irconnect.IRConnection;
 import org.rosuda.irconnect.RServeOpts;
@@ -19,10 +17,12 @@ import org.rosuda.util.process.RUNSTATE;
 import org.rosuda.util.process.RunStateHolder;
 import org.rosuda.util.process.RunstateAware;
 import org.rosuda.util.process.ShellContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 abstract class AbstractRStarter extends RunstateAware<IRConnection> implements ProcessStarter<IRConnection> {
 
-    protected final Log log = LogFactory.getLog(getClass());
+    protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
     protected final String R_ARGS = "--vanilla --slave";
     protected final String R_SERVE_ARGS = "--no-save --slave";
     protected final List<File> fileLocations = Collections.unmodifiableList(getRFileLocations());
@@ -50,13 +50,13 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
 
     @Override
     public final void start() {
-        log.warn("****" + this.getClass() + "****AbstractRStarter.start() with fileLocations " + fileLocations);
+        LOGGER.warn("****" + this.getClass() + "****AbstractRStarter.start() with fileLocations " + fileLocations);
         for (final File startFile : fileLocations) {
             if (!startFile.exists()) {
-                log.info("skipping configured but not present r start file \"" + startFile.getAbsolutePath() + "\"");
+                LOGGER.info("skipping configured but not present r start file \"" + startFile.getAbsolutePath() + "\"");
                 continue;
             }
-            log.info("starting R process for '" + startFile.getAbsolutePath() + "'");
+            LOGGER.info("starting R process for '" + startFile.getAbsolutePath() + "'");
             try {
                 final String[] runtimeArgs = getRuntimeArgs(startFile.getAbsolutePath());
                 final StringBuilder sb = new StringBuilder().append("> ");
@@ -64,23 +64,23 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
                     sb.append(arg);
                     sb.append(" ");
                 }
-                log.info(sb.toString());
-                log.warn("****" + this.getClass() + "**** create process for Args " + runtimeArgs);
+                LOGGER.info(sb.toString());
+                LOGGER.warn("****" + this.getClass() + "**** create process for Args " + runtimeArgs);
                 process = setup.createProcessForArgs(runtimeArgs);
                 // append loggers
                 final IRConnection rcon = new RetryStarter(setup.connectionFactory, setup.getMergedConnectionProperties()).create(process,
                         this.getClass().getSimpleName(), runStateHolder, isBlocking());
-                log.warn("****" + this.getClass() + "**** created process for Args " + runtimeArgs + " -> rcon = " + rcon);
+                LOGGER.warn("****" + this.getClass() + "**** created process for Args " + runtimeArgs + " -> rcon = " + rcon);
                 if (rcon != null) {
                     rcon.close();
                     runStateHolder.setRunState(RUNSTATE.RUNNING);
                     return;
                     // TODO kill process for maven ?
                 } else {
-                    log.warn("no answer from R - please make sure R is installed an Rserve running.");
+                    LOGGER.warn("no answer from R - please make sure R is installed an Rserve running.");
                 }
             } catch (final IOException x) {
-                log.fatal(x);
+                LOGGER.error("start() failed.", x);
             }
         }
     }

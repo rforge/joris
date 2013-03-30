@@ -2,17 +2,17 @@ package org.rosuda.util.process;
 
 import java.io.IOException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class ProcessContext {
 
-    private static final Log log = LogFactory.getLog(ProcessContext.class);
-    
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProcessContext.class);
+
     private Runtime runtime = Runtime.getRuntime();
-    
+
     public void setRuntime(final Runtime runtime) {
-	this.runtime = runtime;
+        this.runtime = runtime;
     }
 
     /**
@@ -23,9 +23,9 @@ public abstract class ProcessContext {
      * @throws IOException
      */
     public Process createProcessForArgs(final String[] runtimeArgs) throws IOException {
-	final Process process = runtime.exec(runtimeArgs);
-	createShutDownHook(process, runtimeArgs);
-	return process;
+        final Process process = runtime.exec(runtimeArgs);
+        createShutDownHook(process, runtimeArgs);
+        return process;
     }
 
     /**
@@ -36,40 +36,40 @@ public abstract class ProcessContext {
      * @throws IOException
      */
     public Process createProcessForArg(String startCommand) throws IOException {
-	final Process process = runtime.exec(startCommand);
-	createShutDownHook(process, new String[]{startCommand});
-	return process;
+        final Process process = runtime.exec(startCommand);
+        createShutDownHook(process, new String[] { startCommand });
+        return process;
     }
-    
+
     private void createShutDownHook(final Process process, final String[] args) {
-	final StringBuilder processIdBuilder = new StringBuilder();
-	for (final String arg : args) {
-	    processIdBuilder.append(arg).append(" ");
-	}
-	final String processId = processIdBuilder.toString().trim();
-	final Thread shutDownThread = new Thread(new ShutdownRuntimeProcess(process, processId));
-	shutDownThread.setName(this.getClass().getName()+"$"+ShutdownRuntimeProcess.class.getSimpleName()+"-"+processId);
+        final StringBuilder processIdBuilder = new StringBuilder();
+        for (final String arg : args) {
+            processIdBuilder.append(arg).append(" ");
+        }
+        final String processId = processIdBuilder.toString().trim();
+        final Thread shutDownThread = new Thread(new ShutdownRuntimeProcess(process, processId));
+        shutDownThread.setName(this.getClass().getName() + "$" + ShutdownRuntimeProcess.class.getSimpleName() + "-" + processId);
     }
-    
+
     public boolean stop() {
-	return false;
+        return false;
     }
-    
+
     private static class ShutdownRuntimeProcess implements Runnable {
 
-	private final Process process;
-	private final String processId;
-	
-	private ShutdownRuntimeProcess(final Process process, final String processId) {
-	    this.process = process;
-	    this.processId = processId;
-	}
-	
-	@Override
-	public void run() {
-	    log.info("shutting down Process \""+processId+"\"");
-	    this.process.destroy();
-	}
-	
+        private final Process process;
+        private final String processId;
+
+        private ShutdownRuntimeProcess(final Process process, final String processId) {
+            this.process = process;
+            this.processId = processId;
+        }
+
+        @Override
+        public void run() {
+            LOGGER.info("shutting down Process \"" + processId + "\"");
+            this.process.destroy();
+        }
+
     }
-  }
+}

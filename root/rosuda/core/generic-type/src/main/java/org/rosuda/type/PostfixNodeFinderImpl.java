@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class PostfixNodeFinderImpl<T> extends AbstractNodeFinderImpl<T> {
 
-    private static final Log LOG = LogFactory.getLog(PostfixNodeFinderImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PostfixNodeFinderImpl.class);
     
     protected List<String> revert(final NodePath path) {
 	if (path == null)

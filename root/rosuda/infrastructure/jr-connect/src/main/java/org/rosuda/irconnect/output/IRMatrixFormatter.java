@@ -19,12 +19,12 @@ public class IRMatrixFormatter extends DelegetableObjectFormatter<IRMatrix>{
 		//TODO : ensure rows, cols names!
 		for (int col = 0; col < value.getColumns(); col ++) {
 			colMax.put(col, -1);
-LOG.debug("row = "+col+", maxCols = "+value.getColumns());
+LOGGER.debug("row = "+col+", maxCols = "+value.getColumns());
 			final Map<Integer, String> colMap = new TreeMap<Integer, String>();
 			colMap.put(-1, value.getColumnNameAt(col));
 			matrixMap.put(col, colMap);
 			for (int row = 0; row < value.getRows(); row ++) {
-LOG.debug("col="+col+",row = "+row+", maxRows = "+value.getRows());
+LOGGER.debug("col="+col+",row = "+row+", maxRows = "+value.getRows());
 				final String formattedValue = objectFormatter.format(value.getValueAt(row, col));
 				if (formattedValue != null) {
 					int len = formattedValue.length();

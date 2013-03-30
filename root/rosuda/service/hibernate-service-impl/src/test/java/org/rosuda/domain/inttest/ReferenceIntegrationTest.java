@@ -10,8 +10,6 @@ import java.util.List;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,6 +23,8 @@ import org.rosuda.graph.service.search.NumberValueConstraint;
 import org.rosuda.graph.service.search.Relation;
 import org.rosuda.graph.service.search.VertexConstraint;
 import org.rosuda.type.Node;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
@@ -40,7 +40,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ReferenceIntegrationTest {
 
-	protected static final Log LOG = LogFactory.getLog(ReferenceIntegrationTest.class);
+    protected static final Logger LOGGER = LoggerFactory.getLogger(ReferenceIntegrationTest.class);
 	private GraphService<Vertex> graphService;
 	private JdbcTemplate jdbcTemplate;
 	private int currentNodes;

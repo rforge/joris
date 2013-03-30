@@ -5,12 +5,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StreamLogger implements Runnable {
 
-    private Log log;
+    private Logger logger;
     private boolean running;
     private final String prefix;
     private final LogMode mode;
@@ -18,7 +18,7 @@ public class StreamLogger implements Runnable {
     private long length;
 
     public StreamLogger(final Class<?> forClass, final String prefix, final LogMode mode, final InputStream in) {
-	this.log = LogFactory.getLog(forClass);
+	this.logger = LoggerFactory.getLogger(forClass);
 	this.prefix = prefix;
 	this.mode = mode;
 	this.running = true;
@@ -35,15 +35,15 @@ public class StreamLogger implements Runnable {
 		length += line.length();
 		switch (mode) {
 		case ERROR:
-		    log.error(prefix + " " + line);
+		    logger.error(prefix + " " + line);
 		    break;
 		case INFO:
-		    log.info(prefix + " " + line);
+		    logger.info(prefix + " " + line);
 		    break;
 		}
 	    }
 	} catch (final IOException e) {
-	    log.fatal(e);
+	    logger.error("StreamLogger.run() failed.", e);
 	}
     }
 

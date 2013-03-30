@@ -16,6 +16,11 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>org.r-project.joris</groupId>
+			<artifactId>util-logging</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-core</artifactId>
 		</dependency>

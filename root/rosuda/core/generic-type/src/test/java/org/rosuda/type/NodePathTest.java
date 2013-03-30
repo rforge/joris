@@ -6,8 +6,8 @@ import static org.junit.Assert.assertThat;
 
 import javax.swing.tree.TreePath;
 
-import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
+import org.slf4j.LoggerFactory;
 
 public class NodePathTest {
 
@@ -38,7 +38,7 @@ public class NodePathTest {
 	    final NodePath path = NodePath.Impl.parse(treepath);
 	    assertNodePathOfRootNext(path);
 	} catch (final Exception x) {
-	    LogFactory.getLog(NodePathTest.class).warn("current JDK does not support NULL in treepath", x);
+	    LoggerFactory.getLogger(NodePathTest.class).warn("current JDK does not support NULL in treepath", x);
 	}
     }
 

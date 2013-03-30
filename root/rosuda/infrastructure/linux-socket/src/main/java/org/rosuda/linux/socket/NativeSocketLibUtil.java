@@ -14,17 +14,17 @@ import java.util.Enumeration;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.rosuda.util.process.OS;
 import org.rosuda.util.process.ShellContext;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NativeSocketLibUtil {
 
     public static final String NATIVE_LIB_PATH = "NATIVE_LIB_PATH";
     public static final String ENV_NATIVE_LIBRARY_PATH = "org.newsclub.net.unix.library.path";
     private static final String resourcePath = "org/rosuda/linux/socket";
-    private static final Log LOG = LogFactory.getLog(NativeSocketLibUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(NativeSocketLibUtil.class);
     private static final int BUFFER_SIZE = 1024;
     private ShellContext context = new ShellContext();
     private String suffix;
@@ -36,7 +36,7 @@ public class NativeSocketLibUtil {
 
     public void enableDomainSockets() {
         if (OS.isWindows()) {
-            LOG.warn("unsupported operation system!");
+            LOGGER.warn("unsupported operation system!");
         }
         initOSProperties();
         try {
@@ -47,12 +47,12 @@ public class NativeSocketLibUtil {
                 targetLocation = new File(native_lib_path);
             }
             System.setProperty(ENV_NATIVE_LIBRARY_PATH, targetLocation.getAbsolutePath());
-            LOG.info("setting System.property '" + ENV_NATIVE_LIBRARY_PATH + "' to '" + System.getProperty(ENV_NATIVE_LIBRARY_PATH) + "'");
+            LOGGER.info("setting System.property '" + ENV_NATIVE_LIBRARY_PATH + "' to '" + System.getProperty(ENV_NATIVE_LIBRARY_PATH) + "'");
             Enumeration<URL> resources = NativeSocketLibUtil.class.getClassLoader().getResources(resourcePath);
             byte[] buffer = new byte[BUFFER_SIZE];
             while (resources.hasMoreElements()) {
                 final URL resource = resources.nextElement();
-                LOG.debug("resource[protocol='" + resource.getProtocol() + "'] : " + resource);
+                LOGGER.debug("resource[protocol='" + resource.getProtocol() + "'] : " + resource);
                 if (isFile(resource)) {
                     final File asFileResource = new File(resource.getFile());
                     for (final File child : asFileResource.listFiles()) {
@@ -63,17 +63,17 @@ public class NativeSocketLibUtil {
                     }
                 } else if (isJar(resource)) {
                     String archiveFileName = resource.getPath();
-                    LOG.debug(">>RAW archiveFileName:" + archiveFileName);
+                    LOGGER.debug(">>RAW archiveFileName:" + archiveFileName);
                     int startIdx = "jar:".length() + 1;
                     int endIdx = archiveFileName.indexOf("!", startIdx);
                     archiveFileName = archiveFileName.substring(startIdx, endIdx);
-                    LOG.debug(">>SUBST archiveFileName:" + archiveFileName);
+                    LOGGER.debug(">>SUBST archiveFileName:" + archiveFileName);
                     final JarFile archive = new JarFile(URLDecoder.decode(archiveFileName, "UTF-8"));
                     Enumeration<? extends ZipEntry> entries = archive.entries();
                     while (entries.hasMoreElements()) {
                         final ZipEntry entry = entries.nextElement();
                         String fileName = entry.getName();
-                        LOG.debug(">>>> zip entry : " + fileName + ", isFromResourcePath:" + fileName.startsWith(resourcePath)
+                        LOGGER.debug(">>>> zip entry : " + fileName + ", isFromResourcePath:" + fileName.startsWith(resourcePath)
                                 + ", isNativeLibFile:" + isNativeLibraryFile(fileName));
                         if (fileName.startsWith(resourcePath) && isNativeLibraryFile(fileName)) {
                             fileName = fileName.substring(resourcePath.length() + 1);
@@ -90,11 +90,11 @@ public class NativeSocketLibUtil {
     }
 
     private void initOSProperties() {
-        suffix = ".so"; 
+        suffix = ".so";
         String os = System.getProperty("os.name").replaceAll("[^A-Za-z0-9]", "").toLowerCase();
         if ("macosx".equals(os)) {
             suffix = ".dylib";
-        } 
+        }
         arch = System.getProperty("os.arch");
     }
 
@@ -134,10 +134,10 @@ public class NativeSocketLibUtil {
             target.write(buffer, 0, read);
             total += read;
         }
-        LOG.info("copied " + total + " bytes for file " + targetFile.getAbsolutePath());
+        LOGGER.info("copied " + total + " bytes for file " + targetFile.getAbsolutePath());
         target.flush();
         target.close();
-        source.close();    
+        source.close();
         initJavaWithNativeLib(targetFile);
     }
 

@@ -9,8 +9,6 @@ import java.util.Properties;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.rosuda.irconnect.IREXP;
 import org.rosuda.irconnect.ITwoWayConnection;
 import org.rosuda.mapper.ObjectTransformationHandler;
@@ -18,10 +16,12 @@ import org.rosuda.mapper.irexp.IREXPMapper;
 import org.rosuda.rengine.REngineConnectionFactory;
 import org.rosuda.type.Node;
 import org.rosuda.type.impl.NodeBuilderFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class CreateNodeModels {
 
-	private static final Log log = LogFactory.getLog(CreateNodeModels.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(CreateNodeModels.class);
 	
 	private final ITwoWayConnection connection;
 	private final ObjectTransformationHandler<Object> handler;
@@ -44,7 +44,7 @@ public class CreateNodeModels {
 	 * @throws IOException
 	 */
 	public void writeSummaryAndAICForCommand(final String command, final File target) throws ParserConfigurationException, TransformerException, IOException {
-		log.info(command);
+		LOGGER.info(command);
 		connection.voidEval("mModel <- "+command+"");
 		connection.voidEval("mSummary <- summary(mModel)");
 		connection.voidEval("mAIC <- AIC(mModel)");
@@ -55,7 +55,7 @@ public class CreateNodeModels {
 		final ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(target));
 		oos.writeObject(lmNode.build());
 		oos.close();
-		log.info("created file "+target.getAbsolutePath());
+		LOGGER.info("created file "+target.getAbsolutePath());
 	}
 
 }
