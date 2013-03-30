@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,6 +39,7 @@ import org.rosuda.util.r.impl.RStarterFactory;
  */
 public class RStartProcessTest {
 
+    private File tempFile;
     private RStarterFactory rStarterFactory;
     private RStartContext rStartContext;
     private ProcessService<IRConnection> service;
@@ -65,6 +67,13 @@ public class RStartProcessTest {
         when(runtime.exec((String[]) any())).thenReturn(process);
         rStartContext.setRuntime(runtime);
         mockedIRConnection = mock(IRConnection.class);
+    }
+
+    @After
+    public void cleanUp() {
+        if (tempFile != null) {
+            tempFile.delete();
+        }
     }
 
     @Test
@@ -128,6 +137,7 @@ public class RStartProcessTest {
     }
 
     private void ensureRFileCanBeFound() throws IOException {
-        new File("R").createNewFile();
+        tempFile = new File("R");
+        tempFile.createNewFile();
     }
 }
