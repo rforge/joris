@@ -12,38 +12,42 @@ import org.springframework.beans.factory.annotation.Required;
 
 public class RStarterFactory extends ProcessFactory<IRConnection> {
 
-    private final RunStateHolder<IRConnection> runStateHolder = new RunStateHolder<IRConnection>();
+    final RunStateHolder<IRConnection> runStateHolder = new RunStateHolder<IRConnection>();
 
     private RStartContext context = new RStartContext();
 
     public RStartContext getContext() {
-	return context;
+        return context;
     }
 
     @Required
     public void setContext(final RStartContext context) {
-	this.context = context;
+        this.context = context;
     }
 
     protected ProcessStarter<IRConnection> createStarter() {
-	try {
-	    final IRConnection rcon = context.createConnection();
-	    rcon.close();
-	    return new RunningInstance<IRConnection>(runStateHolder);
-	} catch (final Exception x) {
-	}
-	if (OS.isWindows()) {
-	    return new WindowsRStarter(runStateHolder, context);
-	} else {
-	    return new UnixRStarter(runStateHolder, context);
-	}
+        try {
+            final IRConnection rcon = context.createConnection();
+            rcon.close();
+            return new RunningInstance<IRConnection>(runStateHolder);
+        } catch (final Exception x) {
+        }
+        return handleCreateStarter();
+    }
+
+    protected ProcessStarter<IRConnection> handleCreateStarter() {
+        if (OS.isWindows()) {
+            return new WindowsRStarter(runStateHolder, context);
+        } else {
+            return new UnixRStarter(runStateHolder, context);
+        }
     }
 
     protected ProcessStopper<IRConnection> createStopper() {
-	return new DefaultRStopper(runStateHolder, context);
+        return new DefaultRStopper(runStateHolder, context);
     }
 
     protected HasRunState<IRConnection> createHasRunState() {
-	return runStateHolder;
+        return runStateHolder;
     }
 }

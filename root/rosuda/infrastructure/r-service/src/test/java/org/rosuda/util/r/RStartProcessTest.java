@@ -10,6 +10,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -23,6 +24,8 @@ import org.rosuda.irconnect.RServerException;
 import org.rosuda.util.process.ProcessService;
 import org.rosuda.util.process.RUNSTATE;
 import org.rosuda.util.process.ShellContext;
+import org.rosuda.util.r.impl.MockFileRStarter;
+import org.rosuda.util.r.impl.MockStarterFactory;
 import org.rosuda.util.r.impl.RStartContext;
 import org.rosuda.util.r.impl.RStarterFactory;
 
@@ -35,75 +38,96 @@ import org.rosuda.util.r.impl.RStarterFactory;
  */
 public class RStartProcessTest {
 
+    private RStarterFactory rStarterFactory;
     private RStartContext rStartContext;
     private ProcessService<IRConnection> service;
     private IConnectionFactory connectionFactory;
     private IRConnection mockedIRConnection;
 
     private Runtime runtime;
-    
+
     private static class EmptyTestShellContext extends ShellContext {
-	@Override
-	public String getProperty(String propertyName) {
-	    return null;
-	}
+        @Override
+        public String getProperty(String propertyName) {
+            return null;
+        }
     }
-    
+
     @Before
     public void setUp() throws IOException {
-	rStartContext = new RStartContext();
-	rStartContext.setShellContext(new EmptyTestShellContext());
-	runtime = mock(Runtime.class);
-	final Process process = mock(Process.class);
-	when(process.getErrorStream()).thenReturn(mock(InputStream.class));
-	when(process.getInputStream()).thenReturn(mock(InputStream.class));
-	when(runtime.exec((String[]) any())).thenReturn(process);
-	rStartContext.setRuntime(runtime);
-	mockedIRConnection = mock(IRConnection.class);
+        rStarterFactory = new RStarterFactory();
+        rStartContext = new RStartContext();
+        rStartContext.setShellContext(new EmptyTestShellContext());
+        runtime = mock(Runtime.class);
+        final Process process = mock(Process.class);
+        when(process.getErrorStream()).thenReturn(mock(InputStream.class));
+        when(process.getInputStream()).thenReturn(mock(InputStream.class));
+        when(runtime.exec((String[]) any())).thenReturn(process);
+        rStartContext.setRuntime(runtime);
+        mockedIRConnection = mock(IRConnection.class);
     }
 
     @Test
     public void usesAvailableRConnection() throws IOException {
-	withAvailableIRConnection();
-	service.start();
-	verify(runtime, never()).exec((String[]) any());
-	assertEquals(RUNSTATE.RUNNING, service.getRunState());
+        withAvailableIRConnection();
+        service.start();
+        verify(runtime, never()).exec((String[]) any());
+        assertEquals(RUNSTATE.RUNNING, service.getRunState());
+    }
+
+    @Test
+    public void startsProcessWhenNoIRConnectionIsAvailableAndFileLocationsAreEmpty() throws Exception {
+        withMockStarterFactory();
+        ensureRFileCanBeFound();
+        errorWhenAcquiringIRConnection(new RServerException("any", "any"));
+        service.start();
+        verify(runtime, atLeast(1)).exec((String[]) any());
+        assertEquals(RUNSTATE.RUNNING, service.getRunState());
     }
 
     @Test
     public void startsProcessWhenNoIRConnectionIsAvailable() throws Exception {
-	errorWhenAcquiringIRConnection(new RServerException("any", "any"));
-	service.start();
-	verify(runtime, atLeast(1)).exec((String[]) any());
-	assertEquals(RUNSTATE.RUNNING, service.getRunState());
+        errorWhenAcquiringIRConnection(new RServerException("any", "any"));
+        ensureRFileCanBeFound();
+        service.start();
+        verify(runtime, atLeast(1)).exec((String[]) any());
+        assertEquals(RUNSTATE.RUNNING, service.getRunState());
     }
 
     @Test
     public void testStopProcess() {
-	withAvailableIRConnection();
-	service.start();
-	service.stop();
-	Assert.assertEquals(RUNSTATE.TERMINATED, service.getRunState());
-	verify(connectionFactory, times(1)).shutdown(notNull(Properties.class));
+        withAvailableIRConnection();
+        service.start();
+        service.stop();
+        Assert.assertEquals(RUNSTATE.TERMINATED, service.getRunState());
+        verify(connectionFactory, times(1)).shutdown(notNull(Properties.class));
     }
 
     // -- helper
 
     private void withAvailableIRConnection() {
-	final RStarterFactory factory = new RStarterFactory();
-	connectionFactory = mock(IConnectionFactory.class);
-	when(connectionFactory.createRConnection(any(Properties.class))).thenReturn(mockedIRConnection);
-	factory.setContext(rStartContext);
-	rStartContext.setConnectionFactory(connectionFactory);
-	this.service = factory.createService();
+        connectionFactory = mock(IConnectionFactory.class);
+        when(connectionFactory.createRConnection(any(Properties.class))).thenReturn(mockedIRConnection);
+        rStarterFactory.setContext(rStartContext);
+        rStartContext.setConnectionFactory(connectionFactory);
+        this.service = rStarterFactory.createService();
     }
-    
+
     private void errorWhenAcquiringIRConnection(final Throwable throwable) {
-	final RStarterFactory factory = new RStarterFactory();
-	connectionFactory = mock(IConnectionFactory.class);
-	when(connectionFactory.createRConnection(any(Properties.class))).thenThrow(throwable).thenReturn(mockedIRConnection);
-	factory.setContext(rStartContext);
-	rStartContext.setConnectionFactory(connectionFactory);
-	this.service = factory.createService();
+        connectionFactory = mock(IConnectionFactory.class);
+        when(connectionFactory.createRConnection(any(Properties.class))).thenThrow(throwable).thenReturn(mockedIRConnection);
+        rStarterFactory.setContext(rStartContext);
+        rStartContext.setConnectionFactory(connectionFactory);
+        this.service = rStarterFactory.createService();
+    }
+
+    private void withMockStarterFactory() {
+        MockStarterFactory mockStarterFactory = new MockStarterFactory();
+        mockStarterFactory.setStarter(new MockFileRStarter(mockStarterFactory.getRunstateHolder(), rStartContext));
+        rStarterFactory = mockStarterFactory;
+    }
+
+    private void ensureRFileCanBeFound() throws IOException {
+        new File("R").createNewFile();
     }
 }
