@@ -25,7 +25,7 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
     protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
     protected final String R_ARGS = "--vanilla --slave";
     protected final String R_SERVE_ARGS = "--no-save --slave";
-    protected final List<File> fileLocations = Collections.unmodifiableList(getRFileLocations());
+    protected final List<File> fileLocations;
 
     final RStartContext setup;
     private Process process;
@@ -33,6 +33,7 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
     public AbstractRStarter(final RunStateHolder<IRConnection> runStateHolder, final RStartContext setup) {
         super(runStateHolder);
         this.setup = setup;
+        fileLocations = Collections.unmodifiableList(getRFileLocations());
         runStateHolder.setRunState(RUNSTATE.STARTING);
     }
 
@@ -117,7 +118,6 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
         @Override
         protected IRConnection createResultInstance() {
             return RConnectionProxy.createProxy(factory.createRConnection(connectionProperties), null);
-        }
-
+        }       
     }
 }
