@@ -9,6 +9,8 @@ public abstract class ProcessContext {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProcessContext.class);
 
+    protected static final String ENVIRONMENT_PREFIX = "JORIS.";
+
     private Runtime runtime = Runtime.getRuntime();
 
     public void setRuntime(final Runtime runtime) {
