@@ -2,6 +2,7 @@ package org.rosuda.linux.socket;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
@@ -38,7 +39,7 @@ public class NativeLibUtil {
             usedLoaders.add(classLoader);
         } while ((classLoader = classLoader.getParent()) == null);
         if (!usedLoaders.contains(systemClassLoader)) {
-            libs.addAll(inspector.getLoadedLibraries(classLoader));
+            libs.addAll(inspector.getLoadedLibraries(systemClassLoader));
         }
         return libs.contains(libName);
     }
@@ -58,6 +59,9 @@ public class NativeLibUtil {
 
         @SuppressWarnings("unchecked")
         Collection<String> getLoadedLibraries(final ClassLoader loader) {
+            if (loader == null) {
+                return Collections.emptyList();
+            }
             LOGGER.info("gettling loaded libs from ClassLoader " + loader.getClass().getSimpleName());
             try {
                 return (Collection<String>) LOADED_LIBRARY_NAMES.get(loader);
