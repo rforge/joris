@@ -2,6 +2,7 @@ package org.rosuda.linux.socket;
 
 import java.lang.reflect.Field;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -23,18 +24,22 @@ public class NativeLibUtil {
     public static boolean isLibraryAlreadyLoaded(String libName) {
         final ClassLoaderLibInspector inspector = getInspector();
         final Set<String> libs = new TreeSet<String>();
+        final ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        final Set<ClassLoader> usedLoaders = new HashSet<ClassLoader>();
         if (classLoader == null) {
-            classLoader = ClassLoader.getSystemClassLoader();
+            classLoader = systemClassLoader;
         }
         do {
-            System.out.println(">>>>>>>>>>>>>>LOGGER = "+LOGGER+" cl="+classLoader);
             if (classLoader == null) {
                 break;
             }
-            LOGGER.info("gettling loaded libs from ClassLoader " + classLoader.getClass().getSimpleName());
             libs.addAll(inspector.getLoadedLibraries(classLoader));
+            usedLoaders.add(classLoader);
         } while ((classLoader = classLoader.getParent()) == null);
+        if (!usedLoaders.contains(systemClassLoader)) {
+            libs.addAll(inspector.getLoadedLibraries(classLoader));
+        }
         return libs.contains(libName);
     }
 
@@ -53,6 +58,7 @@ public class NativeLibUtil {
 
         @SuppressWarnings("unchecked")
         Collection<String> getLoadedLibraries(final ClassLoader loader) {
+            LOGGER.info("gettling loaded libs from ClassLoader " + loader.getClass().getSimpleName());
             try {
                 return (Collection<String>) LOADED_LIBRARY_NAMES.get(loader);
             } catch (Exception e) {
