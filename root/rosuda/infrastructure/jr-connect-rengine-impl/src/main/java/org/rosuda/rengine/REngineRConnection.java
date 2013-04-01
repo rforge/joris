@@ -41,10 +41,16 @@ public class REngineRConnection extends ARConnection implements IRConnection {
                 if (OS.isWindows()) {
                     throw new UnsupportedOperationException("socket connection is not available for windows");
                 }
+                logger.info("BEFORE: enable domain socket socket,\n magic path = "
+                        + System.getProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH) + "\n path PROP_LIBRARY_LOADED = "
+                        + System.getProperty(NativeSocketLibUtil.PROP_LIBRARY_LOADED));
+
                 new NativeSocketLibUtil().enableDomainSockets();
-                logger.info("creating unix domain socket, magic path = "+System.getProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH));                
+                logger.info("AFTER: creating unix domain socket,\n magic path = "
+                        + System.getProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH) + "\n path PROP_LIBRARY_LOADED = "
+                        + System.getProperty(NativeSocketLibUtil.PROP_LIBRARY_LOADED));
                 final File socketFile = new File(socket);
-                logger.info("socket file \""+socketFile.getAbsolutePath()+"\" exists ? "+socketFile.exists());
+                logger.info("AFTER: socket file \"" + socketFile.getAbsolutePath() + "\" exists ? " + socketFile.exists());
                 AFUNIXSocket domainsocket = AFUNIXSocket.connectTo(new AFUNIXSocketAddress(socketFile));
                 if (!domainsocket.isConnected()) {
                     throw new RServerException("no connection to unixsocket \"" + socket + "\"", "domainsocket is not connected.");
