@@ -10,10 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLDecoder;
-import java.util.Collections;
 import java.util.Enumeration;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
@@ -24,7 +21,6 @@ import org.slf4j.LoggerFactory;
 
 public class NativeSocketLibUtil {
 
-    private static final Set<String> loadedLibs = Collections.synchronizedSet(new HashSet<String>());
     public static final String NATIVE_LIB_PATH = "NATIVE_LIB_PATH";
     public static final String ENV_NATIVE_LIBRARY_PATH = "org.newsclub.net.unix.library.path";
     private static final String resourcePath = "org/rosuda/linux/socket";
@@ -147,15 +143,17 @@ public class NativeSocketLibUtil {
     }
 
     private static void initJavaWithNativeLib(final File targetFile) {
-        synchronized (loadedLibs) {
-            final String libName = targetFile.getName();
-            if (!loadedLibs.contains(libName)) {
-                loadedLibs.add(libName);
-                LOGGER.info("loading native lib \"" + libName + "\"");
-                System.load(targetFile.getAbsolutePath());
-            } else {
-                LOGGER.info("native library \"" + libName + "\" has already been loaded.");
-            }
+        String libName;
+        try {
+            libName = targetFile.getCanonicalPath();
+        } catch (IOException e) {
+            throw new RuntimeException("could not determine canonical path of " + targetFile, e);
+        }
+        if (!NativeLibUtil.isLibraryAlreadyLoaded(libName)) {
+            LOGGER.info("loading native lib \"" + libName + "\"");
+            System.load(targetFile.getAbsolutePath());
+        } else {
+            LOGGER.info("native library \"" + libName + "\" has already been loaded.");
         }
     }
 }
