@@ -10,7 +10,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.util.Collections;
 import java.util.Enumeration;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
@@ -21,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 public class NativeSocketLibUtil {
 
+    private static final Set<String> loadedLibs = Collections.synchronizedSet(new HashSet<String>());
     public static final String NATIVE_LIB_PATH = "NATIVE_LIB_PATH";
     public static final String ENV_NATIVE_LIBRARY_PATH = "org.newsclub.net.unix.library.path";
     private static final String resourcePath = "org/rosuda/linux/socket";
@@ -47,7 +51,8 @@ public class NativeSocketLibUtil {
                 targetLocation = new File(native_lib_path);
             }
             System.setProperty(ENV_NATIVE_LIBRARY_PATH, targetLocation.getAbsolutePath());
-            LOGGER.info("setting System.property '" + ENV_NATIVE_LIBRARY_PATH + "' to '" + System.getProperty(ENV_NATIVE_LIBRARY_PATH) + "'");
+            LOGGER.info("setting System.property '" + ENV_NATIVE_LIBRARY_PATH + "' to '" + System.getProperty(ENV_NATIVE_LIBRARY_PATH)
+                    + "'");
             Enumeration<URL> resources = NativeSocketLibUtil.class.getClassLoader().getResources(resourcePath);
             byte[] buffer = new byte[BUFFER_SIZE];
             while (resources.hasMoreElements()) {
@@ -142,6 +147,15 @@ public class NativeSocketLibUtil {
     }
 
     private static void initJavaWithNativeLib(final File targetFile) {
-        System.load(targetFile.getAbsolutePath());
+        synchronized (loadedLibs) {
+            final String libName = targetFile.getName();
+            if (!loadedLibs.contains(libName)) {
+                loadedLibs.add(libName);
+                LOGGER.info("loading native lib \"" + libName + "\"");
+                System.load(targetFile.getAbsolutePath());
+            } else {
+                LOGGER.info("native library \"" + libName + "\" has already been loaded.");
+            }
+        }
     }
 }
