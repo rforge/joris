@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 public class NativeSocketLibUtil {
 
     public static final String NATIVE_LIB_PATH = "NATIVE_LIB_PATH";
+    public static final String PROP_LIBRARY_LOADED = "org.newsclub.net.unix.library.loaded";
     public static final String ENV_NATIVE_LIBRARY_PATH = "org.newsclub.net.unix.library.path";
     private static final String resourcePath = "org/rosuda/linux/socket";
     private static final Logger LOGGER = LoggerFactory.getLogger(NativeSocketLibUtil.class);
@@ -152,6 +153,7 @@ public class NativeSocketLibUtil {
         if (!NativeLibUtil.isLibraryAlreadyLoaded(libName)) {
             LOGGER.info("loading native lib \"" + libName + "\"");
             System.load(targetFile.getAbsolutePath());
+            System.setProperty(PROP_LIBRARY_LOADED, targetFile.getAbsolutePath());
         } else {
             LOGGER.info("native library \"" + libName + "\" has already been loaded.");
         }

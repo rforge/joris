@@ -60,6 +60,19 @@ public class NativeSocketLibUtilTest {
         assertThat(System.getProperties(), both(anystring));
     }
 
+    @Test
+    @SuppressWarnings("unchecked")
+    public void thePathLoadedHasBeenSetIfOSIsNotWindows() {
+        if (OS.isWindows()) {
+            assertTrue("pass smilingly", true);
+            return;
+        }
+        String anystring = "anystring";
+        System.setProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH, anystring);
+        nativeSocketLibUtil.enableDomainSockets();
+        assertThat(System.getProperties(), both(NativeSocketLibUtil.PROP_LIBRARY_LOADED));
+    }
+
     @SuppressWarnings({ "rawtypes", "unchecked" })
     private Matcher both(String input) {
         Matcher equalToInput = equalTo(input);
