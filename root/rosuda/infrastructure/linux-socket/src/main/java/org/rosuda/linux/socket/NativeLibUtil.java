@@ -24,7 +24,14 @@ public class NativeLibUtil {
         final ClassLoaderLibInspector inspector = getInspector();
         final Set<String> libs = new TreeSet<String>();
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        if (classLoader == null) {
+            classLoader = ClassLoader.getSystemClassLoader();
+        }
         do {
+            System.out.println(">>>>>>>>>>>>>>LOGGER = "+LOGGER+" cl="+classLoader);
+            if (classLoader == null) {
+                break;
+            }
             LOGGER.info("gettling loaded libs from ClassLoader " + classLoader.getClass().getSimpleName());
             libs.addAll(inspector.getLoadedLibraries(classLoader));
         } while ((classLoader = classLoader.getParent()) == null);
