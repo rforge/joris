@@ -31,8 +31,8 @@ public class DerbyContextTest {
     @Test
     public void theTemplateStringCreatesAnEnvironmentSpecificShellCall() {
 	when(environmentStub.getClasspath()).thenReturn("classpath");
-	when(environmentStub.getProperty(eq(DerbyContext.DERBY_PORT))).thenReturn("1600");
-	when(environmentStub.getProperty(eq(DerbyContext.DERBY_HOST))).thenReturn("DERBY_PROPERTY");
+	when(environmentStub.getEnvironmentVariable(eq(DerbyContext.DERBY_PORT))).thenReturn("1600");
+	when(environmentStub.getEnvironmentVariable(eq(DerbyContext.DERBY_HOST))).thenReturn("DERBY_PROPERTY");
 	
 	assertEquals("arg1 classpath arg2 -p 1600 -h DERBY_PROPERTY",derbyContext.createShellCall("arg1 {0} arg2{1}"));
     }
@@ -40,8 +40,8 @@ public class DerbyContextTest {
     @Test
     public void whenAShellPropertyIsNullTheArgumentIsReplacedByEmptyString() {
 	when(environmentStub.getClasspath()).thenReturn("classpath");
-	when(environmentStub.getProperty(eq(DerbyContext.DERBY_PORT))).thenReturn("1600");
-	when(environmentStub.getProperty(eq(DerbyContext.DERBY_HOST))).thenReturn(null);
+	when(environmentStub.getEnvironmentVariable(eq(DerbyContext.DERBY_PORT))).thenReturn("1600");
+	when(environmentStub.getEnvironmentVariable(eq(DerbyContext.DERBY_HOST))).thenReturn(null);
 	
 	assertEquals("arg1 classpath arg2 -p 1600",derbyContext.createShellCall("arg1 {0} arg2{1}"));
     }
@@ -49,8 +49,8 @@ public class DerbyContextTest {
     @Test
     public void whenNoPortIsSetFromEnvironmentThePortFromTheConfigIsUsed() {
 	when(environmentStub.getClasspath()).thenReturn(System.getProperty("java.class.path"));
-	when(environmentStub.getProperty(eq(DerbyContext.DERBY_PORT))).thenReturn(null);
-	when(environmentStub.getProperty(eq(DerbyContext.DERBY_HOST))).thenReturn(null);
+	when(environmentStub.getEnvironmentVariable(eq(DerbyContext.DERBY_PORT))).thenReturn(null);
+	when(environmentStub.getEnvironmentVariable(eq(DerbyContext.DERBY_HOST))).thenReturn(null);
 	
 	assertThat(derbyContext.createShellCall("java -cp {0} org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager{1}"),
 		CombinableMatcher.<String>both(startsWith("java -cp ")).and(endsWith(" org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager -p 3529")));
@@ -60,8 +60,8 @@ public class DerbyContextTest {
     @Test
     public void theReferenceCommandFormatWorksWithoutEnvironmentVariable() {
 	when(environmentStub.getClasspath()).thenReturn(System.getProperty("java.class.path"));
-	when(environmentStub.getProperty(eq(DerbyContext.DERBY_PORT))).thenReturn("3529");
-	when(environmentStub.getProperty(eq(DerbyContext.DERBY_HOST))).thenReturn(null);
+	when(environmentStub.getEnvironmentVariable(eq(DerbyContext.DERBY_PORT))).thenReturn("3529");
+	when(environmentStub.getEnvironmentVariable(eq(DerbyContext.DERBY_HOST))).thenReturn(null);
 	
 	assertThat(derbyContext.createShellCall("java -cp {0} org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager{1}"),
 		CombinableMatcher.<String>both(startsWith("java -cp ")).and(endsWith(" org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager -p 3529")));
@@ -72,8 +72,8 @@ public class DerbyContextTest {
     public void theReferenceCommandFormatWorksWithEnvironmentVariable() {
 	
 	when(environmentStub.getClasspath()).thenReturn(System.getProperty("java.class.path"));
-	when(environmentStub.getProperty(eq(DerbyContext.DERBY_PORT))).thenReturn("3529");
-	when(environmentStub.getProperty(eq(DerbyContext.DERBY_HOST))).thenReturn("$OPENSHIFT_INTERNAL_IP");
+	when(environmentStub.getEnvironmentVariable(eq(DerbyContext.DERBY_PORT))).thenReturn("3529");
+	when(environmentStub.getEnvironmentVariable(eq(DerbyContext.DERBY_HOST))).thenReturn("$OPENSHIFT_INTERNAL_IP");
 	
 	assertThat(derbyContext.createShellCall("java -cp {0} org.apache.derby.drda.NetworkServerControl shutdown -noSecurityManager{1}"),
 		CombinableMatcher.<String>both(startsWith("java -cp ")).and(

@@ -24,12 +24,12 @@ public class TestShellContext extends ShellContext {
     }
 
     @Override
-    public String getProperty(String propertyName) {
+    public String getEnvironmentVariable(String propertyName) {
         final String propertyValue = map.get(propertyName);
         if (propertyValue != null) {
             return propertyValue;
         }
-        return super.getProperty(propertyName);
+        return super.getEnvironmentVariable(propertyName);
     }
 
     @Override

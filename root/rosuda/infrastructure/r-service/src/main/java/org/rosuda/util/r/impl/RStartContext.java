@@ -54,8 +54,8 @@ public class RStartContext extends ProcessContext {
                 properties.put(key, entry.getValue());
             }
         }
-        final String environmentSocket = shellContext.getProperty(RServeOpts.SOCKET.getEnvironmentName());
-        final String environmentPort = shellContext.getProperty(RServeOpts.PORT.getEnvironmentName());
+        final String environmentSocket = shellContext.getEnvironmentVariable(RServeOpts.SOCKET.getEnvironmentName());
+        final String environmentPort = shellContext.getEnvironmentVariable(RServeOpts.PORT.getEnvironmentName());
         if (environmentSocket != null) {
             properties.setProperty(IConnectionFactory.SOCKET, environmentSocket);
         } else if (environmentPort != null) {

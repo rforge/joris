@@ -87,8 +87,8 @@ public class DerbyContext extends ProcessContext {
 
     protected String createShellCall(final String templateString) {
         StringBuilder derbyOpts = new StringBuilder();
-        String derbyPort = shellContext.getProperty(DERBY_PORT);
-        String derbyHost = shellContext.getProperty(DERBY_HOST);
+        String derbyPort = shellContext.getEnvironmentVariable(DERBY_PORT);
+        String derbyHost = shellContext.getEnvironmentVariable(DERBY_HOST);
         if (derbyPort != null) {
             derbyOpts.append(" -p ").append(derbyPort);
         } else {

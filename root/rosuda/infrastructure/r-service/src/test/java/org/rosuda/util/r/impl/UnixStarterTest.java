@@ -43,7 +43,7 @@ public class UnixStarterTest {
         }
 
         @Override
-        public String getProperty(String propertyName) {
+        public String getEnvironmentVariable(String propertyName) {
             return argMap.get(propertyName);
         }
     }

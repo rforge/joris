@@ -7,6 +7,7 @@
 package org.rosuda.irconnect;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
@@ -93,14 +94,17 @@ public abstract class AConnectionFactory implements IConnectionFactory {
         }
         LOGGER.info("shutting down " + pool.size() + " RConnections");
         int shutdownSuccessCount = 0;
+        final Collection<IRConnection> deadConnections = new ArrayList<IRConnection>();
         for (final IRConnection con : pool) {
             try {
                 con.shutdown();
+                deadConnections.add(con);
                 shutdownSuccessCount++;
             } catch (final RServerException rse) {
                 LOGGER.warn("r-connection shutdown failed", rse);
             }
         }
+        pool.removeAll(deadConnections);
         if (shutdownSuccessCount == 0) {
             shutDownWithNewConnection(properties);
         }

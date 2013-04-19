@@ -13,11 +13,11 @@ private Properties map = new Properties();
 	}
 	
 	@Override
-	public String getProperty(String propertyName) {
+	public String getEnvironmentVariable(String propertyName) {
 		final String propertyValue = map.getProperty(propertyName);
 		if (propertyValue != null) {
 			return propertyValue;
 		}
-		return super.getProperty(propertyName);
+		return super.getEnvironmentVariable(propertyName);
 	}
 }

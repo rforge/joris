@@ -32,24 +32,24 @@ public class DataSourceConfigurationTest {
     
     @Test
     public void theDatabaseCanBeAdjustedByTheShellEnvironment() {
-	when(shellContext.getProperty(eq(DerbyContext.DERBY_HOST))).thenReturn("mockedhost");
-	when(shellContext.getProperty(eq(DerbyContext.DERBY_PORT))).thenReturn("mockedport");
+	when(shellContext.getEnvironmentVariable(eq(DerbyContext.DERBY_HOST))).thenReturn("mockedhost");
+	when(shellContext.getEnvironmentVariable(eq(DerbyContext.DERBY_PORT))).thenReturn("mockedport");
 	dataSourceConfig.processEnvironmentConfiguration(shellContext);
 	assertThat(dataSourceConfig.getUrl(), equalTo("jdbc:derby://mockedhost:mockedport//derby;create=true"));
     }
     
     @Test
     public void theDatabaseCanOverridePortOnly() {
-	when(shellContext.getProperty(eq(DerbyContext.DERBY_HOST))).thenReturn(null);
-	when(shellContext.getProperty(eq(DerbyContext.DERBY_PORT))).thenReturn("mockedport");
+	when(shellContext.getEnvironmentVariable(eq(DerbyContext.DERBY_HOST))).thenReturn(null);
+	when(shellContext.getEnvironmentVariable(eq(DerbyContext.DERBY_PORT))).thenReturn("mockedport");
 	dataSourceConfig.processEnvironmentConfiguration(shellContext);
 	assertThat(dataSourceConfig.getUrl(), equalTo("jdbc:derby://localhost:mockedport//derby;create=true"));
     }
     
     @Test
     public void theDatabaseCanOverrideHostOnly() {
-	when(shellContext.getProperty(eq(DerbyContext.DERBY_HOST))).thenReturn("mockedhost");
-	when(shellContext.getProperty(eq(DerbyContext.DERBY_PORT))).thenReturn(null);
+	when(shellContext.getEnvironmentVariable(eq(DerbyContext.DERBY_HOST))).thenReturn("mockedhost");
+	when(shellContext.getEnvironmentVariable(eq(DerbyContext.DERBY_PORT))).thenReturn(null);
 	dataSourceConfig.processEnvironmentConfiguration(shellContext);
 	assertThat(dataSourceConfig.getUrl(), equalTo("jdbc:derby://mockedhost:3529//derby;create=true"));
     }

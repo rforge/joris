@@ -50,7 +50,7 @@ public class RStartProcessTest {
 
     private static class EmptyTestShellContext extends ShellContext {
         @Override
-        public String getProperty(String propertyName) {
+        public String getEnvironmentVariable(String propertyName) {
             return null;
         }
     }

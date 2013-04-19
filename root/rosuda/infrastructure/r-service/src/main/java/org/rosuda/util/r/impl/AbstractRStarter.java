@@ -65,13 +65,12 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
                     sb.append(arg);
                     sb.append(" ");
                 }
-                LOGGER.info(sb.toString());
-                LOGGER.warn("****" + this.getClass() + "**** create process for Args " + runtimeArgs);
+                LOGGER.debug("create process for args " + sb);
                 process = setup.createProcessForArgs(runtimeArgs);
                 // append loggers
                 final IRConnection rcon = new RetryStarter(setup.connectionFactory, setup.getMergedConnectionProperties()).create(process,
                         this.getClass().getSimpleName(), runStateHolder, isBlocking());
-                LOGGER.warn("****" + this.getClass() + "**** created process for Args " + runtimeArgs + " -> rcon = " + rcon);
+                LOGGER.debug("created process for args " + sb + " -> rcon = " + rcon);
                 if (rcon != null) {
                     rcon.close();
                     runStateHolder.setRunState(RUNSTATE.RUNNING);
@@ -95,7 +94,7 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
         }
         final StringBuilder envStringBuilder = new StringBuilder();
         for (RServeOpts rsOpt : RServeOpts.values()) {
-            String option = shellContext.getProperty(rsOpt.getEnvironmentName());
+            String option = shellContext.getEnvironmentVariable(rsOpt.getEnvironmentName());
             if (option != null && option.trim().length() > 0) {
                 envStringBuilder.append(rsOpt.asRServeOption()).append(" ").append(option).append(" ");
             }

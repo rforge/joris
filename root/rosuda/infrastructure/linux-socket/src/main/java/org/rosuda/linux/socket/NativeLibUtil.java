@@ -22,7 +22,18 @@ public class NativeLibUtil {
         return inspector;
     }
 
+    public static Collection<String> listLoadedLibraries() {
+        return Collections.unmodifiableSet(aquireLoadedLibraries());
+    }
+
     public static boolean isLibraryAlreadyLoaded(String libName) {
+        System.out.println("#####Check Already loaded : "+libName);
+        // final String pathlessLibName = getPathLessLibName(libName);
+        final Set<String> libs = aquireLoadedLibraries();
+        return libs.contains(libName)/* || (pathlessLibName != null && containsPathLessLib(libs, pathlessLibName))*/;
+    }
+
+    private static Set<String> aquireLoadedLibraries() {
         final ClassLoaderLibInspector inspector = getInspector();
         final Set<String> libs = new TreeSet<String>();
         final ClassLoader systemClassLoader = ClassLoader.getSystemClassLoader();
@@ -35,13 +46,38 @@ public class NativeLibUtil {
             if (classLoader == null) {
                 break;
             }
+            libs.add(classLoader.getClass().getName());
             libs.addAll(inspector.getLoadedLibraries(classLoader));
             usedLoaders.add(classLoader);
         } while ((classLoader = classLoader.getParent()) == null);
         if (!usedLoaders.contains(systemClassLoader)) {
+            libs.add(systemClassLoader.getClass().getName());
             libs.addAll(inspector.getLoadedLibraries(systemClassLoader));
         }
-        return libs.contains(libName);
+        return libs;
+    }
+    
+
+    private static String getPathLessLibName(String libName) {
+        int pathIdx = libName.lastIndexOf("/");
+        final String pathlessLibName;
+        if (pathIdx > 0) {
+            pathlessLibName  = libName.substring(pathIdx);
+        } else {
+            pathlessLibName = null;
+        }
+        return pathlessLibName;
+    }
+
+    private static boolean containsPathLessLib(Set<String> libs, String pathlessLibName) {
+        boolean containsPathLessLib = false;
+        for (String libName : libs) {
+            if (libName.endsWith(pathlessLibName)) {
+                containsPathLessLib = true;
+                LOGGER.info("lib has already been loaded with name "+libName);
+            }
+        }
+        return containsPathLessLib;
     }
 
     protected static class ClassLoaderLibInspector {
@@ -62,11 +98,12 @@ public class NativeLibUtil {
             if (loader == null) {
                 return Collections.emptyList();
             }
-            LOGGER.info("gettling loaded libs from ClassLoader " + loader.getClass().getSimpleName());
             try {
+                LOGGER.info("acquiring loaded libs from ClassLoader " + loader.getClass().getSimpleName()+ " <- "+LOADED_LIBRARY_NAMES.get(loader));
                 return (Collection<String>) LOADED_LIBRARY_NAMES.get(loader);
+                
             } catch (Exception e) {
-                throw new RuntimeException("could not acces class-loader field loadedLibraryNames", e);
+                throw new RuntimeException("could not access class-loader field loadedLibraryNames", e);
             }
         }
 

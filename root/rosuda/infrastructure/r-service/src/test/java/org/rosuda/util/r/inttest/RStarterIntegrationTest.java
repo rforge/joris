@@ -1,17 +1,7 @@
 package org.rosuda.util.r.inttest;
 
-import static org.junit.Assert.assertEquals;
-
-import org.junit.Assert;
-import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.rosuda.irconnect.IRConnection;
-import org.rosuda.rengine.REngineConnectionFactory;
-import org.rosuda.util.process.ProcessService;
-import org.rosuda.util.process.RUNSTATE;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Configurable;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -23,31 +13,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * 
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:/spring/r-service.spring.xml" })
+@ContextConfiguration(locations = { "classpath*:/spring/r-service.spring.xml" })
 @Configurable
-public class RStarterIntegrationTest {
+public class RStarterIntegrationTest extends AbstractStarterIntegrationTest {
 
-    @Autowired
-    @Qualifier("rStarterProcess")
-    private ProcessService<IRConnection> service;
-
-    @Test
-    public void testSpringServiceAvailable() {
-	Assert.assertNotNull(service);
-    }
-
-    @Test
-    public void testStartStopProcess() {
-	Assert.assertNotNull(service);
-	service.start();
-	assertEquals(RUNSTATE.RUNNING, service.getRunState());
-	service.stop();
-	assertEquals(RUNSTATE.TERMINATED, service.getRunState());
-	try {
-	    REngineConnectionFactory.getInstance().createRConnection(null);
-	    Assert.fail("no error raised, there is a connection available.");
-	} catch (final Exception x) {
-	    Assert.assertNotNull(x);
-	}
-    }
 }

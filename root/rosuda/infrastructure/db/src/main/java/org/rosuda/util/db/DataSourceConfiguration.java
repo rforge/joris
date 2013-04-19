@@ -48,9 +48,9 @@ public class DataSourceConfiguration {
     }
 
     protected void processEnvironmentConfiguration(ShellContext shellContext) {
-	final String hostFromEnvironment = shellContext.getProperty(DerbyContext.DERBY_HOST);
+	final String hostFromEnvironment = shellContext.getEnvironmentVariable(DerbyContext.DERBY_HOST);
 	String prefix = url.split("/")[0];
-	final String portFromEnvironment = shellContext.getProperty(DerbyContext.DERBY_PORT);
+	final String portFromEnvironment = shellContext.getEnvironmentVariable(DerbyContext.DERBY_PORT);
 	String urlHost = url.split("/")[2].split("\\:")[0];
 	final String preconfiguredPort = getPort();
 	String postfix = url.substring(url.indexOf(preconfiguredPort) + preconfiguredPort.length());

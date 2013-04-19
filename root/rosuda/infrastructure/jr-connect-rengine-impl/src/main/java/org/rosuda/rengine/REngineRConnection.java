@@ -16,6 +16,7 @@ import org.rosuda.irconnect.ARConnection;
 import org.rosuda.irconnect.IRConnection;
 import org.rosuda.irconnect.IREXP;
 import org.rosuda.irconnect.RServerException;
+import org.rosuda.linux.socket.NativeLibUtil;
 import org.rosuda.linux.socket.NativeSocketLibUtil;
 import org.rosuda.linux.socket.TcpTunnel;
 import org.rosuda.util.process.OS;
@@ -23,7 +24,9 @@ import org.rosuda.util.process.OS;
 public class REngineRConnection extends ARConnection implements IRConnection {
 
     private static Map<String, RConnection> socketConnections = new HashMap<String, RConnection>();
+    private static int createdSockets = 0;
 
+    private static NativeSocketLibUtil nativeSocketLibUtil = new NativeSocketLibUtil();
     protected static Logger logger = Logger.getLogger(REngineRConnection.class.getName());
 
     final RConnection delegate;
@@ -31,6 +34,7 @@ public class REngineRConnection extends ARConnection implements IRConnection {
     private TcpTunnel tunnel;
 
     REngineRConnection(final String host, final int port, final String socket) {
+        logger.info("creating new REngineRConnection("+host+","+port+","+socket+")");
         this.socket = socket;
         try {
             if (socket != null) {
@@ -41,17 +45,41 @@ public class REngineRConnection extends ARConnection implements IRConnection {
                 if (OS.isWindows()) {
                     throw new UnsupportedOperationException("socket connection is not available for windows");
                 }
-                logger.info("BEFORE: enable domain socket socket,\n magic path = "
-                        + System.getProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH) + "\n path PROP_LIBRARY_LOADED = "
-                        + System.getProperty(NativeSocketLibUtil.PROP_LIBRARY_LOADED));
-
-                new NativeSocketLibUtil().enableDomainSockets();
-                logger.info("AFTER: creating unix domain socket,\n magic path = "
-                        + System.getProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH) + "\n path PROP_LIBRARY_LOADED = "
-                        + System.getProperty(NativeSocketLibUtil.PROP_LIBRARY_LOADED));
+                // logger.info("BEFORE: enable domain socket socket,\n magic path = "
+                // +
+                // System.getProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH)
+                // + "\n path PROP_LIBRARY_LOADED = "
+                // + System.getProperty(NativeSocketLibUtil.PROP_LIBRARY_LOADED)
+                // );
+                //
+                nativeSocketLibUtil.enableDomainSockets();
+                // logger.info("AFTER: creating unix domain socket,\n magic path = "
+                // +
+                // System.getProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH)
+                // + "\n path PROP_LIBRARY_LOADED = "
+                // + System.getProperty(NativeSocketLibUtil.PROP_LIBRARY_LOADED)
+                // + "\n isSupported ?"+AFUNIXSocket.isSupported());
                 final File socketFile = new File(socket);
                 logger.info("AFTER: socket file \"" + socketFile.getAbsolutePath() + "\" exists ? " + socketFile.exists());
+                if (!socketFile.exists()) {
+                    throw new RServerException(this, "socket file does not exist", "no file \"" + socketFile.getAbsolutePath()
+                            + "\" exists.");
+                }
+                if (!socketFile.canRead()||!socketFile.canWrite()) {
+                    throw new RServerException(this, "socket file does not provide sufficent provileges", "no r/w access on file \"" + socketFile.getAbsolutePath()
+                            + "\".");                   
+                }
+                logger.info("[[BEFORE: [#created sockets:" + createdSockets + ", System classloader info = "
+                        + NativeLibUtil.listLoadedLibraries() + "\n magic path = "
+                        + System.getProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH) + "\n path PROP_LIBRARY_LOADED = "
+                        + System.getProperty(NativeSocketLibUtil.PROP_LIBRARY_LOADED) + "\n is .so file present :");
+                // File(System.getProperty(NativeSocketLibUtil.PROP_LIBRARY_LOADED)).length()+
+                // " current tc.ClassLoader ="+Thread.currentThread().getContextClassLoader());
+
                 AFUNIXSocket domainsocket = AFUNIXSocket.connectTo(new AFUNIXSocketAddress(socketFile));
+                createdSockets++;
+                logger.info("[[AFTER: created " + createdSockets + " sockets");
+
                 if (!domainsocket.isConnected()) {
                     throw new RServerException("no connection to unixsocket \"" + socket + "\"", "domainsocket is not connected.");
                 }
@@ -59,6 +87,7 @@ public class REngineRConnection extends ARConnection implements IRConnection {
                     throw new RServerException("connection to unixsocket \"" + socket + "\" has been closed", "domainsocket is closed.");
                 }
                 this.tunnel = new TcpTunnel(host, port, domainsocket);
+                logger.info("tunnel established, new Rconnection to "+host+","+port);
                 this.delegate = new RConnection(host, port);
                 socketConnections.put(socket, this.delegate);
             } else {
@@ -76,8 +105,9 @@ public class REngineRConnection extends ARConnection implements IRConnection {
     }
 
     public void close() {
+        logger.info("closing current connection.");
         delegate.close();
-        handleCloseSocket();
+        handleSocketClose();
     }
 
     public IREXP eval(final String query) {
@@ -100,6 +130,7 @@ public class REngineRConnection extends ARConnection implements IRConnection {
     }
 
     public void shutdown() {
+        logger.info("shutting down connection");
         try {
             if (delegate.isConnected()) {
                 delegate.shutdown();
@@ -107,7 +138,7 @@ public class REngineRConnection extends ARConnection implements IRConnection {
         } catch (final RserveException rse) {
             throw new RServerException(this, rse.getRequestErrorDescription(), rse.getMessage());
         }
-        handleCloseSocket();
+        handleSocketShutdown();
     }
 
     public void voidEval(final String query) {
@@ -132,12 +163,23 @@ public class REngineRConnection extends ARConnection implements IRConnection {
         }
     }
 
-    private void handleCloseSocket() {
+    private void handleSocketShutdown() {
+        handleSocketClose();
         if (this.socket == null) {
             return;
+        } else {
+            nativeSocketLibUtil.releaseSocketFile(socket);
         }
-        if (this.tunnel != null) {
-            tunnel.close();
+    }
+
+    private void handleSocketClose() {
+        if (this.socket == null) {
+            return;
+        } else {
+            if (this.tunnel != null) {
+                tunnel.close();
+            }
+            socketConnections.remove(socket);
         }
     }
 

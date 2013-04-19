@@ -48,12 +48,8 @@
 			<artifactId>linux-socket</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
-		<!-- 
-		<dependency>
-			<groupId>org.newsclub.net.unix</groupId>
-			<artifactId>junixsocket</artifactId>
-		</dependency>
-		 -->
+		<!-- <dependency> <groupId>org.newsclub.net.unix</groupId> <artifactId>junixsocket</artifactId> 
+			</dependency> -->
 	</dependencies>
 	<build>
 		<plugins>
@@ -61,14 +57,10 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-					<systemProperties>
-						<property>
-							<name>java.library.path</name>
-							<value>target/lib-native/</value>
-						</property>
-					</systemProperties>
 					<skip>true</skip>
+					<forkMode>never</forkMode>
 				</configuration>
+
 				<executions>
 					<execution>
 						<id>surefire-it</id>
