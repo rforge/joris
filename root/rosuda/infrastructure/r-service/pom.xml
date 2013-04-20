@@ -32,6 +32,12 @@
 		</dependency>
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
+			<artifactId>test-process</artifactId>
+			<scope>test</scope>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>jr-connect</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>

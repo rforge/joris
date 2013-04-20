@@ -22,9 +22,9 @@ import org.junit.Test;
 import org.rosuda.irconnect.IConnectionFactory;
 import org.rosuda.irconnect.IRConnection;
 import org.rosuda.irconnect.RServerException;
+import org.rosuda.util.process.EmptyTestShellContext;
 import org.rosuda.util.process.ProcessService;
 import org.rosuda.util.process.RUNSTATE;
-import org.rosuda.util.process.ShellContext;
 import org.rosuda.util.r.impl.MockFileRStarter;
 import org.rosuda.util.r.impl.MockStarterFactory;
 import org.rosuda.util.r.impl.RStartContext;
@@ -47,13 +47,6 @@ public class RStartProcessTest {
     private IRConnection mockedIRConnection;
 
     private Runtime runtime;
-
-    private static class EmptyTestShellContext extends ShellContext {
-        @Override
-        public String getEnvironmentVariable(String propertyName) {
-            return null;
-        }
-    }
 
     @Before
     public void setUp() throws IOException {

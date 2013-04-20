@@ -5,16 +5,13 @@ import static org.hamcrest.Matchers.not;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
 import static org.hamcrest.Matchers.sameInstance;
-import static org.junit.Assume.*;
-
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assume.assumeTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
@@ -24,7 +21,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.newsclub.net.unix.AFUNIXSocket;
 import org.rosuda.util.process.OS;
-import org.rosuda.util.process.ShellContext;
+import org.rosuda.util.process.TestShellContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,23 +30,6 @@ public class NativeSocketLibUtilTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(NativeSocketLibUtilTest.class);
     private NativeSocketLibUtil nativeSocketLibUtil;
     private TestShellContext shellContext;
-
-    private static class TestShellContext extends ShellContext {
-
-        private Map<String, String> properties = new HashMap<String, String>();
-
-        public void setProperty(String key, String value) {
-            this.properties.put(key, value);
-        }
-
-        @Override
-        public String getEnvironmentVariable(String propertyName) {
-            if (properties.containsKey(propertyName)) {
-                return properties.get(propertyName);
-            }
-            return super.getEnvironmentVariable(propertyName);
-        }
-    }
 
     @Before
     public void setUp() {
@@ -61,7 +41,7 @@ public class NativeSocketLibUtilTest {
     @After
     public void tearDown() {
         nativeSocketLibUtil.resetCache();
-//TODO test lib props before/after (from system!)
+        // TODO test lib props before/after (from system!)
     }
 
     @Test
@@ -119,14 +99,15 @@ public class NativeSocketLibUtilTest {
         assertThat(System.getProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH), notNullValue(String.class));
     }
 
-    //currently unsupported, should work after resetCache is properly implemented
+    // currently unsupported, should work after resetCache is properly
+    // implemented
     @Ignore
     @Test
     public void temporaryFilesAreDeletedWhenCleanCacheIsCalled() throws IOException {
         prepareSocketFolder();
-        nativeSocketLibUtil.enableDomainSockets();        
+        nativeSocketLibUtil.enableDomainSockets();
         String libraryPath = System.getProperty(NativeSocketLibUtil.PROP_LIBRARY_LOADED);
-        LOGGER.info("libraryPath-file = "+libraryPath);
+        LOGGER.info("libraryPath-file = " + libraryPath);
         final File file = new File(libraryPath);
         assertTrue("file \"" + file.getAbsolutePath() + "\" has not been created.", file.exists());
 
@@ -134,12 +115,12 @@ public class NativeSocketLibUtilTest {
 
         assertFalse(file.exists());
     }
-    
-    //remove later
+
+    // remove later
     @Ignore
     @Test
     public void nativeLibCanBeLoadedOrYourEnvironmentIsWrong() {
-        nativeSocketLibUtil.enableDomainSockets();        
+        nativeSocketLibUtil.enableDomainSockets();
         assumeTrue(AFUNIXSocket.isSupported());
     }
 

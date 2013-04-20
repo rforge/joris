@@ -20,6 +20,7 @@
 
 	<modules>
 		<module>process</module>
+		<module>test-process</module>
 		<module>linux-socket</module>
 		<module>jr-connect</module>
 		<module>jr-connect-rengine-impl</module>

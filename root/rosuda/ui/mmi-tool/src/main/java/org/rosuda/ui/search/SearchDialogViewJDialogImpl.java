@@ -1,15 +1,19 @@
 package org.rosuda.ui.search;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.table.TableColumn;
 import javax.swing.text.Document;
 import javax.swing.tree.TreeSelectionModel;
 
-import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.JXTreeTable;
 import org.jdesktop.swingx.treetable.TreeTableModel;
 import org.rosuda.mvc.swing.DocumentHasValue;
@@ -61,6 +65,7 @@ public class SearchDialogViewJDialogImpl<C extends JDialog> extends JDialog impl
 	SwingLayoutProcessor.processLayout(this, "/gui/dialog/ModelSearchDialog.xml");
 
 	searchtree.getSelectionModel();
+	addPopupMenu(searchtree);
 	nodeConstraintList.setModel(new ConstraintListModel());
 	searchButtonInterface = new JButtonHasClickable(searchbutton);
 	closeButtonInterface = new JButtonHasClickable(close);
@@ -113,7 +118,7 @@ public class SearchDialogViewJDialogImpl<C extends JDialog> extends JDialog impl
 
 	    @Override
 	    public void setValue(TreeSelectionModel value) {
-    		logger.warn("unimplemented Method:searchTreeSelectionInterface.setValue");
+		logger.warn("unimplemented Method:searchTreeSelectionInterface.setValue");
 	    }
 
 	    @Override
@@ -220,4 +225,19 @@ public class SearchDialogViewJDialogImpl<C extends JDialog> extends JDialog impl
 	return (C) this;
     }
 
+    // -- helper
+    private void addPopupMenu(final JXTreeTable searchtree) {
+	final JPopupMenu treePopup = new JPopupMenu();
+	searchtree.add(treePopup);
+	//TODO add a new item and bind to ADD action !
+	treePopup.add(add);
+	treePopup.add(remove);
+	searchtree.addMouseListener(new MouseAdapter() {
+	    public void mouseClicked(MouseEvent e) {
+		if (SwingUtilities.isRightMouseButton(e)) {
+		    treePopup.show(e.getComponent(), e.getX(), e.getY());
+		}
+	    }
+	});
+    }
 }

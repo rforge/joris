@@ -29,6 +29,12 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
+			<groupId>org.r-project.joris</groupId>
+			<artifactId>test-process</artifactId>
+			<scope>test</scope>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
 			<groupId>org.newsclub.net.unix</groupId>
 			<artifactId>junixsocket</artifactId>
 		</dependency>

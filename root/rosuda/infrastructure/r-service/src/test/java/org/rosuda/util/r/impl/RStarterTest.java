@@ -10,7 +10,7 @@ import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.rosuda.irconnect.IConnectionFactory;
-import org.rosuda.util.r.inttest.TestShellContext;
+import org.rosuda.util.process.TestShellContext;
 
 public class RStarterTest {
 
@@ -21,7 +21,6 @@ public class RStarterTest {
     public void setUp() {
         context = new RStartContext();
         testShellContext = new TestShellContext();
-        testShellContext.setOnlyInternalEnv(true);
         context.setShellContext(testShellContext);
     }
 
