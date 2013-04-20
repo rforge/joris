@@ -8,7 +8,8 @@ public class TestShellContext extends ShellContext {
 
     private Map<String, String> map = new HashMap<String, String>();
     private Map<String, String> systemProperties = new HashMap<String, String>();
-    private boolean onlyInternalEnv = true;
+    private boolean allowAccessToSystemEnv = false;
+    private boolean allowAccessToSystemProps = false;
 
     public void setMap(Map<String, String> map) {
         this.map = map;
@@ -20,7 +21,7 @@ public class TestShellContext extends ShellContext {
 
     @Override
     public void setSystemProperty(String propertyName, String value) {
-        if (onlyInternalEnv) {
+        if (!allowAccessToSystemProps) {
             systemProperties.put(propertyName, value);
         } else {
             super.setSystemProperty(propertyName, value);
@@ -29,20 +30,11 @@ public class TestShellContext extends ShellContext {
 
     @Override
     public String getSystemProperty(String propertyName) {
-        if (onlyInternalEnv) {
+        if (!allowAccessToSystemProps) {
             return systemProperties.get(propertyName);
         } else {
             return super.getSystemProperty(propertyName);
         }
-    }
-
-    /**
-     * provides access to REAL System variables
-     * 
-     * @param onlyInternalEnv
-     */
-    public void setOnlyInternalEnv(boolean onlyInternalEnv) {
-        this.onlyInternalEnv = onlyInternalEnv;
     }
 
     @Override
@@ -51,15 +43,44 @@ public class TestShellContext extends ShellContext {
         if (propertyValue != null) {
             return propertyValue;
         }
+        if (!allowAccessToSystemEnv) {
+            return null;
+        }
         return super.getEnvironmentVariable(propertyName);
     }
 
     @Override
     public Map<String, String> getEnvironment() {
-        if (onlyInternalEnv) {
+        if (!allowAccessToSystemEnv) {
             return Collections.unmodifiableMap(map);
         } else {
             return super.getEnvironment();
         }
+    }
+
+    /**
+     * provides access to REAL System variables
+     * 
+     * @param onlyInternalEnv
+     */
+    public void enableSystemPropertyLookup() {
+        this.allowAccessToSystemProps = true;
+    }
+
+    public void disableSystemPropertyLookup() {
+        this.allowAccessToSystemProps = false;
+    }
+
+    /**
+     * provides access to REAL System variables
+     * 
+     * @param onlyInternalEnv
+     */
+    public void enableSystemEnvironmentLookup() {
+        this.allowAccessToSystemEnv = true;
+    }
+
+    public void disableSystemEnvironmentLookup() {
+        this.allowAccessToSystemEnv = false;
     }
 }

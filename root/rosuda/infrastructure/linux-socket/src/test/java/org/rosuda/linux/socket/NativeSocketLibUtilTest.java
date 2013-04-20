@@ -35,6 +35,8 @@ public class NativeSocketLibUtilTest {
     public void setUp() {
         nativeSocketLibUtil = new NativeSocketLibUtil();
         shellContext = new TestShellContext();
+        shellContext.enableSystemEnvironmentLookup();
+        shellContext.enableSystemPropertyLookup();
         nativeSocketLibUtil.setShellContext(shellContext);
     }
 
