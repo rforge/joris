@@ -7,6 +7,7 @@ import java.util.Map;
 public class TestShellContext extends ShellContext {
 
     private Map<String, String> map = new HashMap<String, String>();
+    private Map<String, String> systemProperties = new HashMap<String, String>();
     private boolean onlyInternalEnv = true;
 
     public void setMap(Map<String, String> map) {
@@ -15,6 +16,24 @@ public class TestShellContext extends ShellContext {
 
     public void setProperty(final String propertyName, final String propertyValue) {
         this.map.put(propertyName, propertyValue);
+    }
+
+    @Override
+    public void setSystemProperty(String propertyName, String value) {
+        if (onlyInternalEnv) {
+            systemProperties.put(propertyName, value);
+        } else {
+            super.setSystemProperty(propertyName, value);
+        }
+    }
+
+    @Override
+    public String getSystemProperty(String propertyName) {
+        if (onlyInternalEnv) {
+            return systemProperties.get(propertyName);
+        } else {
+            return super.getSystemProperty(propertyName);
+        }
     }
 
     /**

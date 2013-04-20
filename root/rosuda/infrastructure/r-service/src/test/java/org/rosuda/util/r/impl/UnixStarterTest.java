@@ -37,7 +37,6 @@ public class UnixStarterTest {
         RunStateHolder<IRConnection> runStateHolder = mock(RunStateHolder.class);
         context = new RStartContext();
         shellContext = new TestShellContext();
-        shellContext.setOnlyInternalEnv(false);
         context.setShellContext(shellContext);
         this.unixRStarter = new UnixRStarter(runStateHolder, context);
     }
@@ -50,6 +49,7 @@ public class UnixStarterTest {
 
     @Test
     public void givenTheShellContextProvidesASocketArgumentThisSocketIsUsed() {
+
         String socketValue = "/tmp/rservesocket";
         shellContext.setProperty(RServeOpts.SOCKET.getEnvironmentName(), socketValue);
 
