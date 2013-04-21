@@ -65,14 +65,14 @@ public class TestShellContext extends ShellContext {
 
     private void init(Map<String, String> map) {
         this.environment.clear();
-        mergePropertiesIntoMap(map, System.getProperties());
         this.environment.putAll(map);
+        mergePropertiesIntoMap(map, System.getProperties());
     }
 
     private void init(Properties properties) {
         this.environment.clear();
-        mergePropertiesIntoMap(environment, System.getProperties());
         mergePropertiesIntoMap(environment, properties);
+        mergePropertiesIntoMap(environment, System.getProperties());
     }
 
     private void mergePropertiesIntoMap(Map<String, String> map, Properties properties) {
