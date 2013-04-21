@@ -25,26 +25,6 @@ public class TestShellContext extends ShellContext {
         init(properties);
     }
 
-    private void init(Map<String, String> map) {
-        this.environment.clear();
-        mergePropertiesIntoMap(map, System.getProperties());
-        this.environment.putAll(map);
-    }
-
-    private void mergePropertiesIntoMap(Map<String, String> map, Properties properties) {
-        for (final Object key : properties.keySet()) {
-            final String keyString = (String) key;
-            final String value = System.getProperty(keyString);
-            map.put(keyString, value);
-        }
-    }
-
-    private void init(Properties properties) {
-        this.environment.clear();
-        mergePropertiesIntoMap(environment, System.getProperties());
-        mergePropertiesIntoMap(environment, properties);
-    }
-
     public void setEnvironmentProperty(final String propertyName, final String propertyValue) {
         this.environment.put(propertyName, propertyValue);
     }
@@ -79,6 +59,28 @@ public class TestShellContext extends ShellContext {
 
     public void preventFallbackToSystemLookup() {
         this.fallbackAllowed = false;
+    }
+
+    // -- helper
+
+    private void init(Map<String, String> map) {
+        this.environment.clear();
+        mergePropertiesIntoMap(map, System.getProperties());
+        this.environment.putAll(map);
+    }
+
+    private void init(Properties properties) {
+        this.environment.clear();
+        mergePropertiesIntoMap(environment, System.getProperties());
+        mergePropertiesIntoMap(environment, properties);
+    }
+
+    private void mergePropertiesIntoMap(Map<String, String> map, Properties properties) {
+        for (final Object key : properties.keySet()) {
+            final String keyString = (String) key;
+            final String value = properties.getProperty(keyString);
+            map.put(keyString, value);
+        }
     }
 
 }

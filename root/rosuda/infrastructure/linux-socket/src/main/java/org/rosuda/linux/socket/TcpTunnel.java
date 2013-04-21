@@ -3,6 +3,7 @@ package org.rosuda.linux.socket;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.BindException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -21,10 +22,17 @@ public class TcpTunnel {
     private Collection<IOStream> streams = new ArrayList<IOStream>();
 
     public TcpTunnel(String host, int port, final AFUNIXSocket domainsocket) throws IOException {
+        LOGGER.info("binding TcpTunnel ServerSocket to host='" + host + "', port='" + port + "', domainsocket = '" + domainsocket + "'");
         server = new ServerSocket();
-        server.bind(new InetSocketAddress(host, port));
+        try {
+            server.bind(new InetSocketAddress(host, port));
+        } catch (final BindException bindException) {
+            LOGGER.error("could not bind domain socket to TcpTunnel(" + host + "," + port + "," + domainsocket + ")", bindException);
+            throw bindException;
+        }
         this.domainsocket = domainsocket;
-        LOGGER.info("binding TcpTunner ServerSocket to host='" + host + "', port='" + port + "'.");
+        LOGGER.info("TcpTunnel is connecting streams for ServerSocket to host='" + host + "', port='" + port + "' and domainsocket '"
+                + domainsocket + "'.");
         new Thread(new Runnable() {
             @Override
             public void run() {

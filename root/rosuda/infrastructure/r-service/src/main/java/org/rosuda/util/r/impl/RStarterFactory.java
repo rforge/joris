@@ -8,9 +8,13 @@ import org.rosuda.util.process.ProcessStarter;
 import org.rosuda.util.process.ProcessStopper;
 import org.rosuda.util.process.RunStateHolder;
 import org.rosuda.util.process.RunningInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Required;
 
 public class RStarterFactory extends ProcessFactory<IRConnection> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RStarterFactory.class);
 
     final RunStateHolder<IRConnection> runStateHolder = new RunStateHolder<IRConnection>();
 
@@ -31,6 +35,7 @@ public class RStarterFactory extends ProcessFactory<IRConnection> {
             rcon.close();
             return new RunningInstance<IRConnection>(runStateHolder);
         } catch (final Exception x) {
+            LOGGER.info("no running instance available, creating new starter");
         }
         return handleCreateStarter();
     }
