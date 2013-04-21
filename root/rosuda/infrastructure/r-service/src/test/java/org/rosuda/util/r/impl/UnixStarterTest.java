@@ -44,6 +44,8 @@ public class UnixStarterTest {
     @Test
     public void withStandardShellContextNoSocketIsUsed() {
         String executableRFile = "Rserve";
+        shellContext.setEnvironmentProperty(RServeOpts.SOCKET.getEnvironmentName(), null);
+        shellContext.preventFallbackToSystemLookup();
         assertThat(unixRStarter.getRuntimeArgs(executableRFile), not(hasItemInArray(containsString(RServeOpts.SOCKET.asRServeOption()))));
     }
 
@@ -51,7 +53,7 @@ public class UnixStarterTest {
     public void givenTheShellContextProvidesASocketArgumentThisSocketIsUsed() {
 
         String socketValue = "/tmp/rservesocket";
-        shellContext.setProperty(RServeOpts.SOCKET.getEnvironmentName(), socketValue);
+        shellContext.setEnvironmentProperty(RServeOpts.SOCKET.getEnvironmentName(), socketValue);
 
         String executableRFile = "Rserve";
         assertThat(unixRStarter.getRuntimeArgs(executableRFile), hasItemInArray(containsString(RServeOpts.SOCKET.asRServeOption() + " "

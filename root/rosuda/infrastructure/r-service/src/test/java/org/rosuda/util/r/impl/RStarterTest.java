@@ -28,7 +28,7 @@ public class RStarterTest {
     public void environmentVariableHostIsUsed() {
         final String hostValue = "host";
 
-        testShellContext.setProperty(IConnectionFactory.HOST, hostValue);
+        testShellContext.setEnvironmentProperty(IConnectionFactory.HOST, hostValue);
         Properties properties = context.getMergedConnectionProperties();
 
         Matcher hasEntry = not(hasEntry(IConnectionFactory.HOST, hostValue));
@@ -39,7 +39,7 @@ public class RStarterTest {
     public void prefixedEnvironmentVariablePortIsSupported() {
         final String portValue = "somePort";
 
-        testShellContext.setProperty("JORIS_port", portValue);
+        testShellContext.setEnvironmentProperty("JORIS_port", portValue);
         Properties properties = context.getMergedConnectionProperties();
 
         Matcher hasEntry = hasEntry(IConnectionFactory.PORT, portValue);
@@ -50,7 +50,7 @@ public class RStarterTest {
     public void prefixedEnvironmentVariableHostIsSupported() {
         final String hostValue = "host";
 
-        testShellContext.setProperty("JORIS_host", hostValue);
+        testShellContext.setEnvironmentProperty("JORIS_host", hostValue);
         Properties properties = context.getMergedConnectionProperties();
 
         Matcher hasEntry = hasEntry(IConnectionFactory.HOST, hostValue);

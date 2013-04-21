@@ -31,7 +31,12 @@ public class ShellContext {
     }
     
     public void setSystemProperty(final String propertyName, final String value) {
-        LOGGER.info(">>>setting System property \""+propertyName+"\" to \""+value+"\".");
+        LOGGER.info("~~~~~setting System property \""+propertyName+"\" to \""+value+"\".");
+        for (final StackTraceElement se : Thread.currentThread().getStackTrace()) {
+            if (se.getClassName().toLowerCase().contains("test")) {
+                LOGGER.warn(se.getLineNumber()+":"+se.getClassName()+"."+se.getMethodName());
+            } 
+        }
         if (value == null) {
             System.clearProperty(propertyName);
         } else {

@@ -35,8 +35,8 @@ public class NativeSocketLibUtilTest {
     public void setUp() {
         nativeSocketLibUtil = new NativeSocketLibUtil();
         shellContext = new TestShellContext();
-        shellContext.enableSystemEnvironmentLookup();
-        shellContext.enableSystemPropertyLookup();
+        shellContext.setSystemProperty("os.name", "mock-os");
+        shellContext.setSystemProperty("os.arch", "Z-80");
         nativeSocketLibUtil.setShellContext(shellContext);
     }
 
@@ -54,9 +54,9 @@ public class NativeSocketLibUtilTest {
             return;
         }
         String anystring = "anystring";
-        System.setProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH, anystring);
+        shellContext.setEnvironmentProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH, anystring);
         nativeSocketLibUtil.enableDomainSockets();
-        assertThat(System.getProperties(), both(anystring));
+        assertThat(shellContext.getEnvironment(), both(anystring));
     }
 
     @Test
@@ -67,9 +67,9 @@ public class NativeSocketLibUtilTest {
             return;
         }
         String anystring = "anystring";
-        System.setProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH, anystring);
+        shellContext.setEnvironmentProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH, anystring);
         nativeSocketLibUtil.enableDomainSockets();
-        assertThat(System.getProperties(), both(NativeSocketLibUtil.PROP_LIBRARY_LOADED));
+        assertThat(shellContext.getEnvironment(), both(NativeSocketLibUtil.PROP_LIBRARY_LOADED));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class NativeSocketLibUtilTest {
 
         nativeSocketLibUtil.enableDomainSockets();
 
-        assertThat(System.getProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH), sameInstance(path));
+        assertThat(shellContext.getSystemProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH), sameInstance(path));
     }
 
     @Test
@@ -92,17 +92,17 @@ public class NativeSocketLibUtilTest {
             return;
         }
         nativeSocketLibUtil.resetCache();
-        assertThat(System.getProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH), nullValue(String.class));
-        assertThat(System.getProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH), nullValue(String.class));
+        assertThat(shellContext.getSystemProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH), nullValue(String.class));
+        assertThat(shellContext.getSystemProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH), nullValue(String.class));
 
-        assertThat(System.getProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH), nullValue(String.class));
-        assertThat(System.getProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH), nullValue(String.class));
+        assertThat(shellContext.getSystemProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH), nullValue(String.class));
+        assertThat(shellContext.getSystemProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH), nullValue(String.class));
 
         prepareSocketFolder();
         nativeSocketLibUtil.enableDomainSockets();
 
-        assertThat(System.getProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH), notNullValue(String.class));
-        assertThat(System.getProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH), notNullValue(String.class));
+        assertThat(shellContext.getSystemProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH), notNullValue(String.class));
+        assertThat(shellContext.getSystemProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH), notNullValue(String.class));
     }
 
     // currently unsupported, should work after resetCache is properly
@@ -112,7 +112,7 @@ public class NativeSocketLibUtilTest {
     public void temporaryFilesAreDeletedWhenCleanCacheIsCalled() throws IOException {
         prepareSocketFolder();
         nativeSocketLibUtil.enableDomainSockets();
-        String libraryPath = System.getProperty(NativeSocketLibUtil.PROP_LIBRARY_LOADED);
+        String libraryPath = shellContext.getSystemProperty(NativeSocketLibUtil.PROP_LIBRARY_LOADED);
         LOGGER.info("libraryPath-file = " + libraryPath);
         final File file = new File(libraryPath);
         assertTrue("file \"" + file.getAbsolutePath() + "\" has not been created.", file.exists());
@@ -142,7 +142,7 @@ public class NativeSocketLibUtilTest {
         File testFile = nativeSocketLibUtil.createTempFolder();
         testFile.mkdirs();
         String path = testFile.getAbsolutePath();
-        shellContext.setProperty(NativeSocketLibUtil.NATIVE_LIB_PATH, path);
+        shellContext.setEnvironmentProperty(NativeSocketLibUtil.NATIVE_LIB_PATH, path);
         return path;
     }
 }

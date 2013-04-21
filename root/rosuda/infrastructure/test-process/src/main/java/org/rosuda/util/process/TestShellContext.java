@@ -3,84 +3,82 @@ package org.rosuda.util.process;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 public class TestShellContext extends ShellContext {
 
-    private Map<String, String> map = new HashMap<String, String>();
+    private Map<String, String> environment = new HashMap<String, String>();
     private Map<String, String> systemProperties = new HashMap<String, String>();
-    private boolean allowAccessToSystemEnv = false;
-    private boolean allowAccessToSystemProps = false;
+    private boolean fallbackAllowed = true;
 
-    public void setMap(Map<String, String> map) {
-        this.map = map;
+    public TestShellContext() {
     }
 
-    public void setProperty(final String propertyName, final String propertyValue) {
-        this.map.put(propertyName, propertyValue);
+    public TestShellContext(final Map<String, String> map) {
+        this.environment = new HashMap<String, String>();
+        init(map);
+
+    }
+
+    public TestShellContext(final Properties properties) {
+        this.environment = new HashMap<String, String>();
+        init(properties);
+    }
+
+    private void init(Map<String, String> map) {
+        this.environment.clear();
+        mergePropertiesIntoMap(map, System.getProperties());
+        this.environment.putAll(map);
+    }
+
+    private void mergePropertiesIntoMap(Map<String, String> map, Properties properties) {
+        for (final Object key : properties.keySet()) {
+            final String keyString = (String) key;
+            final String value = System.getProperty(keyString);
+            map.put(keyString, value);
+        }
+    }
+
+    private void init(Properties properties) {
+        this.environment.clear();
+        mergePropertiesIntoMap(environment, System.getProperties());
+        mergePropertiesIntoMap(environment, properties);
+    }
+
+    public void setEnvironmentProperty(final String propertyName, final String propertyValue) {
+        this.environment.put(propertyName, propertyValue);
     }
 
     @Override
     public void setSystemProperty(String propertyName, String value) {
-        if (!allowAccessToSystemProps) {
-            systemProperties.put(propertyName, value);
-        } else {
-            super.setSystemProperty(propertyName, value);
-        }
+        systemProperties.put(propertyName, value);
     }
 
     @Override
     public String getSystemProperty(String propertyName) {
-        if (!allowAccessToSystemProps) {
-            return systemProperties.get(propertyName);
-        } else {
-            return super.getSystemProperty(propertyName);
-        }
+        return systemProperties.get(propertyName);
     }
 
     @Override
     public String getEnvironmentVariable(String propertyName) {
-        final String propertyValue = map.get(propertyName);
+        final String propertyValue = environment.get(propertyName);
         if (propertyValue != null) {
             return propertyValue;
         }
-        if (!allowAccessToSystemEnv) {
+        if (fallbackAllowed) {
+            return super.getEnvironmentVariable(propertyName);
+        } else {
             return null;
         }
-        return super.getEnvironmentVariable(propertyName);
     }
 
     @Override
     public Map<String, String> getEnvironment() {
-        if (!allowAccessToSystemEnv) {
-            return Collections.unmodifiableMap(map);
-        } else {
-            return super.getEnvironment();
-        }
+        return Collections.unmodifiableMap(environment);
     }
 
-    /**
-     * provides access to REAL System variables
-     * 
-     * @param onlyInternalEnv
-     */
-    public void enableSystemPropertyLookup() {
-        this.allowAccessToSystemProps = true;
+    public void preventFallbackToSystemLookup() {
+        this.fallbackAllowed = false;
     }
 
-    public void disableSystemPropertyLookup() {
-        this.allowAccessToSystemProps = false;
-    }
-
-    /**
-     * provides access to REAL System variables
-     * 
-     * @param onlyInternalEnv
-     */
-    public void enableSystemEnvironmentLookup() {
-        this.allowAccessToSystemEnv = true;
-    }
-
-    public void disableSystemEnvironmentLookup() {
-        this.allowAccessToSystemEnv = false;
-    }
 }
