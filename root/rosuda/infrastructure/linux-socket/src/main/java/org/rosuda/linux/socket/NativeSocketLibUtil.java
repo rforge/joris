@@ -34,7 +34,7 @@ public class NativeSocketLibUtil {
     private String suffix;
     private String arch;
     private Set<String> modifiedSystemProperties = new HashSet<String>();
-    
+
     public void setShellContext(ShellContext context) {
         this.context = context;
     }
@@ -46,7 +46,7 @@ public class NativeSocketLibUtil {
         if (context.getSystemProperty(PROP_LIBRARY_LOADED) != null) {
             LOGGER.info("Native socket library has already been loaded, environmt variable set.\n"
                     + context.getSystemProperty(PROP_LIBRARY_LOADED) + "\nmagic path=" + context.getSystemProperty(ENV_NATIVE_LIBRARY_PATH));
-            LOGGER.info(">>>library is supported ?"+AFUNIXServerSocket.isSupported());
+            LOGGER.info(">>>library is supported ?" + AFUNIXServerSocket.isSupported());
             return;
         }
         initOSProperties();
@@ -86,18 +86,14 @@ public class NativeSocketLibUtil {
                     }
                 } else if (isJar(resource)) {
                     String archiveFileName = resource.getPath();
-                    LOGGER.debug(">>RAW archiveFileName:" + archiveFileName);
                     int startIdx = "jar:".length() + 1;
                     int endIdx = archiveFileName.indexOf("!", startIdx);
                     archiveFileName = archiveFileName.substring(startIdx, endIdx);
-                    LOGGER.debug(">>SUBST archiveFileName:" + archiveFileName);
                     final JarFile archive = new JarFile(URLDecoder.decode(archiveFileName, "UTF-8"));
                     Enumeration<? extends ZipEntry> entries = archive.entries();
                     while (entries.hasMoreElements()) {
                         final ZipEntry entry = entries.nextElement();
                         String fileName = entry.getName();
-                        LOGGER.debug(">>>> zip entry : " + fileName + ", isFromResourcePath:" + fileName.startsWith(resourcePath)
-                                + ", isNativeLibFile:" + isNativeLibraryFile(fileName));
                         if (fileName.startsWith(resourcePath) && isNativeLibraryFile(fileName)) {
                             fileName = fileName.substring(resourcePath.length() + 1);
                             copyFileWithBuffer(targetLocation, fileName, archive.getInputStream(entry), buffer);
@@ -148,7 +144,7 @@ public class NativeSocketLibUtil {
             FileNotFoundException {
         final File targetFile = new File(targetLocation, fileName);
         if (targetFile.exists() && targetFile.length() > 0) {
-            LOGGER.info("targetfile \"" + targetFile.getAbsolutePath() + "\" exists with a length of " + targetFile.length() + " bytes.");
+            LOGGER.debug("targetfile \"" + targetFile.getAbsolutePath() + "\" exists with a length of " + targetFile.length() + " bytes.");
             return;
         }
         File targetFolder = targetFile.getParentFile();
@@ -163,15 +159,15 @@ public class NativeSocketLibUtil {
             target.write(buffer, 0, read);
             total += read;
         }
-        LOGGER.info("copied " + total + " bytes for file " + targetFile.getAbsolutePath());
+        LOGGER.debug("copied " + total + " bytes for file " + targetFile.getAbsolutePath());
         target.flush();
         target.close();
         source.close();
     }
 
-
     public void restoreEnvironment() {
-        LOGGER.info("*** resetting properties");//check who (wich test) is not resetting cache!
+        LOGGER.debug("*** restored environment");// check who (wich test) is not
+                                                 // resetting cache!
         for (final String envName : modifiedSystemProperties) {
             context.setSystemProperty(envName, null);
         }
@@ -181,12 +177,12 @@ public class NativeSocketLibUtil {
     private File tempFile(final String location) {
         return tempFile(new File(location));
     }
-    
+
     private File tempFile(final File parent, final String fileName) {
         return tempFile(new File(parent, fileName));
-        
+
     }
-    
+
     final File tempFile(final File file) {
         file.deleteOnExit();
         return file;
