@@ -42,7 +42,7 @@ public class NativeSocketLibUtilTest {
 
     @After
     public void tearDown() {
-        nativeSocketLibUtil.resetCache();
+        nativeSocketLibUtil.restoreEnvironment();
         // TODO test lib props before/after (from system!)
     }
 
@@ -91,7 +91,7 @@ public class NativeSocketLibUtilTest {
             assertTrue("pass smilingly", true);
             return;
         }
-        nativeSocketLibUtil.resetCache();
+        nativeSocketLibUtil.restoreEnvironment();
         assertThat(shellContext.getSystemProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH), nullValue(String.class));
         assertThat(shellContext.getSystemProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH), nullValue(String.class));
 
@@ -117,7 +117,7 @@ public class NativeSocketLibUtilTest {
         final File file = new File(libraryPath);
         assertTrue("file \"" + file.getAbsolutePath() + "\" has not been created.", file.exists());
 
-        nativeSocketLibUtil.resetCache();
+        nativeSocketLibUtil.restoreEnvironment();
 
         assertFalse(file.exists());
     }

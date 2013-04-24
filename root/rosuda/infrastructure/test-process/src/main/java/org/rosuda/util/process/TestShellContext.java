@@ -16,13 +16,14 @@ public class TestShellContext extends ShellContext {
 
     public TestShellContext(final Map<String, String> map) {
         this.environment = new HashMap<String, String>();
-        init(map);
-
+        initEnvironment(map);
+        initSystemPropertis();
     }
 
     public TestShellContext(final Properties properties) {
         this.environment = new HashMap<String, String>();
-        init(properties);
+        initEnvironment(properties);
+        initSystemPropertis();
     }
 
     public void setEnvironmentProperty(final String propertyName, final String propertyValue) {
@@ -63,16 +64,21 @@ public class TestShellContext extends ShellContext {
 
     // -- helper
 
-    private void init(Map<String, String> map) {
+    private void initEnvironment(Map<String, String> map) {
         this.environment.clear();
         this.environment.putAll(map);
         mergePropertiesIntoMap(map, System.getProperties());
     }
 
-    private void init(Properties properties) {
+    private void initEnvironment(Properties properties) {
         this.environment.clear();
         mergePropertiesIntoMap(environment, properties);
-        mergePropertiesIntoMap(environment, System.getProperties());
+        this.environment.putAll(System.getenv());
+    }
+    
+    private void initSystemPropertis() {
+        this.systemProperties.clear();
+        mergePropertiesIntoMap(this.systemProperties, System.getProperties());
     }
 
     private void mergePropertiesIntoMap(Map<String, String> map, Properties properties) {

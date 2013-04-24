@@ -3,7 +3,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd">
 
-	<bean name="shellContext" class="org.rosuda.util.process.TestShellContext">
+	<bean name="testShellContext" class="org.rosuda.util.process.ExtendedSystemContext">
 		<constructor-arg index="0"> 
 			<props>
 				<prop key="RSERVE_SOCKET">/tmp/ux_rservesocket</prop>
@@ -11,18 +11,18 @@
 		</constructor-arg>
 	</bean>
 
-	<bean name="rConnectionFactory" class="org.rosuda.rengine.REngineConnectionFactory"
+	<bean name="testRConnectionFactory" class="org.rosuda.rengine.REngineConnectionFactory"
 		factory-method="getInstance" />
 
-	<bean name="setup_rStarterFactory" class="org.rosuda.util.r.impl.RStartContext">
-		<property name="connectionFactory" ref="rConnectionFactory" />
-		<property name="shellContext" ref="shellContext"/>
+	<bean name="testRStartContext" class="org.rosuda.util.r.impl.RStartContext">
+		<property name="connectionFactory" ref="testRConnectionFactory" />
+		<property name="shellContext" ref="testShellContext"/>
 	</bean>
 
-	<bean name="rStarterFactory" class="org.rosuda.util.r.impl.RStarterFactory">
-		<property name="context" ref="setup_rStarterFactory" />
+	<bean name="testRStarterFactory" class="org.rosuda.util.r.impl.RStarterFactory">
+		<property name="context" ref="testRStartContext" />
 	</bean>
 
 	<bean name="rStarterProcess" class="org.rosuda.util.process.ProcessService"
-		factory-bean="rStarterFactory" factory-method="createService" />
+		factory-bean="testRStarterFactory" factory-method="createService" />
 </beans>

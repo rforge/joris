@@ -24,7 +24,8 @@ public abstract class AbstractStarterIntegrationTest {
         super();
     }
 
-    @Test(timeout = 60000)
+    //@Test(timeout = 60000)
+    @Test
     public void testStartStopProcess() {
         if (OS.isWindows()) {
             Assert.assertNotNull("windows passes for unsupported op");

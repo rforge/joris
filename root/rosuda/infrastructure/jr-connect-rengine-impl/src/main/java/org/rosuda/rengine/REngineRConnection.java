@@ -3,10 +3,10 @@ package org.rosuda.rengine;
 import java.io.File;
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.newsclub.net.unix.AFUNIXSocket;
 import org.newsclub.net.unix.AFUNIXSocketAddress;
@@ -20,6 +20,8 @@ import org.rosuda.linux.socket.NativeLibUtil;
 import org.rosuda.linux.socket.NativeSocketLibUtil;
 import org.rosuda.linux.socket.TcpTunnel;
 import org.rosuda.util.process.OS;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class REngineRConnection extends ARConnection implements IRConnection {
 
@@ -27,14 +29,14 @@ public class REngineRConnection extends ARConnection implements IRConnection {
     private static int createdSockets = 0;
 
     private static NativeSocketLibUtil nativeSocketLibUtil = new NativeSocketLibUtil();
-    protected static Logger logger = Logger.getLogger(REngineRConnection.class.getName());
+    protected static Logger logger = LoggerFactory.getLogger(REngineRConnection.class.getName());
 
     final RConnection delegate;
     private final String socket;
     private TcpTunnel tunnel;
 
     REngineRConnection(final String host, final int port, final String socket) {
-        logger.info("creating new REngineRConnection("+host+","+port+","+socket+")");
+        logger.info("creating new REngineRConnection(" + host + "," + port + "," + socket + ")");
         this.socket = socket;
         try {
             if (socket != null) {
@@ -65,18 +67,33 @@ public class REngineRConnection extends ARConnection implements IRConnection {
                     throw new RServerException(this, "socket file does not exist", "no file \"" + socketFile.getAbsolutePath()
                             + "\" exists.");
                 }
-                if (!socketFile.canRead()||!socketFile.canWrite()) {
-                    throw new RServerException(this, "socket file does not provide sufficent provileges", "no r/w access on file \"" + socketFile.getAbsolutePath()
-                            + "\".");                   
+                if (!socketFile.canRead() || !socketFile.canWrite()) {
+                    throw new RServerException(this, "socket file does not provide sufficent provileges", "no r/w access on file \""
+                            + socketFile.getAbsolutePath() + "\".");
                 }
+                String prop = System.getProperty("org.newsclub.net.unix.library.loaded");
+                java.io.File file = prop != null ? new java.io.File(prop) : null;
                 logger.info("[[BEFORE: [#created sockets:" + createdSockets + ", System classloader info = "
                         + NativeLibUtil.listLoadedLibraries() + "\n magic path = "
-                        + System.getProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH) + "\n path PROP_LIBRARY_LOADED = "
-                        + System.getProperty(NativeSocketLibUtil.PROP_LIBRARY_LOADED) + "\n is .so file present :");
-                // File(System.getProperty(NativeSocketLibUtil.PROP_LIBRARY_LOADED)).length()+
+                        + System.getProperty(NativeSocketLibUtil.ENV_NATIVE_LIBRARY_PATH) + "\n path PROP_LIBRARY_LOADED = '" + prop
+                        + "'\n is .so file present :" + (file != null ? file.length() : -1));
                 // " current tc.ClassLoader ="+Thread.currentThread().getContextClassLoader());
-
-                AFUNIXSocket domainsocket = AFUNIXSocket.connectTo(new AFUNIXSocketAddress(socketFile));
+logger.info("registering socket address : "+socketFile);
+                final AFUNIXSocketAddress socketAddress = new AFUNIXSocketAddress(socketFile);
+logger.info("socketAddress registered "+socketAddress);
+                AFUNIXSocket domainsocket = null;
+                try {
+                    domainsocket = AFUNIXSocket.connectTo(socketAddress);
+                } catch (final UnsatisfiedLinkError ule) {
+                    final Collection<String> testStack = new ArrayList<String>();
+                    for (final StackTraceElement se : Thread.currentThread().getStackTrace()) {
+                        if (se.getClassName().toLowerCase().contains("test")) {
+                            testStack.add(se.getClassName());
+                        }
+                    }
+                    logger.error("illegal state !"+testStack, ule);
+                }
+                domainsocket = AFUNIXSocket.connectTo(socketAddress);
                 createdSockets++;
                 logger.info("[[AFTER: created " + createdSockets + " sockets");
 
@@ -87,7 +104,7 @@ public class REngineRConnection extends ARConnection implements IRConnection {
                     throw new RServerException("connection to unixsocket \"" + socket + "\" has been closed", "domainsocket is closed.");
                 }
                 this.tunnel = new TcpTunnel(host, port, domainsocket);
-                logger.info("tunnel established, new Rconnection to "+host+","+port);
+                logger.info("tunnel established, new Rconnection to " + host + "," + port);
                 this.delegate = new RConnection(host, port);
                 socketConnections.put(socket, this.delegate);
             } else {
@@ -115,7 +132,7 @@ public class REngineRConnection extends ARConnection implements IRConnection {
             return new REngineREXP(delegate.eval(query));
         } catch (final RserveException rse) {
             if (rse.getCause() != null && rse.getCause() instanceof SocketException) {
-                logger.log(Level.SEVERE, "SocketException on :" + query);
+                logger.error("SocketException on :" + query);
             }
             throw new RServerException(this, rse.getRequestErrorDescription(), rse.getMessage() + " on r-command:" + query, rse);
         }
@@ -146,7 +163,7 @@ public class REngineRConnection extends ARConnection implements IRConnection {
             delegate.voidEval(query);
         } catch (final RserveException rse) {
             if (rse.getCause() != null && rse.getCause() instanceof SocketException) {
-                logger.log(Level.SEVERE, "SocketException on :" + query);
+                logger.error("SocketException on :" + query);
             }
             throw new RServerException(this, rse.getRequestErrorDescription(), rse.getMessage() + " on r-command:" + query, rse);
         }
@@ -157,7 +174,7 @@ public class REngineRConnection extends ARConnection implements IRConnection {
         try {
             delegate.login(userName, userPassword);
         } catch (final RserveException rse) {
-            Logger.getLogger(REngineRConnection.class.getName()).log(Level.SEVERE, null, rse);
+            logger.error("Unable to connect with login", rse);
             throw new RServerException(this, rse.getRequestErrorDescription(), rse.getMessage() + " on login user \"" + userName + "\"",
                     rse);
         }
@@ -168,8 +185,16 @@ public class REngineRConnection extends ARConnection implements IRConnection {
         if (this.socket == null) {
             return;
         } else {
-            nativeSocketLibUtil.releaseSocketFile(socket);
+            releaseSocketFile(socket);
         }
+    }
+
+    private void releaseSocketFile(String socketFile) {
+        final File toFile = new File(socketFile);
+        if (toFile.exists() && !toFile.delete()) {
+            toFile.deleteOnExit();
+        }
+
     }
 
     private void handleSocketClose() {

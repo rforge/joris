@@ -16,8 +16,6 @@ import java.util.Set;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
 
-import javax.management.RuntimeErrorException;
-
 import org.newsclub.net.unix.AFUNIXServerSocket;
 import org.rosuda.util.process.OS;
 import org.rosuda.util.process.ShellContext;
@@ -27,16 +25,16 @@ import org.slf4j.LoggerFactory;
 public class NativeSocketLibUtil {
 
     public static final String NATIVE_LIB_PATH = "NATIVE_LIB_PATH";
-    public static final String PROP_LIBRARY_LOADED = "org.newsclub.net.unix.library.loaded";
+    protected static final String PROP_LIBRARY_LOADED = "org.newsclub.net.unix.library.loaded";
     public static final String ENV_NATIVE_LIBRARY_PATH = "org.newsclub.net.unix.library.path";
-    private Set<String> tempFolders = new HashSet<String>();
     private static final String resourcePath = "org/rosuda/linux/socket";
     private static final Logger LOGGER = LoggerFactory.getLogger(NativeSocketLibUtil.class);
     private static final int BUFFER_SIZE = 1024;
     private ShellContext context = new ShellContext();
     private String suffix;
     private String arch;
-
+    private Set<String> modifiedSystemProperties = new HashSet<String>();
+    
     public void setShellContext(ShellContext context) {
         this.context = context;
     }
@@ -53,14 +51,22 @@ public class NativeSocketLibUtil {
         }
         initOSProperties();
         try {
+            boolean myTempFile = true;
             File targetLocation = createTempFolder();
             String native_lib_path = context.getEnvironmentVariable(NATIVE_LIB_PATH);
             if (native_lib_path != null) {
                 targetLocation.delete();
+                myTempFile = false;
                 LOGGER.info("using environment configuration for NATIVE_LIBPATH=" + native_lib_path);
                 targetLocation = new File(native_lib_path);
             }
-            context.setSystemProperty(ENV_NATIVE_LIBRARY_PATH, targetLocation.getAbsolutePath());
+            if (context.getSystemProperty(ENV_NATIVE_LIBRARY_PATH) == null) {
+                LOGGER.info("native_library_environment set to =" + targetLocation.getAbsolutePath());
+                context.setSystemProperty(ENV_NATIVE_LIBRARY_PATH, targetLocation.getAbsolutePath());
+                modifiedSystemProperties.add(ENV_NATIVE_LIBRARY_PATH);
+            } else {
+                LOGGER.info("native_library_environment is present:" + context.getSystemProperty(ENV_NATIVE_LIBRARY_PATH));
+            }
             final Enumeration<URL> resources = NativeSocketLibUtil.class.getClassLoader().getResources(resourcePath);
             byte[] buffer = new byte[BUFFER_SIZE];
             while (resources.hasMoreElements()) {
@@ -72,6 +78,10 @@ public class NativeSocketLibUtil {
                         String fileName = child.getName();
                         if (isNativeLibraryFile(fileName)) {
                             copyFileWithBuffer(targetLocation, child.getName(), new FileInputStream(child), buffer);
+                            if (myTempFile) {
+                                tempFile(targetLocation);
+                                tempFile(asFileResource);
+                            }
                         }
                     }
                 } else if (isJar(resource)) {
@@ -129,10 +139,8 @@ public class NativeSocketLibUtil {
         if (!tempFile.delete()) {
             tempFile.deleteOnExit();
         }
-        final File tmpPath = new File(absolutePath);
-        tempFolders.add(tmpPath.getAbsolutePath());
-        final File libPath = new File(tmpPath, "linuxdomainsocket");
-        tempFolders.add(libPath.getAbsolutePath());
+        final File tmpPath = tempFile(absolutePath);
+        final File libPath = tempFile(tmpPath, "linuxdomainsocket");
         return libPath;
     }
 
@@ -141,7 +149,6 @@ public class NativeSocketLibUtil {
         final File targetFile = new File(targetLocation, fileName);
         if (targetFile.exists() && targetFile.length() > 0) {
             LOGGER.info("targetfile \"" + targetFile.getAbsolutePath() + "\" exists with a length of " + targetFile.length() + " bytes.");
-//            initJavaWithNativeLib(targetFile);
             return;
         }
         File targetFolder = targetFile.getParentFile();
@@ -160,70 +167,28 @@ public class NativeSocketLibUtil {
         target.flush();
         target.close();
         source.close();
-        tempFolders.add(targetFile.getAbsolutePath());
-        //initJavaWithNativeLib(targetFile);
     }
 
-    private void initJavaWithNativeLib(final File targetFile) {
-        if (targetFile != null) {
-            throw new RuntimeException("targetFile = "+targetFile);
-        }
-        String libName;
-        try {
-            libName = targetFile.getCanonicalPath();
-        } catch (IOException e) {
-            throw new RuntimeException("could not determine canonical path of " + targetFile, e);
-        }
-        if (!NativeLibUtil.isLibraryAlreadyLoaded(libName)) {
-            LOGGER.info("loading native lib \"" + libName + "\"");
-            // classloaded access ?
-            try {
-                System.load(targetFile.getAbsolutePath());
-            } catch (final UnsatisfiedLinkError ule) {
-                LOGGER.error("failed to load native library '" + targetFile.getAbsolutePath() + "'", ule);
-            }
-        } else {
-            LOGGER.info("native library \"" + libName + "\" has already been loaded. current Environment="
-                    + context.getSystemProperty(PROP_LIBRARY_LOADED));
-            if (context.getSystemProperty(PROP_LIBRARY_LOADED) == null) {
-                LOGGER.warn("library has been loaded but environment is not set. Setting '"+PROP_LIBRARY_LOADED+" to "+libName);
-                context.setSystemProperty(PROP_LIBRARY_LOADED, libName);
-            }
-        }
-    }
 
-    @Override
-    protected void finalize() throws Throwable {
-        LOGGER.info("resetting properties");
-        cleanUpTemporaryEnvironmentFiles();
-        super.finalize();
-    }
-
-    public void resetCache() {
+    public void restoreEnvironment() {
         LOGGER.info("*** resetting properties");//check who (wich test) is not resetting cache!
-        cleanUpTemporaryEnvironmentFiles();
-        context.setSystemProperty(PROP_LIBRARY_LOADED, null);
-        context.setSystemProperty(ENV_NATIVE_LIBRARY_PATH, null);
+        for (final String envName : modifiedSystemProperties) {
+            context.setSystemProperty(envName, null);
+        }
+        modifiedSystemProperties.clear();
     }
 
-    public void releaseSocketFile(String file) {
-        if (file == null) {
-            return;
-        }
-        final File socketFile = new File(file);
-        if (!socketFile.exists()) {
-            return;
-        }
-        if (!socketFile.delete()) {
-            socketFile.deleteOnExit();
-        }
+    private File tempFile(final String location) {
+        return tempFile(new File(location));
     }
-
-    private void cleanUpTemporaryEnvironmentFiles() {
-        releaseSocketFile(context.getSystemProperty(PROP_LIBRARY_LOADED));
-        releaseSocketFile(context.getSystemProperty(ENV_NATIVE_LIBRARY_PATH));
-        for (String absPath : tempFolders) {
-            releaseSocketFile(absPath);
-        }
+    
+    private File tempFile(final File parent, final String fileName) {
+        return tempFile(new File(parent, fileName));
+        
+    }
+    
+    final File tempFile(final File file) {
+        file.deleteOnExit();
+        return file;
     }
 }
