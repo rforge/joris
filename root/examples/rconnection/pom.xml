@@ -9,7 +9,7 @@
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>rconnection</artifactId>
+	<artifactId>examples-connect-r</artifactId>
 
 	<name>rosuda-${project.parent.artifactId}-${project.artifactId}</name>
 	<description>J.O.R.I.S example collection</description>
@@ -29,6 +29,11 @@
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
 			<artifactId>jr-connection-mgr</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.r-project.joris</groupId>
+			<artifactId>linux-socket</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
 	</dependencies>
