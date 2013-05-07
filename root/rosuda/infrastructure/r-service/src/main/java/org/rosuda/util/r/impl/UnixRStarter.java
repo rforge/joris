@@ -24,7 +24,7 @@ class UnixRStarter extends AbstractRStarter {
             while (pathTokenizer.hasMoreTokens()) {
                 final String path = pathTokenizer.nextToken();
                 final File potentialRFile = new File(path, "R");
-                LOGGER.info("checking for potential R file in "+path);
+                LOGGER.debug("checking for potential R file in "+path);
                 if (potentialRFile.exists()) {
                     LOGGER.info("found R file "+potentialRFile.getAbsolutePath());                    
                     list.add(potentialRFile);

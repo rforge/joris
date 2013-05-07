@@ -3,7 +3,6 @@ package org.rosuda.linux.socket;
 import java.io.File;
 import java.io.IOException;
 
-import org.newsclub.net.unix.AFUNIXSocket;
 import org.newsclub.net.unix.AFUNIXSocketAddress;
 
 public class TcpFileTunnel {
@@ -19,8 +18,8 @@ public class TcpFileTunnel {
         }
         final int port = Integer.parseInt(args[2]);
         try {
-            final AFUNIXSocket domainsocket = AFUNIXSocket.connectTo(new AFUNIXSocketAddress(socketFile));
-            new TcpTunnel(args[1], port, domainsocket);
+            AFUNIXSocketAddress socketAddress = new AFUNIXSocketAddress(socketFile);
+            new TcpTunnelServer(args[1], port, socketAddress);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

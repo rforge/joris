@@ -67,11 +67,13 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
                 }
                 LOGGER.debug("create process for args " + sb);
                 process = setup.createProcessForArgs(runtimeArgs);
+                setup.registerProcess(process);
                 // append loggers
                 final IRConnection rcon = new RetryStarter(setup.connectionFactory, setup.getMergedConnectionProperties()).create(process,
                         this.getClass().getSimpleName(), runStateHolder, isBlocking());
                 LOGGER.debug("created process for args " + sb + " -> rcon = " + rcon);
                 if (rcon != null) {
+                    //TODO improvement -> add connection to a pool instead of closing!
                     rcon.close();
                     runStateHolder.setRunState(RUNSTATE.RUNNING);
                     return;

@@ -19,7 +19,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>rconnection</module>
+		<module>examples-connect-r</module>
 	</modules>
 
 </project>

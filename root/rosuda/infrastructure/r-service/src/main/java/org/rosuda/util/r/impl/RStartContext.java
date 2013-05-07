@@ -1,7 +1,11 @@
 package org.rosuda.util.r.impl;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.rosuda.irconnect.IConnectionFactory;
 import org.rosuda.irconnect.IRConnection;
@@ -14,6 +18,7 @@ public class RStartContext extends ProcessContext {
 
     private Properties connectionProps;
     private ShellContext shellContext = new ShellContext();
+    private Set<Process> processes = new HashSet<Process>();
     IConnectionFactory connectionFactory;
 
     public void setShellContext(ShellContext shellContext) {
@@ -70,6 +75,14 @@ public class RStartContext extends ProcessContext {
 
     public Properties getMergedConnectionProperties() {
         return mergeConnectionPropertiesWithSystem(connectionProps);
+    }
+
+    void registerProcess(Process process) {
+        processes.add(process);
+    }
+
+    public Collection<Process> getProcesses() {
+        return Collections.unmodifiableSet(processes);
     }
 
 }

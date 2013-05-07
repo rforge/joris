@@ -57,29 +57,6 @@ public class NativeLibUtil {
         return libs;
     }
     
-
-    private static String getPathLessLibName(String libName) {
-        int pathIdx = libName.lastIndexOf("/");
-        final String pathlessLibName;
-        if (pathIdx > 0) {
-            pathlessLibName  = libName.substring(pathIdx);
-        } else {
-            pathlessLibName = null;
-        }
-        return pathlessLibName;
-    }
-
-    private static boolean containsPathLessLib(Set<String> libs, String pathlessLibName) {
-        boolean containsPathLessLib = false;
-        for (String libName : libs) {
-            if (libName.endsWith(pathlessLibName)) {
-                containsPathLessLib = true;
-                LOGGER.info("lib has already been loaded with name "+libName);
-            }
-        }
-        return containsPathLessLib;
-    }
-
     protected static class ClassLoaderLibInspector {
 
         private static final Field LOADED_LIBRARY_NAMES;

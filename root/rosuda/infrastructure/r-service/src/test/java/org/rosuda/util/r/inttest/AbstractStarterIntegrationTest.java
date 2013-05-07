@@ -1,5 +1,6 @@
 package org.rosuda.util.r.inttest;
 
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.rosuda.irconnect.IRConnection;
@@ -24,6 +25,13 @@ public abstract class AbstractStarterIntegrationTest {
         super();
     }
 
+    @After
+    public void tearDown() {
+        if (RUNSTATE.RUNNING.equals(service.getRunState())) {
+            service.stop();
+        }
+    }
+    
     //@Test(timeout = 60000)
     @Test
     public void testStartStopProcess() {

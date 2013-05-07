@@ -20,6 +20,16 @@
 		</dependency>
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
+			<artifactId>rengine</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.r-project.joris</groupId>
+			<artifactId>rserveengine</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>util-logging</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -33,6 +43,10 @@
 			<artifactId>test-process</artifactId>
 			<scope>test</scope>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.newsclub.net.unix</groupId>
@@ -85,5 +99,5 @@
 			</plugin>
 		</plugins>
 	</build>
-	
+
 </project>

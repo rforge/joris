@@ -18,16 +18,15 @@ import org.rosuda.irconnect.IJava2RConnection;
 import org.rosuda.irconnect.IRConnection;
 import org.rosuda.irconnect.IRConnectionEvent;
 import org.rosuda.irconnect.ITwoWayConnection;
+import org.slf4j.LoggerFactory;
 
 /**
- *
+ * 
  * @author Ralf
  */
-public class RConnectionProxy implements InvocationHandler{
+public class RConnectionProxy implements InvocationHandler {
 
-
-
-    private final static Class<?>[] interfaces = new Class[]{IRConnection.class, IJava2RConnection.class, ITwoWayConnection.class};
+    private final static Class<?>[] interfaces = new Class[] { IRConnection.class, IJava2RConnection.class, ITwoWayConnection.class };
     private final Object[] delegates;
     private static Method hashCodeMethod;
     private static Method equalsMethod;
@@ -61,11 +60,12 @@ public class RConnectionProxy implements InvocationHandler{
     private static final Set<Method> getSetMethods() {
         final Set<Method> methods = new HashSet<Method>();
         try {
-            //methods.add(IJava2RConnection.class.getMethod("assign", new Class[] { String.class , byte[].class}));
-            methods.add(IJava2RConnection.class.getMethod("assign", new Class[] { String.class , int[].class}));
-            methods.add(IJava2RConnection.class.getMethod("assign", new Class[] { String.class , double[].class}));
-            methods.add(IJava2RConnection.class.getMethod("assign", new Class[] { String.class , String.class}));
-            methods.add(IJava2RConnection.class.getMethod("assign", new Class[] { String.class , String[].class }));
+            // methods.add(IJava2RConnection.class.getMethod("assign", new
+            // Class[] { String.class , byte[].class}));
+            methods.add(IJava2RConnection.class.getMethod("assign", new Class[] { String.class, int[].class }));
+            methods.add(IJava2RConnection.class.getMethod("assign", new Class[] { String.class, double[].class }));
+            methods.add(IJava2RConnection.class.getMethod("assign", new Class[] { String.class, String.class }));
+            methods.add(IJava2RConnection.class.getMethod("assign", new Class[] { String.class, String[].class }));
         } catch (NoSuchMethodException e) {
             throw new NoSuchMethodError(e.getMessage());
         }
@@ -73,78 +73,77 @@ public class RConnectionProxy implements InvocationHandler{
     }
 
     public static ITwoWayConnection createProxy(final IRConnection irconnection, final IJava2RConnection irtransfer) {
-        return (ITwoWayConnection)
-            Proxy.newProxyInstance(irconnection.getClass().getClassLoader(),
-                                                  interfaces,
-                                                  new RConnectionProxy(irconnection, irtransfer));
+        return (ITwoWayConnection) Proxy.newProxyInstance(irconnection.getClass().getClassLoader(), interfaces, new RConnectionProxy(
+                irconnection, irtransfer));
     }
 
     private RConnectionProxy(final IRConnection irconnection, final IJava2RConnection irtransfer) {
-        delegates = new Object[]{irconnection, irtransfer};
+        delegates = new Object[] { irconnection, irtransfer };
     }
 
-    public Object invoke(final Object proxy, final Method m, final Object[] args)
-	throws Throwable
-    {
-	Class<?> declaringClass = m.getDeclaringClass();
+    public Object invoke(final Object proxy, final Method m, final Object[] args) throws Throwable {
+        Class<?> declaringClass = m.getDeclaringClass();
 
-	if (declaringClass == Object.class) {
-	    if (m.equals(hashCodeMethod)) {
-            return proxyHashCode(proxy);
-	    } else if (m.equals(equalsMethod)) {
-            return proxyEquals(proxy, args[0]);
-	    } else if (m.equals(toStringMethod)) {
-            return proxyToString(proxy);
-	    } else {
-		throw new InternalError(
-		    "unexpected Object method dispatched: " + m);
-	    }
-	} else {
-	    if (closeMethod.equals(m)) {
-		for (Object delegate: delegates) {
-		    if (delegate instanceof ARConnection) {
-			((ARConnection) delegate).notifyListeners(new IRConnectionEvent.Event(IRConnectionEvent.Type.CLOSE, null, delegate));
-		    }
-		}
-	    }
-        if (evalMethods.contains(m)||setMethods.contains(m)) {
-            for (int i = 0; i < delegates.length; i++) {
-                if (delegates[i] instanceof ARConnection) {
-                    final ARConnection notifyCon = (ARConnection) delegates[i]; 
-                    //check i fmethod from SET => assign is called or eval
-                    if (setMethods.contains(m)) {
-                        final Object target = args[1];
-                        final StringBuffer messageBuffer = new StringBuffer();
-                        if (target.getClass().isArray()) {
-                            final int arrayLength = Array.getLength(target);
-                            for (int ai=0;ai<arrayLength;ai++) {
-                                messageBuffer.append(Array.get(target, ai));
-                                if (ai<arrayLength) {
-                                    messageBuffer.append(",");
-                                }
-                            }
-                        } else {
-                            messageBuffer.append(target);
-                        }
-                        notifyCon.notifyListeners(new IRConnectionEvent.Event(IRConnectionEvent.Type.SET, messageBuffer.toString(), RConnectionProxy.class));
-                    } else if (evalMethods.contains(m)) {
-                        notifyCon.notifyListeners(new IRConnectionEvent.Event(IRConnectionEvent.Type.EVALUATE, args[0].toString(), RConnectionProxy.class));
+        LoggerFactory.getLogger(RConnectionProxy.class).info("invoking " + m);
+        if (declaringClass == Object.class) {
+            if (m.equals(hashCodeMethod)) {
+                return proxyHashCode(proxy);
+            } else if (m.equals(equalsMethod)) {
+                return proxyEquals(proxy, args[0]);
+            } else if (m.equals(toStringMethod)) {
+                return proxyToString(proxy);
+            } else {
+                throw new InternalError("unexpected Object method dispatched: " + m);
+            }
+        } else {
+            if (closeMethod.equals(m)) {
+                for (Object delegate : delegates) {
+                    if (delegate instanceof ARConnection) {
+                        ((ARConnection) delegate)
+                                .notifyListeners(new IRConnectionEvent.Event(IRConnectionEvent.Type.CLOSE, null, delegate));
                     }
                 }
             }
-        }
-        for (int i = 0; i < interfaces.length; i++) {
-		if (declaringClass.isAssignableFrom(interfaces[i])) {
-		    try {
-			return m.invoke(delegates[i], args);
-		    } catch (final InvocationTargetException e) {
-                throw e.getTargetException();
-		    }
-		}
-	    }
+            if (evalMethods.contains(m) || setMethods.contains(m)) {
+                for (int i = 0; i < delegates.length; i++) {
+                    if (delegates[i] instanceof ARConnection) {
+                        final ARConnection notifyCon = (ARConnection) delegates[i];
+                        // check i fmethod from SET => assign is called or eval
+                        if (setMethods.contains(m)) {
+                            final Object target = args[1];
+                            final StringBuffer messageBuffer = new StringBuffer();
+                            if (target.getClass().isArray()) {
+                                final int arrayLength = Array.getLength(target);
+                                for (int ai = 0; ai < arrayLength; ai++) {
+                                    messageBuffer.append(Array.get(target, ai));
+                                    if (ai < arrayLength) {
+                                        messageBuffer.append(",");
+                                    }
+                                }
+                            } else {
+                                messageBuffer.append(target);
+                            }
+                            notifyCon.notifyListeners(new IRConnectionEvent.Event(IRConnectionEvent.Type.SET, messageBuffer.toString(),
+                                    RConnectionProxy.class));
+                        } else if (evalMethods.contains(m)) {
+                            notifyCon.notifyListeners(new IRConnectionEvent.Event(IRConnectionEvent.Type.EVALUATE, args[0].toString(),
+                                    RConnectionProxy.class));
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < interfaces.length; i++) {
+                if (declaringClass.isAssignableFrom(interfaces[i])) {
+                    try {
+                        return m.invoke(delegates[i], args);
+                    } catch (final InvocationTargetException e) {
+                        throw e.getTargetException();
+                    }
+                }
+            }
 
-	    throw new UnsupportedOperationException("cannot execute method "+m);
-	}
+            throw new UnsupportedOperationException("cannot execute method " + m);
+        }
     }
 
     protected Integer proxyHashCode(final Object proxy) {
@@ -156,7 +155,6 @@ public class RConnectionProxy implements InvocationHandler{
     }
 
     protected String proxyToString(final Object proxy) {
-        return proxy.getClass().getName() + '@' +
-            Integer.toHexString(proxy.hashCode());
+        return proxy.getClass().getName() + '@' + Integer.toHexString(proxy.hashCode());
     }
 }

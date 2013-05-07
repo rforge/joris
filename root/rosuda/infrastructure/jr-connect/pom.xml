@@ -25,5 +25,18 @@
 			<groupId>junit</groupId>
 			<artifactId>junit-dep</artifactId>
 		</dependency>
+				<dependency>
+			<groupId>org.r-project.joris</groupId>
+			<artifactId>linux-socket</artifactId>
+			<version>${project.parent.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.newsclub.net.unix</groupId>
+			<artifactId>junixsocket</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+		</dependency>		
 	</dependencies>
 </project>

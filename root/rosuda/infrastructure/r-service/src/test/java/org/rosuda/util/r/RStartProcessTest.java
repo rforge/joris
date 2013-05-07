@@ -10,6 +10,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,8 +56,9 @@ public class RStartProcessTest {
         rStartContext.setShellContext(new EmptyTestShellContext());
         runtime = mock(Runtime.class);
         final Process process = mock(Process.class);
-        when(process.getErrorStream()).thenReturn(mock(InputStream.class));
-        when(process.getInputStream()).thenReturn(mock(InputStream.class));
+        final InputStream inputStream = new ByteArrayInputStream("MOCKEDSTREAM".getBytes());
+        when(process.getErrorStream()).thenReturn(inputStream);
+        when(process.getInputStream()).thenReturn(inputStream);
         when(runtime.exec((String[]) any())).thenReturn(process);
         rStartContext.setRuntime(runtime);
         mockedIRConnection = mock(IRConnection.class);
