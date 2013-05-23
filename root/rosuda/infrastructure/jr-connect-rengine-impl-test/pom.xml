@@ -19,11 +19,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
-			<artifactId>test-connection-util</artifactId>
-			<version>${project.parent.version}</version>	
-		</dependency>
-		<dependency>
-			<groupId>org.r-project.joris</groupId>
 			<artifactId>jr-connect-rengine-impl</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>

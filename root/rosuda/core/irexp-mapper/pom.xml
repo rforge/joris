@@ -29,12 +29,6 @@
 			<version>${project.parent.version}</version>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.r-project.joris</groupId>
-			<artifactId>test-connection-util</artifactId>
-			<version>${project.parent.version}</version>
-			<scope>test</scope>
-		</dependency>
 		<!-- reference impl -->
 		<dependency>
 			<groupId>org.r-project.joris</groupId>

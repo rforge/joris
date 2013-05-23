@@ -25,7 +25,7 @@
 		<module>core</module>
 		<module>dao</module>
 		<module>service</module>		
-		<module>integration</module>		
+		<module>integrationtests</module>		
 		<module>ui</module>
 	</modules>
 
