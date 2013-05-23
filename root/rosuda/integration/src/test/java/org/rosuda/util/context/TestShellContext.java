@@ -1,9 +1,11 @@
-package org.rosuda.util.process;
+package org.rosuda.util.context;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+
+import org.rosuda.util.process.ShellContext;
 
 public class TestShellContext extends ShellContext {
 

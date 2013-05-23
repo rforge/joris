@@ -5,12 +5,13 @@
 
 	<bean name="rConnectionFactory" class="org.rosuda.rengine.REngineConnectionFactory" factory-method="getInstance"/>
 	
-	<bean name="setup.rStarterFactory" class="org.rosuda.util.r.impl.RStartContext">
+	<bean name="setup_rStarterFactory" class="org.rosuda.util.r.impl.RStartContext">
 		<property name="connectionFactory" ref="rConnectionFactory" />
+		<!-- <property name="connectionProps"></property>  -->
 	</bean>
 	
 	<bean name="rStarterFactory" class="org.rosuda.util.r.impl.RStarterFactory">
-		<property name="context" ref="setup.rStarterFactory" />
+		<property name="context" ref="setup_rStarterFactory" />
 	</bean>
 	
 	<bean name="rStarterProcess" class="org.rosuda.util.process.ProcessService" factory-bean="rStarterFactory" factory-method="createService"/>

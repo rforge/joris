@@ -19,7 +19,19 @@
 		</dependency>
 		<dependency>
 			<groupId>org.r-project.joris</groupId>
+			<artifactId>test-process</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.r-project.joris</groupId>
 			<artifactId>test-data-resources</artifactId>
+			<version>${project.parent.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.r-project.joris</groupId>
+			<artifactId>test-connection-util</artifactId>
 			<version>${project.parent.version}</version>
 			<scope>test</scope>
 		</dependency>
@@ -54,4 +66,28 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<forkMode>always</forkMode>
+					<skip>true</skip>
+				</configuration>
+				<executions>
+					<execution>
+						<id>surefire-it</id>
+						<phase>integration-test</phase>
+						<goals>
+							<goal>test</goal>
+						</goals>
+						<configuration>
+							<skip>false</skip>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>

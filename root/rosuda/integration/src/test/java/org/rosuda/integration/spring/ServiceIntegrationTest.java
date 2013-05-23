@@ -1,10 +1,15 @@
-package org.rosuda.integration;
+package org.rosuda.integration.spring;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Properties;
+import java.util.Set;
 
 import javax.sql.DataSource;
 
+import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -12,14 +17,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.rosuda.domain.util.DebugUtil;
 import org.rosuda.graph.service.GraphService;
+import org.rosuda.integration.suites.util.AfterPlainJavaConnectionTestSuite;
+import org.rosuda.integration.suites.util.BeforePlainJavaConnectionTestSuite;
+import org.rosuda.integration.suites.util.PlainJavaConnectionTestSuiteContext;
 import org.rosuda.irconnect.IRConnection;
 import org.rosuda.irconnect.IREXP;
 import org.rosuda.mapper.ObjectTransformationHandler;
 import org.rosuda.mapper.irexp.IREXPMapper;
-import org.rosuda.rengine.REngineConnectionFactory;
 import org.rosuda.type.Node;
 import org.rosuda.type.impl.NodeBuilderFactory;
-import org.rosuda.util.r.impl.RStarterFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +38,12 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:spring-integration-test.xml")
+@ContextConfiguration(locations = "classpath:spring-integration-test.xml") 
 @TransactionConfiguration(transactionManager = "txManager", defaultRollback = false)
 @Transactional
 public class ServiceIntegrationTest {
 
     public static final double EPS = 0.000001;
-    // TODO: inject
     private IRConnection connection;
     private ObjectTransformationHandler<Object> handler;
     private DataSource dataSource;
@@ -54,16 +59,25 @@ public class ServiceIntegrationTest {
         this.dataSource = dataSource;
     }
 
+    @BeforeClass
+    public static void initContext() {
+        BeforePlainJavaConnectionTestSuite.setupAll();
+    }
+    
+    @AfterClass
+    public static void releaseContext() throws Exception {
+        AfterPlainJavaConnectionTestSuite.tearDown();
+    }
+    
     @Autowired
     public void setGraphService(final GraphService<Object> graphService) {
         this.graphService = graphService;
     }
 
+    
     @Before
     public void setUp() throws Exception {
-        // ensure service start
-        new RStarterFactory().createService().start();
-        connection = new REngineConnectionFactory().createRConnection(new Properties());
+        connection = PlainJavaConnectionTestSuiteContext.getInstance().acquireRConnection();
         this.handler = new IREXPMapper<Object>().createInstance();
         this.tick = System.currentTimeMillis();
     }
@@ -81,10 +95,20 @@ public class ServiceIntegrationTest {
         final ApplicationContext factory = new ClassPathXmlApplicationContext("spring-integration-test.xml");
         final DataSource dataSource = (DataSource) factory.getBean("dataSource");
         final JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcTemplate.update("DELETE FROM graph_edge");
-        jdbcTemplate.update("DELETE FROM edge");
-        jdbcTemplate.update("DELETE FROM vertex");
-        jdbcTemplate.update("DELETE FROM graph");
+        // find tables
+        Connection dbConnection = dataSource.getConnection();
+        ResultSet tableQuery = dbConnection.getMetaData().getTables(null, null, "%", null);
+        final Set<String> tableNames = new HashSet<String>();
+        while (tableQuery.next()) {
+            tableNames.add(tableQuery.getString(3).toLowerCase());
+        }
+        final List<String> deleteTables = Arrays.asList("graph_edge","edge","vertex","graph");
+        for (final String deleteTable : deleteTables) {
+            if (tableNames.contains(deleteTable)) {
+                jdbcTemplate.update("DELETE FROM "+deleteTable);
+                LOGGER.debug("trucated table "+deleteTable);
+            }            
+        }
         LOGGER.info("cleaned up database.");
     }
 
@@ -130,7 +154,7 @@ public class ServiceIntegrationTest {
         logPerformance("after.count.result");
         Assert.assertEquals(nodeCount, reloadedEntityNodeCount);
         //
-        DebugUtil.debugSchema(dataSource);
+        // DebugUtil.debugSchema(dataSource);
 
         // try to delete
         graphService.delete(entityFromList);

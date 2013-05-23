@@ -57,6 +57,10 @@ public class NativeSocketLibUtil {
             if (native_lib_path != null) {
                 targetLocation.delete();
                 myTempFile = false;
+                if (native_lib_path.contains("~")) {
+                    //TODO !duplicate code - find or write util/filesystem that supports ~
+                    native_lib_path = native_lib_path.replaceFirst("~", System.getProperty("user.home"));
+                }
                 LOGGER.info("using environment configuration for NATIVE_LIBPATH=" + native_lib_path);
                 targetLocation = new File(native_lib_path);
             }

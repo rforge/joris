@@ -21,7 +21,8 @@
 			</list>
 		</property>
 	</bean>
-	<bean id="managedConnection" factory-bean="rConnectionMgr" factory-method="getIRConnection">
+	
+	<bean id="managedConnection" factory-bean="rConnectionMgr" factory-method="getIRConnection" class="org.rosuda.irconnect.IRConnection">
 		<constructor-arg index="0" type="IRConnectionConfig" ref="timpConnectionConfig"/>
 	</bean>
 

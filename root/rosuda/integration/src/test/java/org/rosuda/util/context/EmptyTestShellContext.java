@@ -1,4 +1,4 @@
-package org.rosuda.util.process;
+package org.rosuda.util.context;
 
 public class EmptyTestShellContext extends TestShellContext {
 

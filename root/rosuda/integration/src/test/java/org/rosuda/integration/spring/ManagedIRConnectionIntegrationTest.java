@@ -1,4 +1,4 @@
-package org.rosuda.irconnect.mgr.inttest;
+package org.rosuda.integration.spring;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,13 +19,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath*:spring/r-service.spring.xml", "classpath:/spring/r-manager.spring.xml" })
+@ContextConfiguration(locations = { "classpath*:spring/r-service.spring.xml", "classpath*:/spring/r-manager.spring.xml" })
 @Configurable
 public class ManagedIRConnectionIntegrationTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ManagedIRConnectionIntegrationTest.class);
 
-    @Autowired
+    @Autowired            
     IRConnection managedConnection;
 
     @Autowired

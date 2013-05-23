@@ -131,9 +131,12 @@ public class TcpDomainServerManager {
 
     private File getSocketFile(String socket) {
         LOGGER.info("check if linux domain socket \"" + socket + "\" is accessible ..");
+        if (socket.startsWith("~")) {
+            socket = socket.replace("~", System.getProperty("user.home"));
+        }
         final File socketFile = new File(socket);
         if (!socketFile.exists()) {
-            throw new ConnectionException("socket file \"" + socketFile.getAbsolutePath() + "\" does not exists.");
+            throw new ConnectionException("socket file \"" +  socketFile.getAbsolutePath() + "\" does not exists.");
         }
 
         if (!socketFile.canRead() || !socketFile.canWrite()) {

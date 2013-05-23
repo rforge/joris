@@ -16,7 +16,7 @@
 			<param name="ConversionPattern" value="%p %t %c - %m%n" />
 		</layout>
 	</appender>
-		<appender name="RSERVELOG" class="org.apache.log4j.RollingFileAppender">
+	<appender name="RSERVELOG" class="org.apache.log4j.RollingFileAppender">
 		<param name="file" value="rserve.log" />
 		<param name="MaxFileSize" value="100KB" />
 		<!-- Keep one backup file -->
@@ -25,7 +25,17 @@
 			<param name="ConversionPattern" value="%p %t %c - %m%n" />
 		</layout>
 	</appender>
-	
+	<appender name="CONNECTIONLOG" class="org.apache.log4j.RollingFileAppender">
+		<param name="file" value="connections.log" />
+		<param name="MaxFileSize" value="100KB" />
+		<!-- Keep one backup file -->
+		<param name="MaxBackupIndex" value="1" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%p %t %c - %m%n" />
+		</layout>
+	</appender>
+
+
 	<logger name="org.hibernate">
 		<level value="WARN" />
 		<appender-ref ref="LOGFILE" />
@@ -33,6 +43,10 @@
 	<logger name="org.rosuda">
 		<level value="DEBUG" />
 		<appender-ref ref="RSERVELOG" />
+	</logger>
+	<logger name="org.rosuda.rengine.REngineRConnection">
+		<level value="DEBUG" />
+		<appender-ref ref="CONNECTIONLOG" />
 	</logger>
 	<root>
 		<priority value="INFO" />

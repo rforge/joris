@@ -49,6 +49,10 @@
 	
 	<!-- dao is requred for the service -->
 	<bean id="graphDao" class="org.rosuda.graph.dao.HibernateGraphDaoImpl" />
+
+	<bean id="sqlQueryBuilder" class="org.rosuda.graph.service.util.SQLQueryBuilder" />
 	
-	<bean id="graphService" class="org.rosuda.graph.service.HibernateGraphServiceImpl" />
+	<bean id="graphService" class="org.rosuda.graph.service.HibernateGraphServiceImpl" >
+		<property name="queryBuilder" ref="sqlQueryBuilder"/>
+	</bean>
 </beans>

@@ -73,7 +73,11 @@ public class HibernateGraphServiceImpl<T> implements GraphService<T>{
 		final StringBuilder queryBuilderStub = new StringBuilder("SELECT DISTINCT(graph.gra_id) graphid FROM GRAPH graph");
 		final Map<String, Object> arguments; 
 		try {
+		    if (vertexConstraints != null) {
 			arguments = queryBuilder.appendConstraintsToQueryStub(queryBuilderStub, vertexConstraints);
+		    } else {
+		        arguments = queryBuilder.appendConstraintsToQueryStub(queryBuilderStub, new ArrayList<VertexConstraint>());
+		    }
 		} catch (final Exception x) {
 			throw new RuntimeException(x);
 		}
