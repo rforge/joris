@@ -68,6 +68,7 @@ public class PlainJavaConnectionTestSuiteContext {
                 rStarterService.stop();
             }
         } finally {
+            instance.testConnection = null;
             instance = null;
         }
     }

@@ -15,7 +15,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.rosuda.domain.util.DebugUtil;
 import org.rosuda.graph.service.GraphService;
 import org.rosuda.integration.suites.util.AfterPlainJavaConnectionTestSuite;
 import org.rosuda.integration.suites.util.BeforePlainJavaConnectionTestSuite;
@@ -26,6 +25,8 @@ import org.rosuda.mapper.ObjectTransformationHandler;
 import org.rosuda.mapper.irexp.IREXPMapper;
 import org.rosuda.type.Node;
 import org.rosuda.type.impl.NodeBuilderFactory;
+import org.rosuda.util.java.RServeUtil;
+import org.rosuda.util.process.OS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ import org.springframework.test.context.transaction.TransactionConfiguration;
 import org.springframework.transaction.annotation.Transactional;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = "classpath:spring-integration-test.xml") 
+@ContextConfiguration(locations = "classpath:spring-integration-test.xml")
 @TransactionConfiguration(transactionManager = "txManager", defaultRollback = false)
 @Transactional
 public class ServiceIntegrationTest {
@@ -59,22 +60,25 @@ public class ServiceIntegrationTest {
         this.dataSource = dataSource;
     }
 
-    @BeforeClass
-    public static void initContext() {
+    public static void cleanupRServe() {
+        if (OS.isWindows()) {
+            RServeUtil.killAllWindowsRProcesses();
+        } else {
+            RServeUtil.killAllUXRProcesses();
+        }
         BeforePlainJavaConnectionTestSuite.setupAll();
     }
-    
+
     @AfterClass
     public static void releaseContext() throws Exception {
         AfterPlainJavaConnectionTestSuite.tearDown();
     }
-    
+
     @Autowired
     public void setGraphService(final GraphService<Object> graphService) {
         this.graphService = graphService;
     }
 
-    
     @Before
     public void setUp() throws Exception {
         connection = PlainJavaConnectionTestSuiteContext.getInstance().acquireRConnection();
@@ -92,6 +96,7 @@ public class ServiceIntegrationTest {
     @Transactional
     public static void cleanUpDatabase() throws Exception {
         LOGGER.info("cleaning up database");
+        PlainJavaConnectionTestSuiteContext.getInstance().shutdown();
         final ApplicationContext factory = new ClassPathXmlApplicationContext("spring-integration-test.xml");
         final DataSource dataSource = (DataSource) factory.getBean("dataSource");
         final JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
@@ -102,12 +107,12 @@ public class ServiceIntegrationTest {
         while (tableQuery.next()) {
             tableNames.add(tableQuery.getString(3).toLowerCase());
         }
-        final List<String> deleteTables = Arrays.asList("graph_edge","edge","vertex","graph");
+        final List<String> deleteTables = Arrays.asList("graph_edge", "edge", "vertex", "graph");
         for (final String deleteTable : deleteTables) {
             if (tableNames.contains(deleteTable)) {
-                jdbcTemplate.update("DELETE FROM "+deleteTable);
-                LOGGER.debug("trucated table "+deleteTable);
-            }            
+                jdbcTemplate.update("DELETE FROM " + deleteTable);
+                LOGGER.debug("trucated table " + deleteTable);
+            }
         }
         LOGGER.info("cleaned up database.");
     }

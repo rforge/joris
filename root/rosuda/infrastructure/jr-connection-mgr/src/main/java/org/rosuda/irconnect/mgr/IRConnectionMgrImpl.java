@@ -6,6 +6,8 @@ import org.rosuda.irconnect.IConnectionFactory;
 import org.rosuda.irconnect.IRConnection;
 import org.rosuda.irconnect.cfg.IRConnectionConfig;
 import org.rosuda.irconnect.cfg.IRConnectionConfigStep;
+import org.rosuda.util.java.RServeUtil;
+import org.rosuda.util.process.OS;
 import org.rosuda.util.process.ProcessService;
 import org.rosuda.util.process.RUNSTATE;
 import org.slf4j.Logger;
@@ -24,33 +26,48 @@ import org.springframework.beans.factory.annotation.Qualifier;
 // @ContextConfiguration(locations = {"classpath:/spring/r-service.spring.xml"})
 public class IRConnectionMgrImpl implements IRConnectionMgr {
 
+    static {
+        ensureRServeIsDown();
+    }
+
     private static final Logger LOGGER = LoggerFactory.getLogger(IRConnectionMgrImpl.class);
+
+    private ProcessService<IRConnection> service;
 
     @Autowired
     @Qualifier("rStarterProcess")
-    private ProcessService<IRConnection> service;
-
     public void setService(final ProcessService<IRConnection> service) {
         this.service = service;
     }
 
-    @Autowired
-    @Qualifier("rConnectionFactory")
+    private static void ensureRServeIsDown() {
+        if (OS.isWindows()) {
+            RServeUtil.killAllWindowsRProcesses();
+        } else {
+            RServeUtil.killAllUXRProcesses();
+        }
+
+    }
+
     private IConnectionFactory factory;
 
+    @Autowired
+    @Qualifier("rConnectionFactory")
     public void setFactory(final IConnectionFactory factory) {
         this.factory = factory;
     }
 
-    @Autowired
-    @Qualifier("rConnectionConfiguration")
     private Properties configuration = new Properties();
 
+    @Autowired
+    @Qualifier("rConnectionConfiguration")
     public void setConfiguration(Properties configuration) {
         this.configuration = configuration;
     }
 
     protected IRConnection createConnection() {
+        // Fails on windows when another instance of Rserve.exe is running ...
+        // (locked port 6311)
         LOGGER.debug("createConnection()");
         if (this.service.getRunState() != RUNSTATE.RUNNING) {
             LOGGER.debug("createConnection().service.start()");
