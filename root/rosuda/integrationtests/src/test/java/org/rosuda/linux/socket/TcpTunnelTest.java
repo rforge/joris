@@ -16,7 +16,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.newsclub.net.unix.AFUNIXSocketAddress;
-import org.rosuda.util.java.FileFinderUtil;
+import org.rosuda.util.java.file.FileFinderUtil;
 import org.rosuda.util.process.OS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,8 +91,9 @@ public class TcpTunnelTest {
 
     private Process createRServeSocketProcess(File socketFile) throws Exception {
         // find R exec
-        String rExecutable = FileFinderUtil.findFileByName("R").get(0).getAbsolutePath(); // "/usr/lib/R/bin/R";
-        String rServeBinary = FileFinderUtil.findFileByName("Rserve-bin.so").get(0).getAbsolutePath(); // "/home/ralf/R/x86_64-pc-linux-gnu-library/2.14/Rserve/libs/Rserve-bin.so";
+        final FileFinderUtil fileFinderUtil = new FileFinderUtil();
+        String rExecutable = fileFinderUtil.findFileByName("R").get(0).getAbsolutePath(); // "/usr/lib/R/bin/R";
+        String rServeBinary = fileFinderUtil.findFileByRegularExpression("Rserve(.*).so").get(0).getAbsolutePath(); // "/home/ralf/R/x86_64-pc-linux-gnu-library/2.14/Rserve/libs/Rserve-bin.so";
         String tunnelFile = socketFile.getAbsolutePath();
         final String startCmd = String.format("%s CMD %s --RS-socket %s --no-save --slave", rExecutable, rServeBinary, tunnelFile);
         LOGGER.info("starting rserve>" + startCmd);
