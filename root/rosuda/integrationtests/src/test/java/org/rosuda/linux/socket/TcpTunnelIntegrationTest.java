@@ -21,9 +21,9 @@ import org.rosuda.util.process.OS;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class TcpTunnelTest {
+public class TcpTunnelIntegrationTest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(TcpTunnelTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TcpTunnelIntegrationTest.class);
 
     private static final long TIMEOUT = 10000;
 

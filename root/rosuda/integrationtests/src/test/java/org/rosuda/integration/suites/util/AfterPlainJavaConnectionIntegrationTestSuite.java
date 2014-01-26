@@ -8,9 +8,9 @@ import org.rosuda.util.java.RServeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class AfterPlainJavaConnectionTestSuite {
+public class AfterPlainJavaConnectionIntegrationTestSuite {
 
-    private static Logger LOGGER = LoggerFactory.getLogger(AfterPlainJavaConnectionTestSuite.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(AfterPlainJavaConnectionIntegrationTestSuite.class);
 
     @Test
     public void instanceIsRunningBeforeShutdown() {

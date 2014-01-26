@@ -20,6 +20,8 @@ import org.rosuda.util.process.ShellContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// use RServeProvider
+@Deprecated
 abstract class AbstractRStarter extends RunstateAware<IRConnection> implements ProcessStarter<IRConnection> {
 
     protected final Logger LOGGER = LoggerFactory.getLogger(getClass());
@@ -73,7 +75,8 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
                         this.getClass().getSimpleName(), runStateHolder, isBlocking());
                 LOGGER.debug("created process for args " + sb + " -> rcon = " + rcon);
                 if (rcon != null) {
-                    //TODO improvement -> add connection to a pool instead of closing!
+                    // TODO improvement -> add connection to a pool instead of
+                    // closing!
                     rcon.close();
                     runStateHolder.setRunState(RUNSTATE.RUNNING);
                     return;
@@ -119,6 +122,6 @@ abstract class AbstractRStarter extends RunstateAware<IRConnection> implements P
         @Override
         protected IRConnection createResultInstance() {
             return RConnectionProxy.createProxy(factory.createRConnection(connectionProperties), null);
-        }       
+        }
     }
 }

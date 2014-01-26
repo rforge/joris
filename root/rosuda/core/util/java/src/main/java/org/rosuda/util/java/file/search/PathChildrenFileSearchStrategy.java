@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import org.rosuda.util.java.file.FileSystem;
-import org.rosuda.util.java.file.FilenameMatcher;
+import org.rosuda.util.java.file.FileMatcher;
 
 public class PathChildrenFileSearchStrategy extends AbstractFileSearchStrategy {
 
@@ -13,7 +13,7 @@ public class PathChildrenFileSearchStrategy extends AbstractFileSearchStrategy {
     }
 
     @Override
-    protected void handleSearchFor(FilenameMatcher matcher, List<File> matchingFiles) {
+    protected void handleSearchFor(FileMatcher matcher, List<File> matchingFiles) {
         for (final File path : fileSystem.pathelements()) {
             if (matchingFiles.isEmpty()) {
                 scanFoldersUntilMatched(path.listFiles(), matcher, matchingFiles);

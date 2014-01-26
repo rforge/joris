@@ -78,12 +78,64 @@ public class FileFinderUtilTest {
     }
 
     @Test
+    public void searchByFilenameRegexpWherePATHVariableContainsFolderReturnsResult() {
+        File mockFile = mockFile("someEntry", "matched");
+        File mockDirectory = mockDirectory(null, "someFolder", new File[] { mockFile });
+        when(fileSystem.pathelements()).thenReturn(Arrays.asList(mockDirectory));
+        when(fileSystem.getChild(eq(mockDirectory), eq("matched"))).thenReturn(mockFile);
+        List<File> result = fileFinderUtil.findFileByNameRegularExpression("\\w*");
+        assertThat(result, hasSize(1));
+    }
+
+    @Test
+    public void searchByFilenameRegexpWherePATHVariableDoesNotContainFolderFindsResultFromUserHome() {
+        when(fileSystem.pathelements()).thenReturn(Collections.<File> emptyList());
+        File mockFile = mockFile("someEntry", "matched");
+        when(fileSystem.listFilesFromHomeDirectory()).thenReturn(new File[] { mockFile });
+        List<File> result = fileFinderUtil.findFileByNameRegularExpression("\\w*");
+        assertThat(result, hasSize(1));
+    }
+
+    @Test
+    public void searchByFilenameRegexpWherePATHVariableDoesNotContainFolderFindsResultFromUserHomeChildren() {
+        when(fileSystem.pathelements()).thenReturn(Collections.<File> emptyList());
+        File mockFile = mockFile("someFolder/someEntry", "matched");
+        File mockDirectory = mockDirectory("someFolder", "someEntry", new File[] { mockFile });
+        when(fileSystem.listFilesFromHomeDirectory()).thenReturn(new File[] { mockDirectory });
+        List<File> result = fileFinderUtil.findFileByNameRegularExpression("\\w*");
+        assertThat(result, hasSize(1));
+    }
+
+    @Test
+    public void searchByFilenameRegexpAndPathDidNotFindMatchButChildrenOfPathDo() {
+        File mockFile = mockFile("someEntry", "matched");
+        File mockDirectory = mockDirectory("someFolder", "someEntry", new File[] { mockFile });
+        File parentMockDirectory = mockDirectory(null, "someFolder", new File[] { mockDirectory });
+        when(fileSystem.pathelements()).thenReturn(Arrays.asList(parentMockDirectory));
+        when(fileSystem.listFilesFromHomeDirectory()).thenReturn(new File[] {});
+        List<File> result = fileFinderUtil.findFileByNameRegularExpression("\\w*");
+        assertThat(result, hasSize(1));
+    }
+
+    @Test
+    public void whenFilenameRegexpSearchEnvironmentDoesNotFindAMatchRootFilesWillBeUsed() {
+        File mockFile = mockFile("someEntry", "matched");
+        File mockDirectory = mockDirectory("someFolder", "someEntry", new File[] { mockFile });
+        File parentMockDirectory = mockDirectory(null, "someFolder", new File[] { mockDirectory });
+        when(fileSystem.pathelements()).thenReturn(Collections.<File> emptyList());
+        when(fileSystem.listFilesFromHomeDirectory()).thenReturn(new File[] {});
+        when(fileSystem.listRoots()).thenReturn(new File[] { parentMockDirectory });
+        List<File> result = fileFinderUtil.findFileByNameRegularExpression("\\w*");
+        assertThat(result, hasSize(1));
+    }
+
+    @Test
     public void searchByRegexpWherePATHVariableContainsFolderReturnsResult() {
         File mockFile = mockFile("someEntry", "matched");
         File mockDirectory = mockDirectory(null, "someFolder", new File[] { mockFile });
         when(fileSystem.pathelements()).thenReturn(Arrays.asList(mockDirectory));
         when(fileSystem.getChild(eq(mockDirectory), eq("matched"))).thenReturn(mockFile);
-        List<File> result = fileFinderUtil.findFileByRegularExpression("\\w*");
+        List<File> result = fileFinderUtil.findFileByRegularExpression("(\\w|/)*");
         assertThat(result, hasSize(1));
     }
 
@@ -92,7 +144,7 @@ public class FileFinderUtilTest {
         when(fileSystem.pathelements()).thenReturn(Collections.<File> emptyList());
         File mockFile = mockFile("someEntry", "matched");
         when(fileSystem.listFilesFromHomeDirectory()).thenReturn(new File[] { mockFile });
-        List<File> result = fileFinderUtil.findFileByRegularExpression("\\w*");
+        List<File> result = fileFinderUtil.findFileByRegularExpression("(\\w|/)*");
         assertThat(result, hasSize(1));
     }
 
@@ -102,7 +154,7 @@ public class FileFinderUtilTest {
         File mockFile = mockFile("someFolder/someEntry", "matched");
         File mockDirectory = mockDirectory("someFolder", "someEntry", new File[] { mockFile });
         when(fileSystem.listFilesFromHomeDirectory()).thenReturn(new File[] { mockDirectory });
-        List<File> result = fileFinderUtil.findFileByRegularExpression("\\w*");
+        List<File> result = fileFinderUtil.findFileByRegularExpression("(\\w|/)*");
         assertThat(result, hasSize(1));
     }
 
@@ -113,7 +165,7 @@ public class FileFinderUtilTest {
         File parentMockDirectory = mockDirectory(null, "someFolder", new File[] { mockDirectory });
         when(fileSystem.pathelements()).thenReturn(Arrays.asList(parentMockDirectory));
         when(fileSystem.listFilesFromHomeDirectory()).thenReturn(new File[] {});
-        List<File> result = fileFinderUtil.findFileByRegularExpression("\\w*");
+        List<File> result = fileFinderUtil.findFileByRegularExpression("(\\w|/)*");
         assertThat(result, hasSize(1));
     }
 
@@ -125,7 +177,7 @@ public class FileFinderUtilTest {
         when(fileSystem.pathelements()).thenReturn(Collections.<File> emptyList());
         when(fileSystem.listFilesFromHomeDirectory()).thenReturn(new File[] {});
         when(fileSystem.listRoots()).thenReturn(new File[] { parentMockDirectory });
-        List<File> result = fileFinderUtil.findFileByRegularExpression("\\w*");
+        List<File> result = fileFinderUtil.findFileByRegularExpression("(\\w|/)*");
         assertThat(result, hasSize(1));
     }
 
@@ -137,7 +189,7 @@ public class FileFinderUtilTest {
         when(mock.exists()).thenReturn(true);
         when(mock.isFile()).thenReturn(false);
         when(mock.isDirectory()).thenReturn(true);
-        when(mock.getAbsolutePath()).thenReturn(">" + path + "/" + name);
+        when(mock.getAbsolutePath()).thenReturn(path + "/" + name);
         when(mock.listFiles()).thenReturn(children);
         return mock;
     }
@@ -148,7 +200,7 @@ public class FileFinderUtilTest {
         when(mock.getParent()).thenReturn(path);
         when(mock.exists()).thenReturn(true);
         when(mock.isFile()).thenReturn(true);
-        when(mock.getAbsolutePath()).thenReturn(">" + path + "/" + name);
+        when(mock.getAbsolutePath()).thenReturn(path + "/" + name);
         return mock;
     }
 }

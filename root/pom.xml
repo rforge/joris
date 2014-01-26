@@ -64,10 +64,11 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
+			<!-- unit-tests -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.14.1</version>
+   				<artifactId>maven-surefire-plugin</artifactId>
+    			<version>2.16</version>
 				<configuration>
 					<forkMode>never</forkMode>
 					<!-- Skip the default running of this plug-in (or everything is run 
@@ -94,14 +95,32 @@
 								<!-- Exclude integration tests within (unit) test phase. -->
 								<exclude>**/*IntegrationTest.java</exclude>
 								<exclude>**/inttest/**/*Test.java</exclude>
+								<excluse>**/*IntegrationTestSuite.java</excluse>
 							</excludes>
 						</configuration>
 					</execution>
+				</executions>
+			</plugin>
+			<!-- integration-tests -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+   				<artifactId>maven-failsafe-plugin</artifactId>
+    			<version>2.16</version>
+				<configuration>
+					<forkMode>never</forkMode>
+					<!-- Skip the default running of this plug-in (or everything is run 
+						twice...see below) -->
+					<skip>true</skip>
+					<!-- Show 100% of the lines from the stack trace (doesn't work) -->
+					<trimStackTrace>false</trimStackTrace>
+				</configuration>
+				<executions>
 					<execution>
 						<id>integration-tests</id>
 						<phase>integration-test</phase>
 						<goals>
-							<goal>test</goal>
+							<goal>integration-test</goal>
+             				<goal>verify</goal>
 						</goals>
 						<configuration>
 							<!-- Never skip running the tests when the integration-test phase 
@@ -109,9 +128,16 @@
 							<skip>false</skip>
 							<includes>
 								<!-- Include integration tests within integration-test phase. -->
-								<include>**/*IntegrationTest.java</include>
+								<!-- only run in suite (speed!) -->
+								<!-- <include>**/*IntegrationTest.java</include>
 								<include>**/inttest/**/*Test.java</include>
+								 -->
+								<include>**/*IntegrationTestSuite.java</include>
 							</includes>
+							<excludes>
+								<exclude>**/*IntegrationTest.java</exclude>
+								<exclude>**/inttest/**/*Test.java</exclude>
+							</excludes>
 						</configuration>
 					</execution>
 				</executions>

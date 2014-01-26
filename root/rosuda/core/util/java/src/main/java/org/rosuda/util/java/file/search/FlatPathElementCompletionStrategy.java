@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.List;
 
 import org.rosuda.util.java.file.FileSystem;
-import org.rosuda.util.java.file.FilenameMatcher;
+import org.rosuda.util.java.file.FileMatcher;
 
 public class FlatPathElementCompletionStrategy extends AbstractFileSearchStrategy {
 
@@ -13,7 +13,7 @@ public class FlatPathElementCompletionStrategy extends AbstractFileSearchStrateg
     }
 
     @Override
-    protected void handleSearchFor(FilenameMatcher matcher, List<File> matchingFiles) {
+    protected void handleSearchFor(FileMatcher matcher, List<File> matchingFiles) {
         for (final File path : fileSystem.pathelements()) {
             final String perfectMatch = matcher.perfectMatch();
             if (perfectMatch != null) {

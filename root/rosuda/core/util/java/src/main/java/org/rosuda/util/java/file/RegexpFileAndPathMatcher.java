@@ -2,11 +2,11 @@ package org.rosuda.util.java.file;
 
 import java.io.File;
 
-public class RegexpFilenameMatcher implements FileMatcher {
+public class RegexpFileAndPathMatcher implements FileMatcher {
 
     private final String regexp;
 
-    protected RegexpFilenameMatcher(final String regexp) {
+    protected RegexpFileAndPathMatcher(final String regexp) {
         this.regexp = regexp;
     }
 
@@ -17,7 +17,7 @@ public class RegexpFilenameMatcher implements FileMatcher {
 
     @Override
     public boolean matches(File file) {
-        return file.getName().matches(regexp);
+        return file.getAbsolutePath().matches(regexp);
     }
 
     @Override

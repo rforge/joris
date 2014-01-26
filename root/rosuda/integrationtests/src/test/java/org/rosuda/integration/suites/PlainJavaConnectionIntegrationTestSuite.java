@@ -7,18 +7,18 @@ import org.rosuda.integration.connection.jrengine.CreateConnectionIntegrationTes
 import org.rosuda.integration.connection.jrengine.REngineAssignIntegrationTest;
 import org.rosuda.integration.connection.jrengine.WrappedEngineFormatIntegrationTest;
 import org.rosuda.integration.connection.jrengine.WrappedEngineIntegrationTest;
-import org.rosuda.integration.suites.util.AfterPlainJavaConnectionTestSuite;
-import org.rosuda.integration.suites.util.BeforePlainJavaConnectionTestSuite;
+import org.rosuda.integration.suites.util.AfterPlainJavaConnectionIntegrationTestSuite;
+import org.rosuda.integration.suites.util.BeforePlainJavaConnectionIntegrationTestSuite;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-    BeforePlainJavaConnectionTestSuite.class,
+    BeforePlainJavaConnectionIntegrationTestSuite.class,
     CreateConnectionIntegrationTest.class,
     REngineAssignIntegrationTest.class,
     WrappedEngineFormatIntegrationTest.class,
     WrappedEngineIntegrationTest.class,
-    AfterPlainJavaConnectionTestSuite.class
+    AfterPlainJavaConnectionIntegrationTestSuite.class
 })
-public class PlainJavaConnectionTestSuite {
+public class PlainJavaConnectionIntegrationTestSuite {
 
 }

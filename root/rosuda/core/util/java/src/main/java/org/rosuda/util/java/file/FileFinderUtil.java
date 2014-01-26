@@ -30,10 +30,14 @@ public class FileFinderUtil {
     }
 
     public List<File> findFileByRegularExpression(final String fileName) {
+        return findFilesByStrategies(new RegexpFileAndPathMatcher(fileName));
+    }
+
+    public List<File> findFileByNameRegularExpression(final String fileName) {
         return findFilesByStrategies(new RegexpFilenameMatcher(fileName));
     }
 
-    private List<File> findFilesByStrategies(final FilenameMatcher matcher) {
+    private List<File> findFilesByStrategies(final FileMatcher matcher) {
         final List<File> matchingFiles = new ArrayList<File>();
         for (final FileSearchStrategy searchStrategy : searchStrategies) {
             searchStrategy.searchFor(matcher, matchingFiles);

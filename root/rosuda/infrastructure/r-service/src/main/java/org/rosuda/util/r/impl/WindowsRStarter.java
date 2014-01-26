@@ -55,10 +55,10 @@ class WindowsRStarter extends AbstractRStarter {
         public boolean accept(File file) {
             final String filename = file.getName().toLowerCase();
             final String path = file.getParentFile().getAbsolutePath().toLowerCase();
-            if (is_64_bit)
-                return file.isFile() && (filename.contains("64") || path.contains("64")) && filename.contains("rserve")
-                        && filename.endsWith(".exe");
-            return file.isFile() && filename.contains("rserve") && filename.endsWith(".exe");
+            boolean valid = is_64_bit
+                    && (file.isFile() && (filename.contains("64") || path.contains("64")) && filename.contains("rserve") && filename
+                            .endsWith(".exe")) || !is_64_bit && (file.isFile() && filename.contains("rserve") && filename.endsWith(".exe"));
+            return valid;
         }
 
         @Override
@@ -120,22 +120,26 @@ class WindowsRStarter extends AbstractRStarter {
         protected final String getLocation(final List<File> fileList, final String preferenceName) {
             final String preferenceValue = winRStarterPrefs.get(preferenceName, "");
             if (!"".equals(preferenceValue)) {
-                fileList.add(new File(preferenceValue));
-                LOGGER.info("using \"" + preferenceValue + "\" as . configured in the user preferences");
-                return preferenceValue;
-            } else {
-                final String winRExeFilePath = handleFind(fileList);
-                if (winRExeFilePath != null) {
-                    winRStarterPrefs.put(preferenceName, winRExeFilePath);
-                    try {
-                        winRStarterPrefs.sync();
-                    } catch (final BackingStoreException e) {
-                        LOGGER.error("could not store preference path for r.exe", e);
-                    }
-                    return winRExeFilePath;
+                final File preferredFile = new File(preferenceValue);
+                if (preferredFile.exists()) {
+                    fileList.add(preferredFile);
+                    LOGGER.info("using \"" + preferenceValue + "\" as . configured in the user preferences");
+                    return preferenceValue;
                 } else {
-                    return null;
+                    LOGGER.warn("preferred file \"" + preferenceValue + "\" is invalid!");
                 }
+            }
+            final String winRExeFilePath = handleFind(fileList);
+            if (winRExeFilePath != null) {
+                winRStarterPrefs.put(preferenceName, winRExeFilePath);
+                try {
+                    winRStarterPrefs.sync();
+                } catch (final BackingStoreException e) {
+                    LOGGER.error("could not store preference path for r.exe", e);
+                }
+                return winRExeFilePath;
+            } else {
+                return null;
             }
         }
 

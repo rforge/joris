@@ -30,6 +30,7 @@ public class RStarterFactory extends ProcessFactory<IRConnection> {
     }
 
     protected ProcessStarter<IRConnection> createStarter() {
+        // ALT: check running processes ?!
         try {
             final IRConnection rcon = context.createConnection();
             rcon.close();

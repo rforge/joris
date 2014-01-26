@@ -1,6 +1,8 @@
 package org.rosuda.util.java.file;
 
-public class EqualsFilenameMatcher implements FilenameMatcher {
+import java.io.File;
+
+public class EqualsFilenameMatcher implements FileMatcher {
 
     private final String equalsFileName;
 
@@ -14,8 +16,8 @@ public class EqualsFilenameMatcher implements FilenameMatcher {
     }
 
     @Override
-    public boolean matches(String fileName) {
-        return equalsFileName.equals(fileName);
+    public boolean matches(File file) {
+        return file.getName().equals(equalsFileName);
     }
 
     @Override

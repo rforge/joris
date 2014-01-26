@@ -16,8 +16,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.rosuda.graph.service.GraphService;
-import org.rosuda.integration.suites.util.AfterPlainJavaConnectionTestSuite;
-import org.rosuda.integration.suites.util.BeforePlainJavaConnectionTestSuite;
+import org.rosuda.integration.suites.util.AfterPlainJavaConnectionIntegrationTestSuite;
+import org.rosuda.integration.suites.util.BeforePlainJavaConnectionIntegrationTestSuite;
 import org.rosuda.integration.suites.util.PlainJavaConnectionTestSuiteContext;
 import org.rosuda.irconnect.IRConnection;
 import org.rosuda.irconnect.IREXP;
@@ -66,12 +66,12 @@ public class ServiceIntegrationTest {
         } else {
             RServeUtil.killAllUXRProcesses();
         }
-        BeforePlainJavaConnectionTestSuite.setupAll();
+        BeforePlainJavaConnectionIntegrationTestSuite.setupAll();
     }
 
     @AfterClass
     public static void releaseContext() throws Exception {
-        AfterPlainJavaConnectionTestSuite.tearDown();
+        AfterPlainJavaConnectionIntegrationTestSuite.tearDown();
     }
 
     @Autowired

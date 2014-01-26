@@ -7,18 +7,18 @@ import org.rosuda.integration.connection.mapper.RFilterIntegrationTest;
 import org.rosuda.integration.connection.mapper.RModelSerializationIntegrationTest;
 import org.rosuda.integration.connection.mapper.RRestructureIntegrationTest;
 import org.rosuda.integration.connection.mapper.RTypeConversionIntegrationTest;
-import org.rosuda.integration.suites.util.AfterPlainJavaConnectionTestSuite;
-import org.rosuda.integration.suites.util.BeforePlainJavaConnectionTestSuite;
+import org.rosuda.integration.suites.util.AfterPlainJavaConnectionIntegrationTestSuite;
+import org.rosuda.integration.suites.util.BeforePlainJavaConnectionIntegrationTestSuite;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-    BeforePlainJavaConnectionTestSuite.class,
+    BeforePlainJavaConnectionIntegrationTestSuite.class,
     RFilterIntegrationTest.class,
     RModelSerializationIntegrationTest.class,
     RRestructureIntegrationTest.class,
     RTypeConversionIntegrationTest.class,
-    AfterPlainJavaConnectionTestSuite.class
+    AfterPlainJavaConnectionIntegrationTestSuite.class
 })
-public class PlainJavaMapperTestSuite {
+public class PlainJavaMapperIntegrationTestSuite {
 
 }

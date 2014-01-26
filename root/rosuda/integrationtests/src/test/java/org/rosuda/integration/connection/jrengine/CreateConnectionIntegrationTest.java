@@ -2,7 +2,7 @@ package org.rosuda.integration.connection.jrengine;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.rosuda.integration.suites.util.BeforePlainJavaConnectionTestSuite;
+import org.rosuda.integration.suites.util.BeforePlainJavaConnectionIntegrationTestSuite;
 import org.rosuda.integration.suites.util.PlainJavaConnectionTestSuiteContext;
 import org.rosuda.irconnect.IRConnection;
 import org.rosuda.irconnect.RServerException;

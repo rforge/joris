@@ -1,10 +1,12 @@
 package org.rosuda.util.java.file;
 
-public interface FilenameMatcher {
+import java.io.File;
+
+public interface FileMatcher {
 
     String describe();
 
-    boolean matches(String fileName);
+    boolean matches(File fileName);
 
     String perfectMatch();
 }
